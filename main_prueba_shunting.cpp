@@ -6,10 +6,12 @@
 #include <math.h>
 #include <string>
 #include <vector>
+#include <stack>
 
 #include "image.h"
 #include "complejo.h"
 #include "main_prueba_shunting.h"
+//#include "stk.h"
 
 using namespace std; 
 
@@ -29,29 +31,115 @@ static option_t options[] = {
 };
 
 static string entered_function;
+void shunting_yard(stack <char> &);
+bool is_operator(char);
+
 
 // **********************************MAIN**********************************//
 
 int main(int argc, char * const argv[]){
-  string output_queue = "";
-
+  string output_queue = "                   ",temp;
+  double auxd;
 	cmdline cmdl(options);	       // Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv);        // Metodo de parseo de la clase cmdline
+	cout<<entered_function<<endl;
+  	/*shunting_yard(output_queue);   // 
+  	cout<<"final: "<<output_queue<<endl;*/
 
-  shunting_yard(output_queue);   // 
 
+  	/*stringstream ss (entered_function);
+ 	while(!ss.eof()){
+  	ss>>temp;
+  	if(stringstream(temp) >> auxd)
+  		cout <<"imprimo el numero: "<<auxd<<endl;
+  	else
+		cout <<"imprimo el simbolo: "<<temp<<endl;
+	}*/
+
+	stack <char> output;
+	shunting_yard(output);
+	while(!output.empty()){
+		cout<<"Out:"<<output.top()<<endl;
+		output.pop();
+	}
+/*
+  	stringstream(temp) >> auxd;
+  	cout <<"imprimo el temp: "<<auxd<<endl;
+  	ss>>temp;
+  	cout <<"imprimo el: "<<temp<<endl;
+  	ss>>temp;
+  	if(stringstream(temp) >> auxd)
+  		cout <<"imprimo el temp: "<<auxd<<endl;
+  	else
+		cout <<"imprimo el: "<<temp<<endl;*/
 
 	return 0;
 }
 
+void shunting_yard(stack <char> & output){
+	int j = 0;
+
+	stack <char> operat;
+	for (int i = 0; i < entered_function.length(); ++i)
+	{
+		if (entered_function[i]!=' ')
+		{
+			/*output_queue[j]=entered_function[i];
+			cout<<"Es:"<<output_queue[j]<<"|"<<endl;
+			j++;*/
+
+		}
+		if (isdigit(entered_function[i]) || entered_function[i]=='z')
+		{	
+			
+			output.push(entered_function[i]);
+			//cout<<"Numero: "<<entered_function[i]<<endl;
+		}
+		//const string token (1, entered_function[i]);
+		else if (is_operator(entered_function[i]))
+		{
+			operat.push(entered_function[i]);
+			//cout<<entered_function[i]<<endl;
+		}
+		else if (is_function(entered_function[i],entered_function[i+1],entered_function[i+2],i))
+		{
+			operat.push(entered_function[i]);
+			//cout<<entered_function[i]<<endl;
+		}
+
+	}
+	while(!operat.empty()){
+		output.push(operat.top());
+		operat.pop();
+	}
+
+}
+
+bool is_operator( char token){        
+    return token == '+' || token == '-' ||      
+           token == '*' || token == '/' || 
+           token == '^';      
+}
+
+bool is_function(char c1, char c2){
+	if ( c1== e || c2 == x)
+	{
+		return true;
+	}
+	else if (c1 == s || c2 == i )
+	{
+		/* code */
+	}
+}
+/*
 void shunting_yard(string & string2fill){
   string aux_stack = "";
 
-  /*for (size_t i=0 ; i < entered_function.length() ; i++){ // Saco los espacios
+  for (size_t i=0 ; i < entered_function.length() ; i++){ // Saco los espacios
     if (entered_function[i] != SPACE_CHARACTER){
       aux_stack.append(1, entered_function[i]); // append (n, character): agrega n veces "character"
     }
-  }*/
+  }
 
   string tokens = "";        
   string aux_str = "";    
@@ -91,7 +179,7 @@ bool isParenthesis( const string& token){
 bool isOperator( const string& token){        
     return token == "+" || token == "-" ||      
            token == "*" || token == "/";      
-}
+}*/
 
 
 //************************FUNCIONES DE CMDLINE************************//
