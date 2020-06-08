@@ -11,7 +11,7 @@
 #include "image.h"
 #include "complejo.h"
 #include "main_prueba_shunting.h"
-//#include "stk.h"
+#include "stk.h"
 
 using namespace std; 
 
@@ -31,7 +31,7 @@ static option_t options[] = {
 };
 
 static string entered_function;
-void shunting_yard(stack <char> &);
+void shunting_yard(stk <char> &);
 bool is_operator(char);
 
 
@@ -56,10 +56,10 @@ int main(int argc, char * const argv[]){
 		cout <<"imprimo el simbolo: "<<temp<<endl;
 	}*/
 
-	stack <char> output;
+	stk <char> output;
 	shunting_yard(output);
-	while(!output.empty()){
-		cout<<"Out:"<<output.top()<<endl;
+	while(!output.is_empty()){
+		cout<<"Out:"<<output.peek()<<endl;
 		output.pop();
 	}
 /*
@@ -76,7 +76,7 @@ int main(int argc, char * const argv[]){
 	return 0;
 }
 
-void shunting_yard(stack <char> & output){
+void shunting_yard(stk <char> & output){
 	int j = 0;
 
 	stack <char> operat;
@@ -101,11 +101,11 @@ void shunting_yard(stack <char> & output){
 			operat.push(entered_function[i]);
 			//cout<<entered_function[i]<<endl;
 		}
-		else if (is_function(entered_function[i],entered_function[i+1],entered_function[i+2],i))
+		/*else if (is_function(entered_function[i],entered_function[i+1],entered_function[i+2],i))
 		{
 			operat.push(entered_function[i]);
 			//cout<<entered_function[i]<<endl;
-		}
+		}*/
 
 	}
 	while(!operat.empty()){
@@ -120,7 +120,7 @@ bool is_operator( char token){
            token == '*' || token == '/' || 
            token == '^';      
 }
-
+/*
 bool is_function(char c1, char c2){
 	if ( c1== e || c2 == x)
 	{
@@ -128,9 +128,9 @@ bool is_function(char c1, char c2){
 	}
 	else if (c1 == s || c2 == i )
 	{
-		/* code */
+
 	}
-}
+}*/
 /*
 void shunting_yard(string & string2fill){
   string aux_stack = "";
