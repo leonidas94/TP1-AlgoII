@@ -47,40 +47,16 @@ int main(int argc, char * const argv[]){
 void shunting_yard(string & string2fill){
   string aux_stack = "";
 
-  /*for (size_t i=0 ; i < entered_function.length() ; i++){ // Saco los espacios
+  for (size_t i=0 ; i < entered_function.length() ; i++){ // Saco los espacios
     if (entered_function[i] != SPACE_CHARACTER){
       aux_stack.append(1, entered_function[i]); // append (n, character): agrega n veces "character"
     }
-  }*/
-
-  string tokens = "";        
-  string aux_str = "";    
- 
-  for (int i=0 ; i < (int) entered_function.length() ; i++){   
-
-    const string token (1, entered_function[i]);    
-
-    if (isOperator (token) || isParenthesis (token)){
-      if ( !aux_str.empty() )
-        tokens.push_back (aux_str);
-      aux_str = "";               
-      tokens.push_back (token);              
-    } else{       
-    // Append the numbers    
-      if ( !token.empty() && token != " " )                   
-        aux_str.append (token);    
-      else {    
-        if (aux_str != ""){    
-          tokens.push_back (aux_str);        
-          aux_str = "";    
-        }    
-      }                           
-    }     
   }
 
-  cout << tokens << endl; 
+
 
 }
+
 
 // Test if token is an pathensesis  
 bool isParenthesis( const string& token){        
