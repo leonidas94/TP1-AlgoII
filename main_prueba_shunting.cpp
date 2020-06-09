@@ -11,6 +11,7 @@
 #include "complejo.h"
 #include "main_prueba_shunting.h"
 #include "stk.h"
+#include "shunting_yard.h"
 
 using namespace std; 
 
@@ -31,9 +32,7 @@ static option_t options[] = {
 
 static string entered_function;
 
-void shunting_yard(stk <char> &);
-bool is_operator(char);
-bool is_blanaced (const string);
+
 
 
 // **********************************MAIN**********************************//
@@ -58,12 +57,12 @@ int main(int argc, char * const argv[]){
 		cout <<"imprimo el simbolo: "<<temp<<endl;
 	}*/
 
-	/*stk <char> output;
-	shunting_yard(output);
+	stk <char> output;
+	shunting_yard(output,entered_function);
 	while(!output.is_empty()){
 		cout<<"Out:"<<output.peek()<<endl;
 		output.pop();
-	}*/
+	}
 /*
   	stringstream(temp) >> auxd;
   	cout <<"imprimo el temp: "<<auxd<<endl;
@@ -75,10 +74,10 @@ int main(int argc, char * const argv[]){
   	else
 		cout <<"imprimo el: "<<temp<<endl;*/
 
-	if (is_blanaced(entered_function))
+	/*if (is_blanaced(entered_function))
 		cout<<"Está blanceada"<<endl;
 	else
-		cout<<"No está balanceada"<<endl;
+		cout<<"No está balanceada"<<endl;*/
 
 	return 0;
 }
@@ -120,69 +119,12 @@ bool is_blanaced (const string function){
 	return balanced;
 }
 
-void shunting_yard(stk <char> & output){
-	int j = 0;
-
-	stk <char> operat;
-	for (int i = 0; i < entered_function.length(); ++i)
-	{
-		if (entered_function[i]!=' ')
-		{
-			/*output_queue[j]=entered_function[i];
-			cout<<"Es:"<<output_queue[j]<<"|"<<endl;
-			j++;*/
-
-		}
-		if (isdigit(entered_function[i]) || entered_function[i]=='z')
-		{	
-			
-			output.push(entered_function[i]);
-			//cout<<"Numero: "<<entered_function[i]<<endl;
-		}
-		//const string token (1, entered_function[i]);
-		else if (is_operator(entered_function[i]))
-		{
-			/*while(operat.is_empty() && ){
-				
-			}*/
-			operat.push(entered_function[i]);
-			//cout<<entered_function[i]<<endl;
-		}
-		/*else if (is_function(entered_function[i],entered_function[i+1],entered_function[i+2],i))
-		{
-			operat.push(entered_function[i]);
-			//cout<<entered_function[i]<<endl;
-		}*/   // 
-
-
-	}
-}
-/*
-void shunting_yard(string & string2fill){
-  string aux_stack = "";
-
-  for (size_t i=0 ; i < entered_function.length() ; i++){ // Saco los espacios
-    if (entered_function[i] != SPACE_CHARACTER){
-      aux_stack.append(1, entered_function[i]); // append (n, character): agrega n veces "character"
-    }
-  }*/
 
 
 
 
 
 
-// Test if token is an pathensesis  
-bool is_parenthesis(char token){        
-    return token == '(' || token == ')';      
-}      
- 
-// Test if token is an operator        
-bool is_operator(char token){        
-    return token == '+' || token == '-' ||      
-           token == '*' || token == '/'	||
-           token == '^';      
-}
 
 
 //************************FUNCIONES DE CMDLINE************************//

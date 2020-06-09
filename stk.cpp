@@ -102,7 +102,7 @@ void stk<T>::push(T t)
 }
 
 
-
+// AAGREGAR EXIT SI EL TAMAÑO ES CERO
 template<typename T>
 T stk<T>::peek()
 {
