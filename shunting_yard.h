@@ -14,3 +14,4 @@ bool is_operator(char);
 int precedence (char token);
 bool is_left_associative(char);
 void shunting_yard(stk <char> &, string);
+bool is_function (string);

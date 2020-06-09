@@ -124,3 +124,19 @@ void shunting_yard(string & string2fill){
     }
   }*/
 
+
+bool is_function (string funct){
+
+	bool aux;
+
+	if (funct == "exp" || funct == "ln" || funct == "re" || funct == "im" ||
+		funct == "abs" || funct == "phase" || funct == "sin" || funct == "cos")
+	{
+		aux = true;
+	}
+	else 
+		aux = false;
+
+	return aux;
+}
+

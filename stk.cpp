@@ -22,48 +22,6 @@ stk<T>::stk() : pri_(0), tam_(0)
 {
 }
 
-/*
-template<typename T>
-stk<T>::stk(const stk &orig) : pri_(0), ult_(0), tam_(orig.tam_)
-{
-	nodo *iter;
-	nodo *ant;
-
-	// Recorremos la secuencia original en sentido directo. En cada paso,
-	// creamos un nodo, copiando el dato correspondiente, y lo enganchamos
-	// al final de nuestra nueva lista.
-	//
-	for (iter = orig.pri_, ant = 0; iter != 0; iter = iter->sig_)
-	{
-		// Creamos un nodo, copiando el dato, y lo enganchamos en e
-		// final de nuestra lista.
-		//
-		nodo *nuevo = new nodo(iter->dato_);
-		nuevo->ant_ = ant;
-		nuevo->sig_ = 0;
-
-		// Si ésta no es la primera pasada, es decir, si no se trata
-		// del primer nodo de la lista, ajustamos el enlace sig_ del
-		// nodo anterior.
-		//
-		if (ant != 0)
-			ant->sig_ = nuevo;
-
-		// Además, tenemos que ajustar los punteros a los elementos
-		// distinguidos de la secuencia, primero y último. En el caso
-		// de pri_ (enlace al primer elemento), esto lo vamos a
-		// hacer una única vez; para el caso de ult_, iremos tomando
-		// registro del último nodo procesado, para ajustarlo antes
-		// de retornar.
-		//
-		if (pri_ == 0)
-			pri_ = nuevo;
-		
-	}
-	
-	// Ajustamos el puntero al último elemento de la copia.
-	ult_ = ant;
-}*/
 
 template<typename T>
 stk<T>::~stk()
@@ -106,7 +64,11 @@ void stk<T>::push(T t)
 template<typename T>
 T stk<T>::peek()
 {
-	return pri_->dato_;
+	if (!is_empty())
+	{
+		return pri_->dato_;
+	}
+	
 }
 
 template<typename T>
