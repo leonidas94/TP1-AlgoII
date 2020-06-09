@@ -6,7 +6,6 @@
 #include <math.h>
 #include <string>
 #include <vector>
-#include <stack>
 
 #include "image.h"
 #include "complejo.h"
@@ -31,6 +30,7 @@ static option_t options[] = {
 };
 
 static string entered_function;
+
 void shunting_yard(stk <char> &);
 bool is_operator(char);
 bool is_blanaced (const string);
@@ -39,10 +39,11 @@ bool is_blanaced (const string);
 // **********************************MAIN**********************************//
 
 int main(int argc, char * const argv[]){
-  string output_queue = "                   ",temp;
-  double auxd;
+  string output_queue = "";
+
 	cmdline cmdl(options);	       // Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv);        // Metodo de parseo de la clase cmdline
+
 	cout<<entered_function<<endl;
   	/*shunting_yard(output_queue);   // 
   	cout<<"final: "<<output_queue<<endl;*/
@@ -122,7 +123,7 @@ bool is_blanaced (const string function){
 void shunting_yard(stk <char> & output){
 	int j = 0;
 
-	stack <char> operat;
+	stk <char> operat;
 	for (int i = 0; i < entered_function.length(); ++i)
 	{
 		if (entered_function[i]!=' ')
@@ -151,32 +152,11 @@ void shunting_yard(stk <char> & output){
 		{
 			operat.push(entered_function[i]);
 			//cout<<entered_function[i]<<endl;
-		}*/
+		}*/   // 
+
 
 	}
-	while(!operat.empty()){
-		output.push(operat.top());
-		operat.pop();
-	}
-
 }
-
-bool is_operator( char token){        
-    return token == '+' || token == '-' ||      
-           token == '*' || token == '/' || 
-           token == '^';      
-}
-/*
-bool is_function(char c1, char c2){
-	if ( c1== e || c2 == x)
-	{
-		return true;
-	}
-	else if (c1 == s || c2 == i )
-	{
-
-	}
-}*/
 /*
 void shunting_yard(string & string2fill){
   string aux_stack = "";
@@ -185,47 +165,24 @@ void shunting_yard(string & string2fill){
     if (entered_function[i] != SPACE_CHARACTER){
       aux_stack.append(1, entered_function[i]); // append (n, character): agrega n veces "character"
     }
-  }
+  }*/
 
-  string tokens = "";        
-  string aux_str = "";    
- 
-  for (int i=0 ; i < (int) entered_function.length() ; i++){   
 
-    const string token (1, entered_function[i]);    
 
-    if (isOperator (token) || isParenthesis (token)){
-      if ( !aux_str.empty() )
-        tokens.push_back (aux_str);
-      aux_str = "";               
-      tokens.push_back (token);              
-    } else{       
-    // Append the numbers    
-      if ( !token.empty() && token != " " )                   
-        aux_str.append (token);    
-      else {    
-        if (aux_str != ""){    
-          tokens.push_back (aux_str);        
-          aux_str = "";    
-        }    
-      }                           
-    }     
-  }
 
-  cout << tokens << endl; 
 
-}
 
 // Test if token is an pathensesis  
-bool isParenthesis( const string& token){        
-    return token == "(" || token == ")";      
+bool is_parenthesis(char token){        
+    return token == '(' || token == ')';      
 }      
  
 // Test if token is an operator        
-bool isOperator( const string& token){        
-    return token == "+" || token == "-" ||      
-           token == "*" || token == "/";      
-}*/
+bool is_operator(char token){        
+    return token == '+' || token == '-' ||      
+           token == '*' || token == '/'	||
+           token == '^';      
+}
 
 
 //************************FUNCIONES DE CMDLINE************************//
