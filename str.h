@@ -2,7 +2,6 @@
 #define _STR_H_INCLUIDO_
 
 #include <iostream>
-#include <string>
 
 using namespace std;
 
@@ -12,6 +11,7 @@ public:
 
 	// Constructores y destructor
 	str(); // Constructor por defecto
+	str(const char *);
 	str(const size_t ); // Constructor por longitud de la cadena
 	str(const str &); // Constructor por copia, copia una string en otra
 	~str(); // Destructor, no tiene que destruir nada porque no pedimos memoria
@@ -26,10 +26,12 @@ public:
 	// Operadores
 
 	str operator=(const str & );
-	str operator=(const string & );
-	str operator+(const str & );
-	str operator+(const string & );
+	str operator=(char *);
+	char operator[]( size_t );
+
 	// Funciones
+	void append(const str &);
+	bool compare(const str &);
 
 
 

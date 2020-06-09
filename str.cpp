@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include "str.h"
 
 using namespace std;
@@ -14,6 +13,21 @@ str::str(){
 str::str(const size_t a){
 	my_str = new char[a];
 	len=a;
+}
+
+// Constructor por copia
+str::str(const char * str_arg){
+
+	size_t length = 0;
+
+	while(str_arg[length]!='\0'){length++;}
+
+	my_str = new char[length];
+	len = length;
+
+	for (size_t i = 0; i < len; ++i){
+		my_str[i]=str_arg[i];	
+	}
 }
 
 // Constructor por copia
@@ -54,7 +68,6 @@ size_t str::get_len(){
 
 
 
-
 str str::operator= (const str & string_a_igualar){
 
 	my_str=string_a_igualar.my_str;
@@ -63,12 +76,17 @@ str str::operator= (const str & string_a_igualar){
 	return *this;
 }
 
-str str::operator= (const string & string_a_igualar){
 
-	//if(strlen(string_a_igualar!=0){	}
+str str::operator= (char * string_a_igualar){
 
-	if(len!=string_a_igualar.length()){
-		len=string_a_igualar.length();
+	size_t length=0;
+
+	while(string_a_igualar[length]!='\0'){
+		length++;
+	}
+
+	if(len!=length){
+		len=length;
 		delete[] my_str;
 		my_str = new char[len];
 	}
@@ -81,25 +99,43 @@ str str::operator= (const string & string_a_igualar){
 }
 
 
-str str::operator+ (const str & str_to_append){
+char str::operator[]( size_t i){
+	if(i < len && i >= 0)
+		return my_str[i];
+	
+	else{
+		cout << "Array index out of bounds." << endl; 
+   }
+   return 0; // NO SABEMOS QUE DEVOLVER
+}
+
+
+void str::append (const str & str_to_append){
 
 	str aux=*this;
 
 	len+=str_to_append.len;
+
 	delete[] my_str;
 	my_str = new char[len];
 
 	for (size_t i = 0; i < aux.len; ++i){
-		my_str[i]=aux[i];	
+		my_str[i]=aux.my_str[i];
 	}
 
 	for (size_t i = aux.len; i < len; ++i){
-		my_str[i]=str_to_append[i];	
+		my_str[i]=str_to_append.my_str[i-aux.len];
 	}	
-
-	return *this;
 }
 
-str str::operator+ (const string & ){
+bool str::compare(const str & str2comp){
 
+	if(len != str2comp.len){return false;}
+
+	for (size_t i = 0; i < len; i++){
+		if(my_str[i] != str2comp.my_str[i])
+		return false;	
+	}
+
+	return true;	
 }
