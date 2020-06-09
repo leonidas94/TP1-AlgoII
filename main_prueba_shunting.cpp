@@ -33,6 +33,7 @@ static option_t options[] = {
 static string entered_function;
 void shunting_yard(stk <char> &);
 bool is_operator(char);
+bool is_blanaced (const string);
 
 
 // **********************************MAIN**********************************//
@@ -56,12 +57,12 @@ int main(int argc, char * const argv[]){
 		cout <<"imprimo el simbolo: "<<temp<<endl;
 	}*/
 
-	stk <char> output;
+	/*stk <char> output;
 	shunting_yard(output);
 	while(!output.is_empty()){
 		cout<<"Out:"<<output.peek()<<endl;
 		output.pop();
-	}
+	}*/
 /*
   	stringstream(temp) >> auxd;
   	cout <<"imprimo el temp: "<<auxd<<endl;
@@ -73,7 +74,49 @@ int main(int argc, char * const argv[]){
   	else
 		cout <<"imprimo el: "<<temp<<endl;*/
 
+	if (is_blanaced(entered_function))
+		cout<<"Está blanceada"<<endl;
+	else
+		cout<<"No está balanceada"<<endl;
+
 	return 0;
+}
+
+bool is_blanaced (const string function){
+	stk <char> stack;
+	bool balanced = true;
+
+	for (int i = 0; i < function.length() && balanced == true; ++i)
+	{
+		switch(function[i]){
+			case '{':
+			case '[':
+			case '(':
+				stack.push(function[i]);
+				break;
+			case '}':
+				if (!stack.is_empty() && stack.peek() == '{')
+					stack.pop();
+				else
+					balanced = false;
+				break;
+			case ']':
+				if (!stack.is_empty() && stack.peek() == '[')
+					stack.pop();
+				else
+					balanced = false;
+				break;	
+			case ')':
+				if (!stack.is_empty() && stack.peek() == '(')
+					stack.pop();
+				else
+					balanced = false;
+				break;				
+		}
+	}
+	if (!stack.is_empty())
+		balanced = false;
+	return balanced;
 }
 
 void shunting_yard(stk <char> & output){
@@ -98,6 +141,9 @@ void shunting_yard(stk <char> & output){
 		//const string token (1, entered_function[i]);
 		else if (is_operator(entered_function[i]))
 		{
+			/*while(operat.is_empty() && ){
+				
+			}*/
 			operat.push(entered_function[i]);
 			//cout<<entered_function[i]<<endl;
 		}
