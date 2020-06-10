@@ -9,9 +9,9 @@
 
 #include "image.h"
 #include "complejo.h"
-#include "main_prueba_shunting.h"
+#include "main_prueba_shunting_v2.h"
 #include "stk.h"
-#include "shunting_yard.h"
+#include "shunting_yard_v2.h"
 #include "str.h"
 
 using namespace std; 
@@ -33,13 +33,10 @@ static option_t options[] = {
 
 static string entered_function;
 
-
-
-
 // **********************************MAIN**********************************//
 
 int main(int argc, char * const argv[]){
-  string output_queue = "";
+  	string output_queue = "";
 
 	cmdline cmdl(options);	       // Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv);        // Metodo de parseo de la clase cmdline
@@ -58,7 +55,7 @@ int main(int argc, char * const argv[]){
 		cout <<"imprimo el simbolo: "<<temp<<endl;
 	}*/
 
-	stk <char> output;
+	stk <str> output;			//Stack de clase str
 	shunting_yard(output,entered_function);
 	while(!output.is_empty()){
 		cout<<"Out:"<<output.peek()<<endl;
@@ -119,13 +116,6 @@ bool is_blanaced (const string function){
 		balanced = false;
 	return balanced;
 }
-
-
-
-
-
-
-
 
 
 //************************FUNCIONES DE CMDLINE************************//
