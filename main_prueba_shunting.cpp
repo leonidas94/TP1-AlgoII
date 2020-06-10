@@ -83,7 +83,7 @@ int main(int argc, char * const argv[]){
 	return 0;
 }
 
-bool is_blanaced (const string function){
+bool is_balanced (const string function){
 	stk <char> stack;
 	bool balanced = true;
 
