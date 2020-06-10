@@ -4,16 +4,16 @@
 int main (){
 
 	str new_string;
-	str string_igual = "juancho";
+	str cadena = "a12";
 	char * cadena_char = "puto";
 	char a = 'a';
 	size_t largo;
 
-	cout << a << endl;
 
-	string_igual.append(a);
+	if(cadena.is_number())
+		cout << a << endl;
 
-	string_igual.print_str();
+	cadena.print_str();
 
 	return 0;
 }
