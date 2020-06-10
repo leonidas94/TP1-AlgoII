@@ -128,6 +128,26 @@ void str::append (const str & str_to_append){
 	}	
 }
 
+
+
+void str::append (const char & char_to_append){
+
+	str aux=*this;
+
+	len++;
+
+	delete[] my_str;
+	my_str = new char[len];
+
+	for (size_t i = 0; i < aux.len; ++i){
+		my_str[i]=aux.my_str[i];
+	}
+
+		my_str[aux.len]=char_to_append;
+}
+
+
+
 bool str::compare(const str & str2comp){
 
 	if(len != str2comp.len){return false;}

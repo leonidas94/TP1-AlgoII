@@ -31,6 +31,7 @@ public:
 
 	// Funciones
 	void append(const str &);
+	void append(const char &);
 	bool compare(const str &);
 
 
