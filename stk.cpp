@@ -81,6 +81,17 @@ bool stk<T>::is_empty()
 	return false;
 }
 
+template <typename T>
+stk<T>& stk<T>::operator= (const stk<T>& stk2copy){
+	 stk <T> out;
+	 nodo * aux;
+	 aux = stk2copy.pri_;
+	 while (!aux){
+	 	out.push(aux.dato_);
+	 	aux = aux.sig_;
+	 }
+}
+
 
 /***********************LO VIEJO*******************************/
 /*void stk::stk (){

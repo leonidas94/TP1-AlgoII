@@ -36,7 +36,7 @@ class stk{
 	public:
 
 		stk();
-		//stk(const array &);
+		stk (const stk<T>&);
 		~stk();
 
 		size_t stk_size() const;
@@ -45,6 +45,8 @@ class stk{
 		void push(T);
 		T peek();
 		bool is_empty();
+		stk<T>& operator= (const stk<T>&);
+
 
 
 };
@@ -63,6 +65,64 @@ stk<T>::nodo::~nodo()
 template<typename T>
 stk<T>::stk() : pri_(0), tam_(0)
 {
+}
+
+template <typename T>
+stk<T>::stk (const stk<T>& stk2copy){
+
+	nodo * aux;
+	nodo * aux2;
+	if (stk2copy.tam_>0)
+	{
+		pri_ = new nodo((stk2copy.pri_)->dato_);
+		aux = (stk2copy.pri_)->sig_;
+		aux2 = pri_;
+
+		while (aux){
+			aux2->sig_ = new nodo(aux->dato_);
+			aux = aux->sig_;
+			aux2 = aux2->sig_;
+
+		}
+		tam_=stk2copy.tam_;
+	}
+	else{
+		this->pri_=0;
+		this->tam_=0;
+	}
+}
+
+template <typename T>
+stk<T>& stk<T>::operator= (const stk<T>& stk2copy){
+
+	for (nodo *p = pri_; p; )
+	{
+		nodo *q = p->sig_;
+		delete p;
+		p = q;
+	}
+
+	nodo * aux;
+	nodo * aux2;
+	if (stk2copy.tam_>0)
+	{
+		pri_ = new nodo((stk2copy.pri_)->dato_);
+		aux = (stk2copy.pri_)->sig_;
+		aux2 = pri_;
+
+		while (aux){
+			aux2->sig_ = new nodo(aux->dato_);
+			aux = aux->sig_;
+			aux2 = aux2->sig_;
+
+		}
+		tam_=stk2copy.tam_;
+	}
+	else{
+		this->pri_=0;
+		this->tam_=0;
+	}
+	return *this;
 }
 
 /*
@@ -166,6 +226,10 @@ template<typename T>
 size_t stk<T>::stk_size() const{
 	return tam_;
 }
+
+
+
+
 
 
 #endif
