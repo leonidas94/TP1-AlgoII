@@ -1,20 +1,29 @@
 #include "stk.h"
 #include "shunting_yard_v2.h"
 
-void shunting_yard(stk <str> & output_stack, string entered_function){
+void shunting_yard(stk <str> & output_stack, str entered_function[]){
 	int counter = 0;
 
 	stk <str> op_stack;
 
 	stk <str> tokens_stack; // Lo voy a usar para tratar de separar entered_function en tokens
 
-	for (int i = 0; i<entered_function.length(); ++i){	//trato de separar en tokens (1.5, exp...)
+	/*for (int i = 0; i<entered_function.size(); ++i){	//trato de separar en tokens (1.5, exp...)
 		str aux_str;
+		if (isnumber(entered_function[i]))
+		{
+			for (i; entered_function[i]!= '\0' || entered_function[i]== '.' || isnumber(entered_function[i]); ++i)
+			{
+				aux_str.append(entered_function[i]);
+			}
+		}
 
 
-	}
+	}*/
 
-	for (int i = 0; i < entered_function.length(); ++i)
+	int tamano = sizeof(entered_function)/sizeof(entered_function[0]);
+// ACA ARRANCA EL AGLORITMO
+	for (int i = 0; i < tamano; ++i)
 	{
 		if (entered_function[i]!=' ')
 		{
@@ -23,7 +32,7 @@ void shunting_yard(stk <str> & output_stack, string entered_function){
 			j++;*/
 
 		}
-		if (isdigit(entered_function[i]) || entered_function[i]=='z')
+		if (isnumber(entered_function[i]) || entered_function[i]=='z')
 		{	
 			
 			output_stack.push(entered_function[i]);
@@ -93,9 +102,9 @@ int precedence (str token){
 
 	if (token.compare("+") || token.compare("-"))
 		p=2;
-	if (token.compare("*") || token.compare("/"))
+	else if (token.compare("*") || token.compare("/"))
 		p=3;
-	if (token.compare("^"))
+	else if (token.compare("^"))
 		p=4;
 
 	return p;
@@ -109,7 +118,7 @@ bool is_left_associative(str token){
 		token.compare("*") || token.compare("/")){
 		return left_assoc;
 	}
-	if (token.compare("^")){
+	else if (token.compare("^")){
 		left_assoc = false;
 	}
 
