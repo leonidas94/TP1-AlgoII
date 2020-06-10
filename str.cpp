@@ -159,3 +159,10 @@ bool str::compare(const str & str2comp){
 
 	return true;	
 }
+
+bool str::is_number(){
+
+	if(isdigit(my_str[0]))
+		return true;
+	return false;
+}
