@@ -1,11 +1,7 @@
 #include <iostream>
 #include "stk.h"
 
-
-
 using namespace std;
-
-
 
 template<typename T>
 stk<T>::nodo::nodo(const T &t) : sig_(0), dato_(t)

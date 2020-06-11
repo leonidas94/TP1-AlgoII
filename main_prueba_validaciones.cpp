@@ -45,7 +45,9 @@ int main(int argc, char * const argv[]){
 
 	cout << entered_function << endl;
 
-	string_array = parse_function(entered_function);	// Valido la funcion ingresada
+	string_array = parse_function(entered_function);
+
+	cout << string_array[3] << endl;
 
 	return 0;
 }
