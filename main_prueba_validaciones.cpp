@@ -47,8 +47,13 @@ int main(int argc, char * const argv[]){
 
 	string_array = parse_function(entered_function);
 
-	cout << string_array[3] << endl;
-
+	//int string_array_size= sizeof(string_array);//sizeof(string_array[0]);
+	//cout << "Tamano :" <<string_array_size<<endl;;
+	for (int i = 0; i < 15; ++i)
+	{
+		cout << string_array[i] << endl;
+	}
+	
 	return 0;
 }
 
@@ -64,16 +69,35 @@ string * parse_function(const string function){		// Valido y parseo la funcion i
 
 	while (i < function.length()){
 
-		if (function[i] == ' ')
-			i++;
+		/*if (function[i] == ' ')
+			i++;*/
 		if (is_math_function_initial(function[i]) && function[i+1]!='-' && !isdigit(function[i+1])){
 			if (!parse_math_expression(function, string_array, string_array_size, i)){
 				cout << "error, funcion matematica erronea" << endl;
 				exit(0);
 			}
-			i++;
+			cout<<"Valor de  i:"<<i<<endl;
+			//i++;
+		}
+		// agregue desde aca
+		else if(isdigit(function[i]) || function[i]=='.'){
+			if (!parse_number(function, string_array, string_array_size, i)){
+				cout << "error, funcion matematica erronea" << endl;
+				exit(0);
+			}
+		}
+		else if (is_operator(function[i]) || is_parenthesis (function[i])){
+			string aux_string = "";
+			aux_string.append(1, function[i]);
+			add_string_to_array(string_array, string_array_size, aux_string);
+		}
+		else if (function[i]=='z' || function[i]=='j'){
+			string aux_string = "";
+			aux_string.append(1, function[i]);
+			add_string_to_array(string_array, string_array_size, aux_string);
 		}
 		i++;
+
 
 	}
 
@@ -97,7 +121,7 @@ bool is_math_function_initial (const char letter){ // Comparo contra las inicial
 bool parse_math_expression (const string function, string *& string_array, size_t & string_array_size, size_t & position){	
 	string aux_string = "";
 
-cout << "encontro funcion en pos: " << position << endl;
+//cout << "encontro funcion en pos: " << position << endl;
 
 	while (function[position] != '('){
 		if (position >= function.length()){
@@ -107,7 +131,7 @@ cout << "encontro funcion en pos: " << position << endl;
 		aux_string.append(1, function[position]);
 		position++;
 	}
-
+	position--;
 	for (size_t i = 0; i< FUNCTIONS_AMOUNT; i++){
 		if (aux_string == math_functions[i]){
 			add_string_to_array(string_array, string_array_size, aux_string);
@@ -202,6 +226,37 @@ bool is_balanced (const string function){
 	return balanced;
 }
 
+bool parse_number (const string function, string *& string_array, size_t & string_array_size, size_t & position){
+
+	string aux_string = "";
+	while(isdigit(function[position]) || function[position] == '.' || 
+		 ((function[position] == 'e' || function[position] == 'E') &&  (function[position+1] == '-' || isdigit(function[position+1]))) ||
+		 (function[position] == '-' && isdigit(function[position+1]) && (function[position-1] == 'e' || function[position-1] == 'E')))
+	{
+		if (position >= function.length()){
+			cout << "ERROR no encontro parentesis ( parseando"<< endl;
+			return false;
+		}
+		//cout<<"antes de asignar"<<endl;
+		aux_string.append(1, function[position++]);
+		//cout<<"despues de asignar"<<endl;
+	}
+	position--;
+	add_string_to_array(string_array, string_array_size, aux_string);
+	return true;
+}
+
+/****/
+bool is_operator(char token){        
+    return token == '+' || token == '-' ||      
+           token == '*' || token == '/'	||
+           token == '^';      
+}
+bool is_parenthesis(char token){        
+    return token == ')' || token == '(' ||
+    	   token == ']' || token == '[' ||
+    	   token == '{' || token == '}';      
+} 
 
 
 //************************FUNCIONES DE CMDLINE************************//

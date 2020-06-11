@@ -45,10 +45,18 @@ bool is_balanced (const string );
 bool is_math_function_initial (const char);
 
 bool parse_math_expression(const string, string *&, size_t &, size_t &);
+bool parse_number(const string, string *&, size_t &, size_t &);// agregue eso
 
 bool resize_string_array (string *& , size_t &, size_t );
 
 void add_string_to_array(string *& , size_t &, const string &);
+
+
+
+/********************************/
+
+bool is_operator(char);
+bool is_parenthesis(char);
 
 class cmdline {
 	// Este atributo apunta a la tabla que describe todas las opciones a procesar. 
