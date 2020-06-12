@@ -38,11 +38,11 @@ static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
 
-bool isOperator(const string& );
+bool isOperator(const string & );
 
-bool isParenthesis( const string& );
+bool isParenthesis( const string & );
 
-void shunting_yard(string &);
+void shunting_yard2(stk <string> &,string & );
 
 class cmdline {
 	// Este atributo apunta a la tabla que describe todas las opciones a procesar. 

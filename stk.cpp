@@ -4,7 +4,7 @@
 using namespace std;
 
 template<typename T>
-stk<T>::nodo::nodo(const T &t) : sig_(0), dato_(t)
+stk<T>::nodo::nodo(const T &t) : sig_(0), dato_(t); // AGREGADO DE FLAG
 {
 }
 
@@ -48,6 +48,7 @@ template<typename T>
 void stk<T>::push(T t)
 {
 	nodo *p = new nodo(t);
+
 	p->sig_ = pri_;
 
 	pri_ = p;

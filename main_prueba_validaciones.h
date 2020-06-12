@@ -7,6 +7,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <string>
+#include "shunting_yard_v2.h"
 
 #define OPT_DEFAULT   0
 #define OPT_SEEN      1
@@ -46,7 +47,7 @@ bool is_math_function_initial (const char);
 
 bool parse_math_expression(const string, string *&, size_t &, size_t &);
 bool parse_number(const string, string *&, size_t &, size_t &);// agregue eso
-
+bool parse_negative_number(const string, string *&, size_t &, size_t &);
 bool resize_string_array (string *& , size_t &, size_t );
 
 void add_string_to_array(string *& , size_t &, const string &);

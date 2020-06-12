@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sstream>
+#include <string>
 #include <cstdlib>
 #include <math.h>
 
@@ -9,7 +10,8 @@
 #include "complejo.h"
 #include "main_prueba_validaciones.h"
 #include "stk.h"
-#include "str.h"
+//#include "str.h"
+
 
 using namespace std; 
 
@@ -49,10 +51,20 @@ int main(int argc, char * const argv[]){
 
 	//int string_array_size= sizeof(string_array);//sizeof(string_array[0]);
 	//cout << "Tamano :" <<string_array_size<<endl;;
+
 	for (int i = 0; i < 15; ++i)
 	{
 		cout << string_array[i] << endl;
 	}
+	stk <string> output;
+	shunting_yard2(output,string_array);
+	/*while(!output.is_empty()){
+		cout<<"Out:"<<output.peek()<<endl;
+		output.pop();
+	}*/
+
+	solve_rpn(output);
+	cout<<"La rta es: "<<output.peek()<<endl;
 	
 	return 0;
 }
@@ -66,6 +78,7 @@ string * parse_function(const string function){		// Valido y parseo la funcion i
 		cout << "No esta balanceada" << endl;
 		exit(0);
 	}
+	//CLEAN SPACES
 
 	while (i < function.length()){
 
@@ -80,13 +93,27 @@ string * parse_function(const string function){		// Valido y parseo la funcion i
 			//i++;
 		}
 		// agregue desde aca
-		else if(isdigit(function[i]) || function[i]=='.'){
-			if (!parse_number(function, string_array, string_array_size, i)){
+		else if(isdigit(function[i]) || (function[i]=='.' && isdigit(function[i+1])))
+		{
+			if (!parse_number(function, string_array, string_array_size, i)){ 
 				cout << "error, funcion matematica erronea" << endl;
 				exit(0);
 			}
 		}
-		else if (is_operator(function[i]) || is_parenthesis (function[i])){
+		else if (  
+				(function[i]=='-' && isdigit(function[i+1])) && 
+				(i==0 || 
+				!isdigit(function[i-1]) || 
+				!is_operator(function[i-1]) || 
+				!is_parenthesis(function[i]))
+				)
+		{
+			if (!parse_negative_number(function, string_array, string_array_size, i)){ 
+				cout << "error, funcion matematica erronea" << endl;
+				exit(0);
+			}
+		}
+		else if (is_operator(function[i]) || is_parenthesis(function[i])){
 			string aux_string = "";
 			aux_string.append(1, function[i]);
 			add_string_to_array(string_array, string_array_size, aux_string);
@@ -121,7 +148,7 @@ bool is_math_function_initial (const char letter){ // Comparo contra las inicial
 bool parse_math_expression (const string function, string *& string_array, size_t & string_array_size, size_t & position){	
 	string aux_string = "";
 
-//cout << "encontro funcion en pos: " << position << endl;
+//cout << "encontro funcion en pos: " << position << endl;  
 
 	while (function[position] != '('){
 		if (position >= function.length()){
@@ -229,17 +256,36 @@ bool is_balanced (const string function){
 bool parse_number (const string function, string *& string_array, size_t & string_array_size, size_t & position){
 
 	string aux_string = "";
-	while(isdigit(function[position]) || function[position] == '.' || 
-		 ((function[position] == 'e' || function[position] == 'E') &&  (function[position+1] == '-' || isdigit(function[position+1]))) ||
-		 (function[position] == '-' && isdigit(function[position+1]) && (function[position-1] == 'e' || function[position-1] == 'E')))
+	while(
+		 isdigit(function[position]) || function[position] == '.' //|| 
+		 //((function[position] == 'e' || function[position] == 'E') &&  (function[position+1] == '-' || isdigit(function[position+1])) )
+		 )
 	{
 		if (position >= function.length()){
 			cout << "ERROR no encontro parentesis ( parseando"<< endl;
 			return false;
 		}
-		//cout<<"antes de asignar"<<endl;
 		aux_string.append(1, function[position++]);
-		//cout<<"despues de asignar"<<endl;
+	}
+	position--;
+	add_string_to_array(string_array, string_array_size, aux_string);
+	return true;
+}
+bool parse_negative_number (const string function, string *& string_array, size_t & string_array_size, size_t & position){
+
+	string aux_string = "";
+
+	aux_string.append(1, function[position++]);// Guarda el signo menos
+	while(
+		 isdigit(function[position]) || function[position] == '.' //|| 
+		 //((function[position] == 'e' || function[position] == 'E') &&  (function[position+1] == '-' || isdigit(function[position+1])) )
+		 )
+	{
+		if (position >= function.length()){
+			cout << "ERROR no encontro parentesis ( parseando"<< endl;
+			return false;
+		}
+		aux_string.append(1, function[position++]);
 	}
 	position--;
 	add_string_to_array(string_array, string_array_size, aux_string);
@@ -250,7 +296,8 @@ bool parse_number (const string function, string *& string_array, size_t & strin
 bool is_operator(char token){        
     return token == '+' || token == '-' ||      
            token == '*' || token == '/'	||
-           token == '^';      
+           token == '^' || token == 'e' ||
+           token == 'E';      
 }
 bool is_parenthesis(char token){        
     return token == ')' || token == '(' ||

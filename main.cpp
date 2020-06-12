@@ -266,7 +266,7 @@ bool read_pgm(image & img_arg){
     getline(*iss, in_string); // Se leen las dimensiones de la matriz.
   }
 
-  stringstream ss (in_string);  
+  stringstream ss (in_string); 
   
 	while (i < 2 && !ss.eof()){
   	ss >> temp;
@@ -291,7 +291,7 @@ bool read_pgm(image & img_arg){
   img_arg.set_width(aux_size[0]);  // Se guarda el ancho de la matriz.
   img_arg.set_height(aux_size[1]); // Se guarda el alto de la matriz.
   
-
+  // CCAMBIAR A OPERADOR  >> SI HAY TIEMPO
   getline(*iss, in_string);
   aux_greyscale = stoi(in_string);
   img_arg.set_greyscale(aux_greyscale); // Se guarda el valor de la escala de grises.

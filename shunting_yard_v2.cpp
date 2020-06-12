@@ -1,49 +1,43 @@
-#include "stk.h"
 #include "shunting_yard_v2.h"
+#include <sstream>
+#include <string>
 
-void shunting_yard(stk <str> & output_stack, str entered_function[]){
-	int counter = 0;
+/*#include <cmath>
+#include <string>
+#include "stk.h"*/
+using namespace std; 
 
-	stk <str> op_stack;
+void shunting_yard2(stk <string> & output_stack, string entered_function[]){
+	//int counter = 0;
 
-	stk <str> tokens_stack; // Lo voy a usar para tratar de separar entered_function en tokens
+	stk <string> op_stack;
 
-	/*for (int i = 0; i<entered_function.size(); ++i){	//trato de separar en tokens (1.5, exp...)
-		str aux_str;
-		if (isnumber(entered_function[i]))
-		{
-			for (i; entered_function[i]!= '\0' || entered_function[i]== '.' || isnumber(entered_function[i]); ++i)
-			{
-				aux_str.append(entered_function[i]);
-			}
-		}
+	stk <string> tokens_stack; // Lo voy a usar para tratar de separar entered_function en tokens
 
-
-	}*/
-
-	int tamano = sizeof(entered_function)/sizeof(entered_function[0]);
+	int tamano=3;
+	
+	//cout<<tamano<<endl;
 // ACA ARRANCA EL AGLORITMO
 	for (int i = 0; i < tamano; ++i)
 	{
-		if (entered_function[i]!=' ')
-		{
-			/*output_queue[j]=entered_function[i];
-			cout<<"Es:"<<output_queue[j]<<"|"<<endl;
-			j++;*/
-
-		}
-		if (isnumber(entered_function[i]) || entered_function[i]=='z')
+		if (isdigit(entered_function[i]) ||  entered_function[i]=="z")
 		{	
-			
+			cout<<"entro"<<endl;
 			output_stack.push(entered_function[i]);
+
 			//cout<<"Numero: "<<entered_function[i]<<endl;
 		}
+		else if(is_function(entered_function[i])) {
+			op_stack.push(entered_function[i]);
+		}	
 		//const string token (1, entered_function[i]);
 		else if (is_operator(entered_function[i]))
-		{
+		{	
+			//Calcular la precedencia antes
+
 			while((!op_stack.is_empty() && is_operator(op_stack.peek())) && 
 				((precedence(entered_function[i]) < precedence(op_stack.peek())) || ((precedence(entered_function[i]) == precedence(op_stack.peek())) && is_left_associative(entered_function[i])))
-				 &&(!is_left_parenthesis(op_stack.peek())))
+				 && (!is_left_parenthesis(op_stack.peek())))
 			{
 				output_stack.push(op_stack.peek());
 				op_stack.pop();
@@ -77,48 +71,48 @@ void shunting_yard(stk <str> & output_stack, str entered_function[]){
 
 
 // Test if token is an pathensesis  
-bool is_left_parenthesis(str token){        
-    return token.compare("(") ||
-    	   token.compare("[") ||
-    	   token.compare("{") ;      
+bool is_left_parenthesis(string token){        
+    return token == "(" ||
+    	   token == "[" ||
+    	   token == "{";      
 }   
-bool is_right_parenthesis(str token){        
-    return token.compare(")") ||
-    	   token.compare("]") ||
-    	   token.compare("}") ;    
+bool is_right_parenthesis(string token){        
+    return token == ")" ||
+    	   token == "]" ||
+    	   token == "}" ;    
 }  
 
  
 // Test if token is an operator        
-bool is_operator(str token){        
-    return token.compare("+") || token.compare("-") ||      
-           token.compare("*") || token.compare("/")	||
-           token.compare("^");      
+bool is_operator(string token){        
+    return token == "+" || token == "-" ||      
+           token == "*" || token == "/"	||
+           token == "^";      
 }
 
 
-int precedence (str token){
+int precedence (string token){
 	int p = 0;
 
-	if (token.compare("+") || token.compare("-"))
+	if (token == "+" || token == "-")
 		p=2;
-	else if (token.compare("*") || token.compare("/"))
+	else if (token == "*" || token == "/")
 		p=3;
-	else if (token.compare("^"))
+	else if (token == "^")
 		p=4;
 
 	return p;
 } 
 
 
-bool is_left_associative(str token){
+bool is_left_associative(string token){
 	bool left_assoc = true;
 
-	if (token.compare("+") || token.compare("-") ||
-		token.compare("*") || token.compare("/")){
+	if (token == "+" || token == "-" ||
+		token == "*" || token == "/"){
 		return left_assoc;
 	}
-	else if (token.compare("^")){
+	else if (token == "^"){
 		left_assoc = false;
 	}
 
@@ -126,14 +120,14 @@ bool is_left_associative(str token){
 }
 
 
-bool is_function (str funct){
+bool is_function (string funct){
 
 	bool aux;
 
-	if (funct.compare("exp") || funct.compare("ln") ||
-		funct.compare("re") || funct.compare("im") ||
-		funct.compare("abs") || funct.compare("phase") ||
-		funct.compare("sin") || funct.compare("cos"))
+	if (funct == "exp" || funct == "ln" ||
+		funct == "re" || funct == "im" ||
+		funct == "abs" || funct == "phase" ||
+		funct == "sin" || funct == "cos")
 	{
 		aux = true;
 	}
@@ -142,4 +136,97 @@ bool is_function (str funct){
 
 	return aux;
 }
+
+bool isdigit (string str){
+	return isdigit(str[0]);
+}
+
+
+void solve_rpn(stk <string> & stack){
+	cout<<"SOLVE RPN"<<endl;
+	string temp;
+	//double result;
+
+	/*if (stack.is_empty()){
+		return 0;
+	}*/
+	if (stack.is_empty())
+	{
+		return;
+	}
+	else if (isdigit(stack.peek()))
+	{
+		return;
+	}
+	else if (is_operator(stack.peek())){
+		string token = stack.peek();
+		stack.pop();
+
+		solve_rpn(stack);
+		string right = stack.peek();//solve_rpn(stack.peek());
+		stack.pop();
+		cout<<"leyo el de la derecha"<<endl;
+
+		solve_rpn(stack);
+		string left = stack.peek();//solve_rpn(stack);
+		stack.pop();
+		cout<<"leyo el de la izquierda"<<endl;
+		double x, y;
+		stringstream s1 (left); 
+		s1 >> temp;
+		
+		stringstream(temp) >> x;
+		stringstream s2 (right);
+		s2 >> temp; 
+		stringstream(temp) >> y;
+
+
+		if 		(token == "+") x += y;
+		else if (token == "-") x -= y;
+		else if (token == "*") x *= y;
+		//else if (token == "^") x = x^y;
+		else {
+			if (y==0)
+			{
+				cout<<"error division por 0"<<endl;
+			}
+			else
+				x /= y;
+		}
+
+		ostringstream x_convert;
+		x_convert << x;
+		cout<<x<<endl;
+		right = x_convert.str();
+		stack.push(right);
+		return;
+	}
+	else if (is_function(stack.peek())){
+		string function = stack.peek();
+		stack.pop();
+
+		solve_rpn(stack);
+		string right = stack.peek();//solve_rpn(stack.peek());
+		stack.pop();
+
+		double y;
+		stringstream s1 (right);
+		s1 >> y; 
+		cout<<y<<endl;
+
+		if (function == "exp") y = exp(y);
+		if (function == "ln") y = log(y);
+
+		ostringstream y_convert;
+		y_convert << y;
+		cout<<y<<endl;
+		right = y_convert.str();
+		stack.push(right);
+		return;
+		
+	}
+
+} 
+
+
 

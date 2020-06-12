@@ -24,6 +24,8 @@ class stk{
 		nodo *sig_;
 		T dato_;
 
+		//bool flag_sign;
+
 		public:
 		nodo(T const&);
 		~nodo();
@@ -189,7 +191,9 @@ void stk<T>::pop()
 		delete pri_;
 		pri_ = aux;
 		tam_--;
-	}
+	}else 
+		return;
+
 }
 
 
@@ -209,7 +213,10 @@ void stk<T>::push(T t)
 template<typename T>
 T stk<T>::peek()
 {
-	return pri_->dato_;
+	if (!is_empty())
+	{
+		return pri_->dato_;
+	}
 }
 
 template<typename T>
