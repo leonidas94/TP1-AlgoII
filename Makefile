@@ -1,10 +1,10 @@
 CXXARGS  = -g -Wall
 CXXFLAGS = -I. $(CXXARGS)
 
-all: function_image
+all: prueba1
 	
-function_image: main.cpp image.cpp complejo.cpp main.h image.h complejo.h
-	$(CXX) $(CXXFLAGS) -o function_image complejo.cpp image.cpp main.cpp
+prueba1: main_tp1.cpp parser.cpp shunting_yard.cpp main_tp1.h parser.h shunting_yard.h
+	$(CXX) $(CXXFLAGS) -o prueba1 shunting_yard.cpp parser.cpp main_tp1.cpp
 
 clean:
 	$(RM) -vf *.o *.exe *.t *.out *.err

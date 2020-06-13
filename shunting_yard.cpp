@@ -1,4 +1,4 @@
-#include "shunting_yard_v2.h"
+#include "shunting_yard.h"
 #include <sstream>
 #include <string>
 
@@ -7,7 +7,7 @@
 #include "stk.h"*/
 using namespace std; 
 
-void shunting_yard2(stk <string> & output_stack, string entered_function[],size_t tamano){
+void shunting_yard(stk <string> & output_stack, string entered_function[],size_t tamano){
 	//int counter = 0;
 
 	stk <string> op_stack;
@@ -22,11 +22,11 @@ void shunting_yard2(stk <string> & output_stack, string entered_function[],size_
 	{
 		cout<< entered_function[i] <<endl;
 
-		if (isdigit(entered_function[i]) ||  entered_function[i]=="z")
+		if (is_string_digit(entered_function[i]) ||  entered_function[i]=="z")
 		{	
 			output_stack.push(entered_function[i]);
 		}
-		else if(is_function(entered_function[i])) {
+		else if(is_math_function(entered_function[i])) {
 			op_stack.push(entered_function[i]);
 		}	
 		
@@ -58,7 +58,7 @@ void shunting_yard2(stk <string> & output_stack, string entered_function[],size_
 			if (is_left_parenthesis(op_stack.peek()))
 			{
 				op_stack.pop();
-				if (is_function(op_stack.peek())){
+				if (is_math_function(op_stack.peek())){
 					output_stack.push(op_stack.peek());
 					op_stack.pop();
 				}
@@ -96,7 +96,7 @@ bool is_operator(string token){
 }
 
 
-bool is_function (string funct){
+bool is_math_function (string funct){
 
 	bool aux;
 
@@ -143,7 +143,7 @@ bool is_left_associative(string token){
 
 
 
-bool isdigit (string str){
+bool is_string_digit (string str){
 
 	string temp;
 	stringstream ss (str); 
@@ -169,7 +169,7 @@ void solve_rpn(stk <string> & stack){
 		cout<<"empty"<<endl;
 		return;
 	}
-	else if (isdigit(stack.peek()))
+	else if (is_string_digit(stack.peek()))
 	{
 		return;
 	}
@@ -219,7 +219,7 @@ void solve_rpn(stk <string> & stack){
 		stack.push(right);
 		return;
 	}
-	else if (is_function(stack.peek())){
+	else if (is_math_function(stack.peek())){
 		cout<<"es una function"<<endl;
 		string function = stack.peek();
 		stack.pop();

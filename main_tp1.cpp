@@ -4,13 +4,14 @@
 #include <sstream>
 #include <string>
 #include <cstdlib>
-#include <math.h>
+#include <cmath>
 
+#include "parser.h"
 #include "image.h"
 #include "complejo.h"
-#include "main_prueba_validaciones.h"
+#include "shunting_yard.h"
+#include "main_tp1.h"
 #include "stk.h"
-//#include "str.h"
 
 
 using namespace std; 
@@ -34,8 +35,6 @@ static option_t options[] = {
 
 static string entered_function;		// Funcion leida directamente de consola
 
-static char functions_initials[]= {'l', 'r', 'i', 'e', 'a', 'p'};
-static string math_functions[]= {"exp", "ln", "re", "im", "abs", "phase" };
 
 // **********************************MAIN**********************************//
 
@@ -52,17 +51,13 @@ int main(int argc, char * const argv[]){
 
 	string_array = parse_function(entered_function, string_array_size);
 
-
-	//int string_array_size= sizeof(string_array);//sizeof(string_array[0]);
-	//cout << "Tamano :" <<string_array_size<<endl;;
-
-	for (int i = 0; i < 15; ++i)
+	for (int i = 0; i < string_array_size; ++i)
 	{
 		cout << string_array[i] << endl;
 	}
-	stk <string> output;
+	//stk <string> output;
 	
-	shunting_yard2(output,string_array, string_array_size);
+	//shunting_yard(output,string_array, string_array_size);
 
 
 	// ESTE WHILE IMPRIME EL STACK PARA VER SI ESTA BIEN (PERO LO DESAPILA!!!!!)
@@ -71,249 +66,12 @@ int main(int argc, char * const argv[]){
 		output.pop();
 	}*/
 
-
-	
-	solve_rpn(output);
-	cout<<"La rta es: "<<output.peek()<<endl;
+	//solve_rpn(output);
+	//cout<<"La rta es: "<<output.peek()<<endl;
 	
 	return 0;
 }
 
-string * parse_function(const string function, size_t & string_array_size){		// Valido y parseo la funcion ingresada
-	size_t i = 0;
-	string * string_array;		// aca devuelvo el string array con la funcion parseada
-								// si es que fue ingresada correctamente
-
-	if (!is_balanced(function)){	
-		cout << "No esta balanceada" << endl;
-		exit(0);
-	}
-	//CLEAN SPACES
-
-	while (i < function.length()){
-
-		/*if (function[i] == ' ')
-			i++;*/
-		if (is_math_function_initial(function[i]) && function[i+1]!='-' && !isdigit(function[i+1])){
-			if (!parse_math_expression(function, string_array, string_array_size, i)){
-				cout << "error, funcion matematica erronea" << endl;
-				exit(0);
-			}
-			cout<<"Valor de  i:"<<i<<endl;
-			//i++;
-		}
-		// agregue desde aca
-		else if(isdigit(function[i]) || (function[i]=='.' && isdigit(function[i+1])))
-		{
-			if (!parse_number(function, string_array, string_array_size, i)){ 
-				cout << "error, funcion matematica erronea" << endl;
-				exit(0);
-			}
-		}
-		else if (  
-				(function[i]=='-' && isdigit(function[i+1])) && 
-				(i==0 || 
-				!isdigit(function[i-1]) || 
-				!is_operator(function[i-1]) || 
-				!is_parenthesis(function[i]))
-				)
-		{
-			if (!parse_negative_number(function, string_array, string_array_size, i)){ 
-				cout << "error, funcion matematica erronea" << endl;
-				exit(0);
-			}
-		}
-		else if (is_operator(function[i]) || is_parenthesis(function[i])){
-			string aux_string = "";
-			aux_string.append(1, function[i]);
-			add_string_to_array(string_array, string_array_size, aux_string);
-		}
-		else if (function[i]=='z' || function[i]=='j'){
-			string aux_string = "";
-			aux_string.append(1, function[i]);
-			add_string_to_array(string_array, string_array_size, aux_string);
-		}
-		i++;
-
-
-	}
-	
-	return string_array;
-}
-
-
-bool is_math_function_initial (const char letter){ // Comparo contra las iniciales de las funciones
-	size_t size = sizeof(functions_initials) / sizeof(functions_initials[0]);
-
-	for (size_t i=0 ; i< size ; i++){
-		if (letter == functions_initials[i]){
-			return true;
-		}
-	}
-	return false;
-}
-
-
-// Comprueba la funcion y la guarda en string array
-bool parse_math_expression (const string function, string *& string_array, size_t & string_array_size, size_t & position){	
-	string aux_string = "";
-
-//cout << "encontro funcion en pos: " << position << endl;  
-
-	while (function[position] != '('){
-		if (position >= function.length()){
-			cout << "ERROR no encontro parentesis ( parseando"<< endl;
-			exit (0);
-		}
-		aux_string.append(1, function[position]);
-		position++;
-	}
-	position--;
-	for (size_t i = 0; i< FUNCTIONS_AMOUNT; i++){
-		if (aux_string == math_functions[i]){
-			add_string_to_array(string_array, string_array_size, aux_string);
-			return true;
-		}
-	}
-	return false;
-
-}
-
-
-void add_string_to_array(string *& string_array, size_t & string_array_size, const string & str2add){
-
-	resize_string_array(string_array, string_array_size, 1);
-
-	string_array[string_array_size-1] = str2add;
-
-}
-
-
-bool resize_string_array (string *& string_array, size_t & string_array_size, size_t i){	// pido memoria para string array de tamaño i
-	string * aux_string_array;
-
-	if (string_array_size == 0){	// Primer caso
-		string_array = new string [i];
-		string_array[0]="";
-		string_array_size += i;
-		return true;
-	}
-
-	if (string_array_size>0){	// Luego del primer caso
-
-		aux_string_array = new string [string_array_size]; // pido memoria para el string array aux
-
-		for (size_t j = 0; j< string_array_size; j++){ // copio el string array a un auxiliar
-			aux_string_array[j] = string_array [j];
-		}
-
-		delete[] string_array;
-		string_array = new string [string_array_size+i];	// Pido memoria para i lugar mas
-
-		for (size_t j = 0; j< string_array_size ; j++){ // recupero la informacion que tenia antes
-			string_array[j] = aux_string_array [j];
-		}
-
-		for (size_t j = string_array_size; j < string_array_size+i; j++){	//Seteo las nuevas posiciones en vacio
-			string_array[j] = "";
-		}
-		string_array_size += i;
-		delete[] aux_string_array;
-
-		return true;
-	}
-
-	return true;
-}
-
-bool is_balanced (const string function){
-	stk <char> stack;
-	bool balanced = true;
-
-	for (size_t i = 0; i < function.length() && balanced == true; ++i)
-	{
-		switch(function[i]){
-			case '{':
-			case '[':
-			case '(':
-				stack.push(function[i]);
-				break;
-			case '}':
-				if (!stack.is_empty() && stack.peek() == '{')
-					stack.pop();
-				else
-					balanced = false;
-				break;
-			case ']':
-				if (!stack.is_empty() && stack.peek() == '[')
-					stack.pop();
-				else
-					balanced = false;
-				break;	
-			case ')':
-				if (!stack.is_empty() && stack.peek() == '(')
-					stack.pop();
-				else
-					balanced = false;
-				break;				
-		}
-	}
-	if (!stack.is_empty())
-		balanced = false;
-	return balanced;
-}
-
-bool parse_number (const string function, string *& string_array, size_t & string_array_size, size_t & position){
-
-	string aux_string = "";
-	while(
-		 isdigit(function[position]) || function[position] == '.' || function[position]== '-' ||
-		 ((function[position] == 'e' || function[position] == 'E') &&  (function[position+1] == '-' || isdigit(function[position+1])) )
-		 )
-	{
-		if (position >= function.length()){
-			cout << "ERROR no encontro parentesis ( parseando"<< endl;
-			return false;
-		}
-		aux_string.append(1, function[position++]);
-	}
-	position--;
-	add_string_to_array(string_array, string_array_size, aux_string);
-	return true;
-}
-bool parse_negative_number (const string function, string *& string_array, size_t & string_array_size, size_t & position){
-
-	string aux_string = "";
-
-	aux_string.append(1, function[position++]);// Guarda el signo menos
-	while(
-		 isdigit(function[position]) || function[position] == '.' //|| 
-		 //((function[position] == 'e' || function[position] == 'E') &&  (function[position+1] == '-' || isdigit(function[position+1])) )
-		 )
-	{
-		if (position >= function.length()){
-			cout << "ERROR no encontro parentesis ( parseando"<< endl;
-			return false;
-		}
-		aux_string.append(1, function[position++]);
-	}
-	position--;
-	add_string_to_array(string_array, string_array_size, aux_string);
-	return true;
-}
-
-/****/
-bool is_operator(char token){        
-    return token == '+' || token == '-' ||      
-           token == '*' || token == '/'	||
-           token == '^' || token == 'e' ||
-           token == 'E';      
-}
-bool is_parenthesis(char token){        
-    return token == ')' || token == '(' ||
-    	   token == ']' || token == '[' ||
-    	   token == '{' || token == '}';      
-} 
 
 
 //************************FUNCIONES DE CMDLINE************************//
@@ -461,6 +219,4 @@ int cmdline::do_short_opt(const char *opt, const char *arg) {
 
 
 // *******************************FUNCIONES**********************************//
-
-
-// Esta funcion lee del archivo de input y llena la imagen VACIA que se le pasa como argumento. 
+ 
