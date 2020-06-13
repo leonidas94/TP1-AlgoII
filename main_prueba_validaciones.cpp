@@ -40,14 +40,17 @@ static string math_functions[]= {"exp", "ln", "re", "im", "abs", "phase" };
 // **********************************MAIN**********************************//
 
 int main(int argc, char * const argv[]){
+
 	string * string_array;
+	size_t string_array_size= 0;
+
 
 	cmdline cmdl(options);	       // Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv);        // Metodo de parseo de la clase cmdline
 
 	cout << entered_function << endl;
 
-	string_array = parse_function(entered_function);
+	string_array = parse_function(entered_function, string_array_size);
 
 	//int string_array_size= sizeof(string_array);//sizeof(string_array[0]);
 	//cout << "Tamano :" <<string_array_size<<endl;;
@@ -57,7 +60,8 @@ int main(int argc, char * const argv[]){
 		cout << string_array[i] << endl;
 	}
 	stk <string> output;
-	shunting_yard2(output,string_array);
+	cout<<"size: "<<string_array_size<<endl;
+	shunting_yard2(output,string_array, string_array_size);
 	/*while(!output.is_empty()){
 		cout<<"Out:"<<output.peek()<<endl;
 		output.pop();
@@ -69,8 +73,8 @@ int main(int argc, char * const argv[]){
 	return 0;
 }
 
-string * parse_function(const string function){		// Valido y parseo la funcion ingresada
-	size_t i = 0, string_array_size= 0;
+string * parse_function(const string function, size_t & string_array_size){		// Valido y parseo la funcion ingresada
+	size_t i = 0;
 	string * string_array;		// aca devuelvo el string array con la funcion parseada
 								// si es que fue ingresada correctamente
 
@@ -127,7 +131,7 @@ string * parse_function(const string function){		// Valido y parseo la funcion i
 
 
 	}
-
+	
 	return string_array;
 }
 
@@ -257,8 +261,8 @@ bool parse_number (const string function, string *& string_array, size_t & strin
 
 	string aux_string = "";
 	while(
-		 isdigit(function[position]) || function[position] == '.' //|| 
-		 //((function[position] == 'e' || function[position] == 'E') &&  (function[position+1] == '-' || isdigit(function[position+1])) )
+		 isdigit(function[position]) || function[position] == '.' || function[position]== '-' ||
+		 ((function[position] == 'e' || function[position] == 'E') &&  (function[position+1] == '-' || isdigit(function[position+1])) )
 		 )
 	{
 		if (position >= function.length()){

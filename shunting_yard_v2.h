@@ -9,7 +9,7 @@ static const int precedence_3 = 3;
 static const int precedence_4 = 4;
 
 
-void shunting_yard2(stk <string> &, string[]);
+void shunting_yard2(stk <string> &, string[], size_t);
 
 int precedence (string token);
 bool is_left_parenthesis(string); 

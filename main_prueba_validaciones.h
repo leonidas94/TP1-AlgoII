@@ -40,7 +40,7 @@ static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
 
-string * parse_function(const string);
+string * parse_function(const string, size_t &);
 
 bool is_balanced (const string );
 bool is_math_function_initial (const char);

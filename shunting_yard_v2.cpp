@@ -7,22 +7,21 @@
 #include "stk.h"*/
 using namespace std; 
 
-void shunting_yard2(stk <string> & output_stack, string entered_function[]){
+void shunting_yard2(stk <string> & output_stack, string entered_function[],size_t tamano){
 	//int counter = 0;
 
 	stk <string> op_stack;
 
 	stk <string> tokens_stack; // Lo voy a usar para tratar de separar entered_function en tokens
 
-	int tamano=3;
+	
 	
 	//cout<<tamano<<endl;
 // ACA ARRANCA EL AGLORITMO
-	for (int i = 0; i < tamano; ++i)
+	for (int i = 0; i < (int)tamano; ++i)
 	{
 		if (isdigit(entered_function[i]) ||  entered_function[i]=="z")
 		{	
-			cout<<"entro"<<endl;
 			output_stack.push(entered_function[i]);
 
 			//cout<<"Numero: "<<entered_function[i]<<endl;
@@ -138,7 +137,15 @@ bool is_function (string funct){
 }
 
 bool isdigit (string str){
-	return isdigit(str[0]);
+
+	string temp;
+	stringstream ss (str); 
+	double aux;
+  
+  	ss >> temp;
+  	if(stringstream(temp) >> aux)  // Si puedo convertir a double
+		return true;
+	return false;
 }
 
 
@@ -152,6 +159,7 @@ void solve_rpn(stk <string> & stack){
 	}*/
 	if (stack.is_empty())
 	{
+		cout<<"empty"<<endl;
 		return;
 	}
 	else if (isdigit(stack.peek()))
@@ -165,26 +173,29 @@ void solve_rpn(stk <string> & stack){
 		solve_rpn(stack);
 		string right = stack.peek();//solve_rpn(stack.peek());
 		stack.pop();
-		cout<<"leyo el de la derecha"<<endl;
+		
 
 		solve_rpn(stack);
 		string left = stack.peek();//solve_rpn(stack);
 		stack.pop();
-		cout<<"leyo el de la izquierda"<<endl;
+		cout<<"derecha"<<left<<endl;
+		//cout<<"leyo el de la izquierda"<<endl;
 		double x, y;
+
 		stringstream s1 (left); 
 		s1 >> temp;
-		
 		stringstream(temp) >> x;
 		stringstream s2 (right);
 		s2 >> temp; 
 		stringstream(temp) >> y;
 
+		cout<<"left: "<<x<<"|right: "<<y<<endl;
+
 
 		if 		(token == "+") x += y;
 		else if (token == "-") x -= y;
 		else if (token == "*") x *= y;
-		//else if (token == "^") x = x^y;
+		else if (token == "^") x = pow(x,y);
 		else {
 			if (y==0)
 			{
