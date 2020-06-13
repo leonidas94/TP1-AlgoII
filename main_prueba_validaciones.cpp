@@ -52,6 +52,7 @@ int main(int argc, char * const argv[]){
 
 	string_array = parse_function(entered_function, string_array_size);
 
+
 	//int string_array_size= sizeof(string_array);//sizeof(string_array[0]);
 	//cout << "Tamano :" <<string_array_size<<endl;;
 
@@ -60,13 +61,18 @@ int main(int argc, char * const argv[]){
 		cout << string_array[i] << endl;
 	}
 	stk <string> output;
-	cout<<"size: "<<string_array_size<<endl;
+	
 	shunting_yard2(output,string_array, string_array_size);
+
+
+	// ESTE WHILE IMPRIME EL STACK PARA VER SI ESTA BIEN (PERO LO DESAPILA!!!!!)
 	/*while(!output.is_empty()){
 		cout<<"Out:"<<output.peek()<<endl;
 		output.pop();
 	}*/
 
+
+	
 	solve_rpn(output);
 	cout<<"La rta es: "<<output.peek()<<endl;
 	

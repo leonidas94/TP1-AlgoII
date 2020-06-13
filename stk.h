@@ -184,7 +184,7 @@ stk<T>::~stk()
 template<typename T>
 void stk<T>::pop()
 {
-	if (tam_ > 0)
+	if (pri_)
 	{
 		nodo * aux;
 		aux = pri_->sig_;
@@ -214,15 +214,14 @@ template<typename T>
 T stk<T>::peek()
 {
 	if (!is_empty())
-	{
 		return pri_->dato_;
-	}
+
 }
 
 template<typename T>
 bool stk<T>::is_empty()
 {
-	if (tam_==0)
+	if (!pri_)
 	{
 		return true;
 	}

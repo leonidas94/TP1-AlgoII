@@ -16,20 +16,20 @@ void shunting_yard2(stk <string> & output_stack, string entered_function[],size_
 
 	
 	
-	//cout<<tamano<<endl;
+
 // ACA ARRANCA EL AGLORITMO
 	for (int i = 0; i < (int)tamano; ++i)
 	{
+		cout<< entered_function[i] <<endl;
+
 		if (isdigit(entered_function[i]) ||  entered_function[i]=="z")
 		{	
 			output_stack.push(entered_function[i]);
-
-			//cout<<"Numero: "<<entered_function[i]<<endl;
 		}
 		else if(is_function(entered_function[i])) {
 			op_stack.push(entered_function[i]);
 		}	
-		//const string token (1, entered_function[i]);
+		
 		else if (is_operator(entered_function[i]))
 		{	
 			//Calcular la precedencia antes
@@ -42,7 +42,7 @@ void shunting_yard2(stk <string> & output_stack, string entered_function[],size_
 				op_stack.pop();
 			}
 			op_stack.push(entered_function[i]);
-			//cout<<entered_function[i]<<endl;
+			
 		}
 		else if (is_left_parenthesis(entered_function[i]))
 		{
@@ -50,6 +50,7 @@ void shunting_yard2(stk <string> & output_stack, string entered_function[],size_
 		}  
 		else if (is_right_parenthesis(entered_function[i]))
 		{
+			
 			while (!is_left_parenthesis(op_stack.peek())){
 				output_stack.push(op_stack.peek());
 				op_stack.pop();
@@ -57,6 +58,10 @@ void shunting_yard2(stk <string> & output_stack, string entered_function[],size_
 			if (is_left_parenthesis(op_stack.peek()))
 			{
 				op_stack.pop();
+				if (is_function(op_stack.peek())){
+					output_stack.push(op_stack.peek());
+					op_stack.pop();
+				}
 			}
 		}
 
@@ -75,7 +80,8 @@ bool is_left_parenthesis(string token){
     	   token == "[" ||
     	   token == "{";      
 }   
-bool is_right_parenthesis(string token){        
+bool is_right_parenthesis(string token){   
+
     return token == ")" ||
     	   token == "]" ||
     	   token == "}" ;    
@@ -89,6 +95,23 @@ bool is_operator(string token){
            token == "^";      
 }
 
+
+bool is_function (string funct){
+
+	bool aux;
+
+	if (funct == "exp" || funct == "ln" ||
+		funct == "re" || funct == "im" ||
+		funct == "abs" || funct == "phase" ||
+		funct == "sin" || funct == "cos")
+	{
+		aux = true;
+	}
+	else 
+		aux = false;
+
+	return aux;
+}
 
 int precedence (string token){
 	int p = 0;
@@ -119,22 +142,6 @@ bool is_left_associative(string token){
 }
 
 
-bool is_function (string funct){
-
-	bool aux;
-
-	if (funct == "exp" || funct == "ln" ||
-		funct == "re" || funct == "im" ||
-		funct == "abs" || funct == "phase" ||
-		funct == "sin" || funct == "cos")
-	{
-		aux = true;
-	}
-	else 
-		aux = false;
-
-	return aux;
-}
 
 bool isdigit (string str){
 
@@ -213,6 +220,7 @@ void solve_rpn(stk <string> & stack){
 		return;
 	}
 	else if (is_function(stack.peek())){
+		cout<<"es una function"<<endl;
 		string function = stack.peek();
 		stack.pop();
 
