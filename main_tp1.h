@@ -7,7 +7,14 @@
 #include <sstream>
 #include <cstdlib>
 #include <string>
-//#include "shunting_yard.h"
+#include <cmath>
+
+#include "is_functions.h"
+#include "complejo.h"
+#include "stk.h"
+#include "parser.h"
+#include "image.h"
+#include "shunting_yard.h"
 
 using namespace std;
 
@@ -33,9 +40,14 @@ static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
 
+bool read_pgm(image &);
+void generate_matrix_c(double, complejo ***);
+
+int * search(const complejo, const double);
+
+void map_image(image &, image &, stk <string>);
 
 /********************************/
-
 
 class cmdline {
 	// Este atributo apunta a la tabla que describe todas las opciones a procesar. 

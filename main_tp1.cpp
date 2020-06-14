@@ -1,18 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-#include <sstream>
-#include <string>
-#include <cstdlib>
-#include <cmath>
-
-#include "parser.h"
-#include "image.h"
-#include "complejo.h"
-#include "shunting_yard.h"
 #include "main_tp1.h"
-#include "stk.h"
-
 
 using namespace std; 
 
@@ -24,6 +10,7 @@ static fstream ifs; 		// Input File Stream (derivada de la clase ifstream que de
 static fstream ofs;		// Output File Stream (derivada de la clase ofstream que deriva de ostream para el manejo de archivos)
 
 static string PGM_IDENTIFIER = "P2";
+static char SKIP_LINE_IDENTIFIER = '#';
 
 static option_t options[] = {
 	{1, "i", "input", "-", opt_input, OPT_DEFAULT},
@@ -35,41 +22,43 @@ static option_t options[] = {
 
 static string entered_function;		// Funcion leida directamente de consola
 
-
 // **********************************MAIN**********************************//
 
 int main(int argc, char * const argv[]){
-
+	image input_image;
 	string * string_array;
 	size_t string_array_size= 0;
-
+	stk <string> output_stk;
 
 	cmdline cmdl(options);	       // Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv);        // Metodo de parseo de la clase cmdline
 
-	cout << entered_function << endl;
 
-	string_array = parse_function(entered_function, string_array_size);
-
-	/*for (int i = 0; i < (int) string_array_size; ++i)
-	{
-		cout << string_array[i] << endl;
-	}*/
-
-	stk <string> output;
+	//Primero leo la imagen de entrada, ya que si esta mal, hacer el resto es innecesario
+	if(!read_pgm(input_image)){    // Se lee la imagen de intrada
+		cerr<<"Fallo en el archivo"<<endl;
+		return 1;
+	}
 	
-	shunting_yard(output,string_array, string_array_size);
+	// Se declara la imagen de salida a partir de las dimenciones de la imagen de entrada
+	image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
 
+	// Parsero la funcion ingresada para aplicarle el algoritmo Shunting-Yard
+	string_array = parse_function(entered_function, string_array_size);	
+	
+	// Aplico el algoritmo Shunting-Yard al array de strings, guardo en un stack de strings 'output'
+	shunting_yard(output_stk, string_array, string_array_size);
+
+	map_image(input_image, output_image, output_stk);
+
+	// Se imprime la imagen de salida
+	output_image.print_image(oss);
 
 	// ESTE WHILE IMPRIME EL STACK PARA VER SI ESTA BIEN (PERO LO DESAPILA!!!!!)
 	/*while(!output.is_empty()){
 		cout<<"Out:"<<output.peek()<<endl;
 		output.pop();
 	}*/
-	complejo c (2,2);
-	//cout <<"El complejo es: " <<c<<endl;
-	solve_rpn(output, c);
-	cout<<"La rta es: "<<output.peek()<<endl;
 	
 	return 0;
 }
@@ -219,6 +208,231 @@ int cmdline::do_short_opt(const char *opt, const char *arg) {
 	return -1;
 }
 
-
 // *******************************FUNCIONES**********************************//
- 
+
+// Esta funcion lee del archivo de input y llena la imagen VACIA que se le pasa como argumento. 
+bool read_pgm(image & img_arg){
+  int aux_int, aux_size[2], aux_greyscale;
+  int i=0;
+  int ** aux_matrix;
+  string in_string, temp;		
+
+
+  getline(*iss, in_string); // Identificador PGM.
+
+  if (in_string[0] == PGM_IDENTIFIER[0]){
+  	if (in_string[1] != PGM_IDENTIFIER[1]){
+    	cerr<< "No es PGM" <<endl;   // En caso que el identificador sea incorrecto, imprime un mensaje de error.
+    	return false;
+  	}
+	}
+	else {cerr<< "No es PGM" <<endl; return false;}
+
+  getline(*iss, in_string);
+  if (in_string[0] == SKIP_LINE_IDENTIFIER){ // Se detecta si se leyó un comentario.
+    getline(*iss, in_string); // Se leen las dimensiones de la matriz.
+  }
+
+  stringstream ss (in_string); 
+  
+	while (i < 2 && !ss.eof()){
+  	ss >> temp;
+  	if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, guardo.
+  	  aux_size[i] = aux_int;
+  	  i++;
+  	}
+  	temp = "";
+	}
+	if (i == 1){
+		cout<< "Error en el formato."<<endl;
+		return false;
+	}
+
+	ss >> temp;
+ 	if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, es un error.
+ 		cout<< "Error en el formato."<<endl;
+ 		return false;
+  }
+
+  
+  img_arg.set_width(aux_size[0]);  // Se guarda el ancho de la matriz.
+  img_arg.set_height(aux_size[1]); // Se guarda el alto de la matriz.
+  
+  // CCAMBIAR A OPERADOR  >> SI HAY TIEMPO
+  getline(*iss, in_string);
+  aux_greyscale = stoi(in_string);
+  img_arg.set_greyscale(aux_greyscale); // Se guarda el valor de la escala de grises.
+
+  // Crea la matriz de enteros y los llena con ceros.
+  // Como la matriz va a ser cuadrada, se pide dos veces de dimension "max".
+
+  aux_matrix = new int*[aux_size[1]]; 
+  for (int i = 0; i < aux_size[1]; i++){  
+      aux_matrix[i] = new int[aux_size[0]]; 
+  }
+
+  for (int i = 0; i < aux_size[1]; i++){
+    for (int j = 0; j < aux_size[0]; j++){
+    	*iss >> aux_int;
+    	if (!(iss->eof())){  // Se evalúa si los elementos que esta leyendo corresponde a la cantidad de la dimensión
+    		if (aux_int <= aux_greyscale && aux_int >= 0)
+    		{
+    			aux_matrix[i][j] = aux_int;
+    		}else{
+    			cerr<<"Error. Elemento de fuera de rango."<<endl; // En caso que haya menos elementos,
+    			for (int i = 0; i<aux_size[1]; i++)        // se destruye matriz auxiliar
+        		delete[] aux_matrix[i];
+  				delete[] aux_matrix;
+    			return false;
+    		}
+    		
+
+    	}else{
+    		cerr<<"Error. Cantidad insuficiente de elementos."<<endl; // En caso que haya menos elementos,
+    		for (int i = 0; i<aux_size[1]; i++)        // se destruye matriz auxiliar
+        	delete[] aux_matrix[i];
+  			delete[] aux_matrix;
+    		return false;
+    	}   
+    }
+  }
+
+  *iss >> aux_int; 
+
+  if (!iss->eof()){ // Se evalúa si el siguiente elemento es eof.
+  	cerr<<"Error. Cantidad excesiva de elementos."<<endl; // En caso que haya más elementos,
+  	for (int i = 0; i<aux_size[1]; i++)      // Se destruye matriz auxiliar en caso de error
+      delete[] aux_matrix[i];
+  	delete[] aux_matrix;
+  	return false;
+  }
+
+
+  img_arg.fill_matrix(aux_matrix);  // Se llena la matriz de imagen
+
+  for (int i = 0; i<aux_size[1]; i++)   // Se destruye la matriz auxiliar              
+        delete[] aux_matrix[i];
+  delete[] aux_matrix;
+
+  return true;
+}
+
+
+void generate_matrix_c(double max, complejo *** matrix){
+
+	// Esta funcion genera una matriz de complejos con valores que van desde el -1-i hasta el 1+i formando un
+	// rectangulo de lado 2, con el centro del plano complejo en el centro de la matriz.
+  
+  (*matrix) = new complejo*[(int)max]; // Pido memoria para la matriz
+  for (int i = 0; i < max; i++){  
+   	(*matrix)[i] = new complejo[(int)max];
+  }
+
+  double paso=2/(max-1);	// Determina el paso que debe haber debido al salto de una posicion para que en los limites se encutren los unos
+  double aux_real=-1;
+  double aux_imag=1;
+
+ 	// Se recorre la matriz y se la va rellenando punto a punto con el valor de complejo correspondiente
+  for (int i = 0; i < max; i++){    	
+    for (int j = 0; j < max; j++){  
+      (*matrix)[i][j]=complejo(aux_real,aux_imag);
+      aux_real=aux_real+paso;	// Se ajusta el valor para la proxima posicion
+    }
+    aux_real=-1;				// Se reinicia el valor del x ya que recorre por filas
+    aux_imag=aux_imag-paso;	// Se ajusta el valor para la proxima posicion
+  }
+}
+
+
+int * search(const complejo c, const double max){
+	double paso=2/(max-1);	// Determina el paso que debe haber debido al salto de una posicion para que en los limites se encutren los unos
+
+	int * to_return;
+	size_t i=0 , j=0;
+
+	for (i = 0 ; (paso*i)-1 < c.get_real() ; ++i);
+//cout << c.get_img() << endl;
+	for (j = max-1 ; -1+(paso*j) > c.get_img(); j--);//j <= (c.get_img()+1)/paso ; j++);
+	//j = max-j;
+if (j<0)
+	j=0;
+if (i>=max)
+	i=max-1;
+//cout << "cortax 2" << endl;
+//1-s*k <= c.img
+
+//1-c.img <= s*k
+
+//(1-c.img)/s <= k
+
+	to_return= new int[2];
+	to_return[0] = i;
+	to_return[1] = j;
+
+	return to_return;
+}
+
+
+void map_image(image & original, image & destino, stk <string> output_stk){
+
+  int * pos;
+  int aux_color;
+  int max = original.get_max_dim();
+  complejo aux;
+  complejo ** complex_matrix;
+
+  // Se genera la matriz de complejos de tamaño max por max
+  generate_matrix_c(max, &complex_matrix);
+
+  // Se recorre la matriz de complejos para transformar cada uno de los puntos.
+  // Los indices de la matriz de complejos coinciden con los de la matriz destino, por lo tanto 
+  // alcanza con recorrer solo una de las dos.
+  for(int i=0; i < destino.get_max_dim();i++){
+    for (int j = 0; j < destino.get_max_dim(); j++)
+    {
+    	// Se guarda el valor de la matriz de complejos para luego realizar la transformacion
+    	aux = complex_matrix[i][j];
+    	//cout << "aux antes: " << aux << endl;
+
+    	stk <string> stk_to_solve = output_stk;
+
+		solve_rpn(stk_to_solve, aux);
+		string aux_string = stk_to_solve.peek();
+
+		stringstream s1 (aux_string); 
+		s1 >> aux;
+
+//cout << "aux dsp: " << aux << endl;
+
+  		// Se corrobora que el valor c a buscar este dentro de el semiplano que conforman los puntos (-1+i), (-1-i), (1-i) y (1+i)
+  		// sino lo esta, no se hace nada, ya que como la matriz de la imagen destino se encuentra rellena de ceros (negro)
+  		if(abs(aux.get_real()) <= 1 && abs(aux.get_img()) <= 1){
+
+    		pos = search(aux, max);
+//cout << pos[0] << "," << pos[1] << " ";
+
+    	 	if (pos !=NULL){ 		// Si no se detecta un error se se guarda el color en la imagen destino
+    	    	aux_color = original.get_matrix_value(pos[1],pos[0]);
+        		destino.set_matrix_value(i,j,aux_color);
+      		}
+	      	else {
+	      		cerr<<"Error en busqueda binaria."<<endl;
+	      		for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
+	      			if (complex_matrix[i]){          
+	        			delete[] complex_matrix[i];
+	      			}
+	    		}
+	  			delete[] complex_matrix;
+	      	}
+    	}
+  	}
+//cout << endl;
+  }
+  
+  for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
+      if (complex_matrix[i]){          
+        delete[] complex_matrix[i];
+      }
+    }
+  delete[] complex_matrix;
+} 

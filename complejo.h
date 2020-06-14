@@ -55,9 +55,7 @@ public:
 	complejo seno();
 	complejo pow2();
 	complejo complex_pow(const complejo);
-
-
-	
+	complejo complex_pow(const double);
 
 private:
 	double real; // Dos atributos, real e imaginario, se explica solo
@@ -65,12 +63,6 @@ private:
 
 };
 
-/*ostream & operator << (ostream &out, const complejo &c)
-{
-    out << c.get_real();
-    out << "+i" << c.get_img() << endl;
-    return out;
-}*/	
 ostream & operator << (ostream &, const complejo &);
 istream & operator >> (istream &,  complejo &);
 
