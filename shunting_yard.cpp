@@ -21,7 +21,7 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 // ACA ARRANCA EL AGLORITMO
 	for (int i = 0; i < (int)tamano; ++i)
 	{
-		cout<< entered_function[i] <<endl;
+		
 
 		if (is_string_digit(entered_function[i]) ||  entered_function[i]=="z")
 		{	
@@ -160,7 +160,7 @@ bool is_string_digit (string str){
 }
 
 
-void solve_rpn(stk <string> & stack){
+void solve_rpn(stk <string> & stack, complejo c){
 	//cout<<"SOLVE RPN"<<endl;
 	string temp;
 	//double result;
@@ -175,6 +175,23 @@ void solve_rpn(stk <string> & stack){
 	}
 	else if (is_string_digit(stack.peek()))
 	{
+		if (stack.peek() == "j")
+		{
+			stack.pop();
+			complejo x (0,1);
+			string aux;
+			aux = x.to_string();
+			cout<<"El j es: "<<x<<endl;
+			stack.push(aux);
+		}
+		return;
+	}
+	else if (stack.peek() == "z")
+	{
+		stack.pop();
+		string aux;
+		aux = c.to_string();
+		stack.push(aux);
 		return;
 	}
 	else if (is_operator(stack.peek())){
@@ -185,48 +202,57 @@ void solve_rpn(stk <string> & stack){
 		double aux;
 
 
-		solve_rpn(stack);
+		solve_rpn(stack,c);
 		string right = stack.peek();//solve_rpn(stack.peek());
 		stack.pop();
 		
 
 		// i+d
 		//   i+d
-		if (right == "j")
+		/*if (right == "j")
 		{
 			x.set_img(1);
-		}else{
-			stringstream s1 (right); 
-			s1 >> temp;
-			stringstream(temp) >> aux;
-			x.set_real(aux);
 		}
+		else if (right == "z")
+		{
+			x = c;
+		}
+		else{*/
+			stringstream s1 (right); 
+			/*s1 >> temp;
+			stringstream(temp) >> x;//aux*/
+			s1 >> x;
+			//x.set_real(aux);
+		//}
+			//cout<<"Derecha: "<<x<<endl;
 
 		string left;
 
 		if (stack.is_empty())
 		{
 			left = "0";
-		}else{
-			solve_rpn(stack);
+		}
+		else{
+			solve_rpn(stack,c);
 			left = stack.peek();// validar esto si no hay nada  que left sea 
 			stack.pop();
 		}
 
-		if (left == "j")
+		/*if (left == "j")
 		{
 			y.set_img(1);
 		}
-		/*else if ()
+		else if ( left == "z")
 		{
-			
-		}*/
-		else{
-			stringstream s1 (left); 
-			s1 >> temp;
-			stringstream(temp) >> aux;
-			y.set_real(aux);
+			y = c;
 		}
+		else{*/
+			stringstream s2 (left); 
+			/*s2 >> temp;
+			stringstream(temp) >> y;//auc*/
+			s2 >> y;
+			//y.set_real(aux);
+		//}
 		
 
 		
@@ -242,7 +268,7 @@ void solve_rpn(stk <string> & stack){
 		if 		(token == "+") x = y+x;
 		else if (token == "-") x = y-x;
 		else if (token == "*") x = y*x;
-		//else if (token == "^") x = pow(x,y); // HACER OPERADOR ^ 
+		else if (token == "^") x = y.complex_pow(x); // HACER OPERADOR ^ 
 		else {
 			if (x == 0)
 			{
@@ -262,7 +288,7 @@ void solve_rpn(stk <string> & stack){
 		string function = stack.peek();
 		stack.pop();
 
-		solve_rpn(stack);
+		solve_rpn(stack,c);
 		string right = stack.peek();//solve_rpn(stack.peek());
 		stack.pop();
 
@@ -272,6 +298,10 @@ void solve_rpn(stk <string> & stack){
 		if (right == "j")
 		{
 			y.set_img(1);
+		}
+		else if ( right == "z")
+		{
+			y = c;
 		}else{
 			stringstream s1 (right); 
 			s1 >> temp;

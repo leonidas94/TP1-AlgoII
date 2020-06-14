@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <cmath>
 
 using namespace std;
 
@@ -53,6 +54,7 @@ public:
 	complejo logaritmo();
 	complejo seno();
 	complejo pow2();
+	complejo complex_pow(const complejo);
 
 
 	
@@ -70,5 +72,6 @@ private:
     return out;
 }*/	
 ostream & operator << (ostream &, const complejo &);
+istream & operator >> (istream &,  complejo &);
 
 #endif

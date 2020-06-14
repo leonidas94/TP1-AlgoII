@@ -23,6 +23,6 @@ bool is_operator(string);
 bool is_left_associative(string);
 bool is_math_function (string);
 bool is_string_digit (string );
-void solve_rpn(stk <string> &);
+void solve_rpn(stk <string> &, complejo);
 
 #endif

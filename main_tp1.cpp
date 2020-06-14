@@ -51,10 +51,10 @@ int main(int argc, char * const argv[]){
 
 	string_array = parse_function(entered_function, string_array_size);
 
-	for (int i = 0; i < (int) string_array_size; ++i)
+	/*for (int i = 0; i < (int) string_array_size; ++i)
 	{
 		cout << string_array[i] << endl;
-	}
+	}*/
 
 	stk <string> output;
 	
@@ -66,8 +66,9 @@ int main(int argc, char * const argv[]){
 		cout<<"Out:"<<output.peek()<<endl;
 		output.pop();
 	}*/
-
-	solve_rpn(output);
+	complejo c (2,2);
+	//cout <<"El complejo es: " <<c<<endl;
+	solve_rpn(output, c);
 	cout<<"La rta es: "<<output.peek()<<endl;
 	
 	return 0;

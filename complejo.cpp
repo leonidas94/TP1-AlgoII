@@ -1,6 +1,6 @@
 #include <iostream>
 #include "complejo.h"
-#include <cmath>
+//#include <cmath>
 #include <string>
 #include <sstream>
 
@@ -262,16 +262,44 @@ complejo complejo::pow2(){
 
  	return aux;
 }
-/*
-complejo complejo::re(){
 
-}*/
+complejo complejo::complex_pow(const complejo a){
 
+	double r = this->get_modulo();
+	double th = this->get_angulo();
+	//cout<<"modulp: "<<r<<"fase: "<<th<<endl;
+
+	r = pow(r,a.real)*exp(-th*a.img);
+	cout<<"en el medios"<<th<<endl;
+	double th2 = (log(r)*a.img) + (th*a.real);
+
+	cout<<th2<<endl;
+	cout<<a.real<<endl;
+	cout<<"log: "<<th2*a.real<<endl;
+	//cout<<"modulp: "<<r<<"fase: "<<th<<endl;
+  	return complejo(r*cos(th2),r*sin(th2));
+}
 
 
 ostream & operator << (ostream &out, const complejo &c)
 {
     out << c.get_real();
-    out << "+j*" << c.get_img() << endl;
+    out << " " << c.get_img() << "j" << endl;
     return out;
 }	
+
+
+istream & operator >> (istream &in,  complejo &c)
+{	
+	double aux;
+    in >> aux;
+    c.set_real(aux);
+    in >> aux;
+
+    if (!in.eof())
+    {
+    	c.set_img(aux);
+    }
+    
+    return in;
+}
