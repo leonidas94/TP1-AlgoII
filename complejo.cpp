@@ -269,7 +269,7 @@ complejo complejo::complex_pow(const complejo a){
 	double th = this->get_angulo();
 	//cout<<"modulp: "<<r<<"fase: "<<th<<endl;
 
-	r = pow(r,a.real)*exp(-th*a.img);
+	double r2 = pow(r,a.real)*exp(-th*a.img);
 	cout<<"en el medios"<<th<<endl;
 	double th2 = (log(r)*a.img) + (th*a.real);
 
@@ -277,7 +277,7 @@ complejo complejo::complex_pow(const complejo a){
 	cout<<a.real<<endl;
 	cout<<"log: "<<th2*a.real<<endl;
 	//cout<<"modulp: "<<r<<"fase: "<<th<<endl;
-  	return complejo(r*cos(th2),r*sin(th2));
+  	return complejo(r2*cos(th2),r2*sin(th2));
 }
 
 
