@@ -1,6 +1,8 @@
 #include <iostream>
 #include "complejo.h"
-#include <math.h>
+#include <cmath>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -52,8 +54,60 @@ double complejo::get_angulo(){	// Obtiene el angulo
 }
 
 // Printer
-void complejo::print_complejo(){
-	cout <<"(" << real << "," << img << ")";
+/*
+ostream& complejo::operator<< (ostream& os){
+	return os << real << "+ j*" << img;
+}*/
+/*
+string complejo::complex_to_string (){
+	string aux = "";
+
+	ostringstream ss;
+  	ss << real;
+	aux.append(ss.str());
+	aux.append("+j*");
+	ostringstream ss1;
+	ss1 << img;
+	aux.append(ss1.str());
+
+
+	return aux;
+}*/
+/*
+const std::string complejo::complex_to_string()const
+{
+    return (std::to_string(real)+"+"+std::to_string(imaginary)+"i");
+//    std::cin.ignore(50, '\n');
+//    std::cin.get();
+    }*/
+
+string complejo::to_string(){
+
+  	ostringstream x_convert;
+	x_convert << *this;
+	return x_convert.str();
+}
+
+
+bool complejo::operator== (const complejo& a){
+ 	
+	if (real == a.real && img == a.img)
+		return true;
+	return false;
+}
+
+bool complejo::operator== (const double a){
+ 	
+	if (real == a && img == 0)
+		return true;
+	return false;
+}
+
+bool complejo::operator== (const int a){
+ 	
+	if (real == a && img == 0)
+		return true;
+	return false;
 }
 
 // Operador SUMA con un complejo
@@ -131,7 +185,15 @@ complejo & complejo::operator = (const complejo & complejo_a_igualar){
 	img=complejo_a_igualar.img;
 	return *this;
 }
+/*
+complejo complejo:: operator^ (const complejo){
 
+}
+
+complejo complejo:: operator^ (const double exponente){
+	
+}
+*/
  // Funciones
 
 // EXPONENCIAL
@@ -200,3 +262,16 @@ complejo complejo::pow2(){
 
  	return aux;
 }
+/*
+complejo complejo::re(){
+
+}*/
+
+
+
+ostream & operator << (ostream &out, const complejo &c)
+{
+    out << c.get_real();
+    out << "+j*" << c.get_img() << endl;
+    return out;
+}	

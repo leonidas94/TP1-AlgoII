@@ -17,6 +17,10 @@ string * parse_function(const string function, size_t & string_array_size){		// 
 		cout << "No esta balanceada" << endl;
 		exit(0);
 	}
+	if (!check_operator_at_begining(function)){	
+		cout << "Error, no puede comenzar con " << function[0] << endl;
+		exit(0);
+	}
 	//CLEAN SPACES
 
 	while (i < function.length()){	// Recorro char por char
@@ -249,5 +253,14 @@ bool resize_string_array (string *& string_array, size_t & string_array_size, si
 		return true;
 	}
 
+	return true;
+}
+
+bool check_operator_at_begining(const string function){
+
+	if (function[0]=='*' || function[0]=='/' || function[0]=='^')
+	{
+		return false;
+	}
 	return true;
 }

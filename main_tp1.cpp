@@ -51,13 +51,14 @@ int main(int argc, char * const argv[]){
 
 	string_array = parse_function(entered_function, string_array_size);
 
-	for (int i = 0; i < string_array_size; ++i)
+	for (int i = 0; i < (int) string_array_size; ++i)
 	{
 		cout << string_array[i] << endl;
 	}
-	//stk <string> output;
+
+	stk <string> output;
 	
-	//shunting_yard(output,string_array, string_array_size);
+	shunting_yard(output,string_array, string_array_size);
 
 
 	// ESTE WHILE IMPRIME EL STACK PARA VER SI ESTA BIEN (PERO LO DESAPILA!!!!!)
@@ -66,8 +67,8 @@ int main(int argc, char * const argv[]){
 		output.pop();
 	}*/
 
-	//solve_rpn(output);
-	//cout<<"La rta es: "<<output.peek()<<endl;
+	solve_rpn(output);
+	cout<<"La rta es: "<<output.peek()<<endl;
 	
 	return 0;
 }

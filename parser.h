@@ -15,6 +15,7 @@ bool parse_math_expression(const string, string *&, size_t &, size_t &);
 bool parse_number(const string, string *&, size_t &, size_t &);
 bool parse_negative_number(const string, string *&, size_t &, size_t &);
 
+bool check_operator_at_begining(const string);
 bool is_balanced (const string );
 bool is_math_function_initial (const char);
 bool is_operator(char);

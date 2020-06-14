@@ -2,6 +2,8 @@
 #define _COMPLEJO_H_INCLUIDO_
 
 #include <iostream>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -24,7 +26,9 @@ public:
 	double get_angulo();
 
 	// Printer
-	void print_complejo();
+	//ostream& operator<< (ostream& os);
+	//const std::string complex_to_string () const;
+	string to_string();
 
 	// Operadores
 	complejo operator + (const complejo &); // Suma de complejos
@@ -35,7 +39,12 @@ public:
 	complejo operator * (const double &);
 	complejo operator / (const complejo &); // Division de complejos
 	complejo operator / (const double &);
+	/*complejo operator ^ (const complejo &); // Potenciacion de complejos
+	complejo operator ^ (const double &);*/
 	complejo & operator = (const complejo &); // Operador =
+	bool operator== (const complejo &);
+	bool operator== (const double a);
+	bool operator== (const int a);
 
 	// Funciones
 	complejo exponencial ();
@@ -46,10 +55,20 @@ public:
 	complejo pow2();
 
 
+	
+
 private:
 	double real; // Dos atributos, real e imaginario, se explica solo
 	double img;
 
 };
+
+/*ostream & operator << (ostream &out, const complejo &c)
+{
+    out << c.get_real();
+    out << "+i" << c.get_img() << endl;
+    return out;
+}*/	
+ostream & operator << (ostream &, const complejo &);
 
 #endif

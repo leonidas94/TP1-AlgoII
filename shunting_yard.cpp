@@ -1,6 +1,7 @@
 #include "shunting_yard.h"
 #include <sstream>
 #include <string>
+#include "complejo.h"
 
 /*#include <cmath>
 #include <string>
@@ -145,6 +146,9 @@ bool is_left_associative(string token){
 
 bool is_string_digit (string str){
 
+	if (str == "j")
+		return true;
+
 	string temp;
 	stringstream ss (str); 
 	double aux;
@@ -157,7 +161,7 @@ bool is_string_digit (string str){
 
 
 void solve_rpn(stk <string> & stack){
-	cout<<"SOLVE RPN"<<endl;
+	//cout<<"SOLVE RPN"<<endl;
 	string temp;
 	//double result;
 
@@ -177,50 +181,84 @@ void solve_rpn(stk <string> & stack){
 		string token = stack.peek();
 		stack.pop();
 
+		complejo x, y;
+		double aux;
+
+
 		solve_rpn(stack);
 		string right = stack.peek();//solve_rpn(stack.peek());
 		stack.pop();
 		
 
-		solve_rpn(stack);
-		string left = stack.peek();//solve_rpn(stack);
-		stack.pop();
-		cout<<"derecha"<<left<<endl;
-		//cout<<"leyo el de la izquierda"<<endl;
-		double x, y;
+		// i+d
+		//   i+d
+		if (right == "j")
+		{
+			x.set_img(1);
+		}else{
+			stringstream s1 (right); 
+			s1 >> temp;
+			stringstream(temp) >> aux;
+			x.set_real(aux);
+		}
 
-		stringstream s1 (left); 
-		s1 >> temp;
-		stringstream(temp) >> x;
+		string left;
+
+		if (stack.is_empty())
+		{
+			left = "0";
+		}else{
+			solve_rpn(stack);
+			left = stack.peek();// validar esto si no hay nada  que left sea 
+			stack.pop();
+		}
+
+		if (left == "j")
+		{
+			y.set_img(1);
+		}
+		/*else if ()
+		{
+			
+		}*/
+		else{
+			stringstream s1 (left); 
+			s1 >> temp;
+			stringstream(temp) >> aux;
+			y.set_real(aux);
+		}
+		
+
+		
+
+		/*
 		stringstream s2 (right);
 		s2 >> temp; 
-		stringstream(temp) >> y;
+		stringstream(temp) >> y;*/
 
-		cout<<"left: "<<x<<"|right: "<<y<<endl;
+		//cout<<"left: "<<x<<"|right: "<<y<<endl;
 
 
-		if 		(token == "+") x += y;
-		else if (token == "-") x -= y;
-		else if (token == "*") x *= y;
-		else if (token == "^") x = pow(x,y);
+		if 		(token == "+") x = y+x;
+		else if (token == "-") x = y-x;
+		else if (token == "*") x = y*x;
+		//else if (token == "^") x = pow(x,y); // HACER OPERADOR ^ 
 		else {
-			if (y==0)
+			if (x == 0)
 			{
 				cout<<"error division por 0"<<endl;
 			}
 			else
-				x /= y;
+				x = y/x;
 		}
 
-		ostringstream x_convert;
-		x_convert << x;
-		cout<<x<<endl;
-		right = x_convert.str();
+		
+		right = x.to_string();
 		stack.push(right);
 		return;
 	}
 	else if (is_math_function(stack.peek())){
-		cout<<"es una function"<<endl;
+		
 		string function = stack.peek();
 		stack.pop();
 
@@ -228,24 +266,28 @@ void solve_rpn(stk <string> & stack){
 		string right = stack.peek();//solve_rpn(stack.peek());
 		stack.pop();
 
-		double y;
-		stringstream s1 (right);
-		s1 >> y; 
-		cout<<y<<endl;
 
-		if (function == "exp") y = exp(y);
-		if (function == "ln") y = log(y);
+		complejo y;
+		double aux;
+		if (right == "j")
+		{
+			y.set_img(1);
+		}else{
+			stringstream s1 (right); 
+			s1 >> temp;
+			stringstream(temp) >> aux;
+			y.set_real(aux);
+		}
 
-		ostringstream y_convert;
-		y_convert << y;
-		cout<<y<<endl;
-		right = y_convert.str();
+		if (function == "exp") y = y.exponencial();
+		if (function == "ln") y = y.logaritmo();
+		//if (function == "re") y = re(y);
+
+		
+		right = y.to_string();
 		stack.push(right);
 		return;
 		
 	}
 
 } 
-
-
-
