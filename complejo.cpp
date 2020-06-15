@@ -141,8 +141,10 @@ complejo complejo::operator - (const double & double_a_restar){
 // Operador MULTIPLICACION por un complejo
 complejo complejo::operator * (const complejo & A){
 	complejo aux;
+	//cout<<"la parte imaginaria"<<A.img<<endl;
 	aux.real = (this->real * A.real) - (this->img * A.img);
 	aux.img = (this->real * A.img) + (this->img * A.real);
+	//cout<<aux.real<<","<<aux.img<<endl;
 	return aux;
 }
 
@@ -177,6 +179,7 @@ complejo complejo::operator / (const double & divisor){
 
 // Operador IGUAL
 complejo & complejo::operator = (const complejo & complejo_a_igualar){
+
 	real=complejo_a_igualar.real;
 	img=complejo_a_igualar.img;
 	return *this;
@@ -232,7 +235,7 @@ complejo complejo::logaritmo(){
 
   aux.real = log(modulo);
   aux.img = atan2(this->img,this->real);
-
+  //cout<<aux<<endl;
   return aux;
 }
 
@@ -282,10 +285,18 @@ complejo complejo::complex_pow(const double a){
   	return complejo(r2*cos(th2),r2*sin(th2));
 }
 
+complejo complejo::re(){
+	return complejo (real,0);
+}
+complejo complejo::im(){
+	return complejo (0,img);
+}
+
+
 ostream & operator << (ostream &out, const complejo &c)
 {
     out << c.get_real();
-    out << " " << c.get_img() << "j" << endl;
+    out << " " << c.get_img() << " j";
     return out;
 }	
 
@@ -293,13 +304,22 @@ ostream & operator << (ostream &out, const complejo &c)
 istream & operator >> (istream &in,  complejo &c)
 {	
 	double aux;
-    in >> aux;
-    c.set_real(aux);
-    in >> aux;
+	string temp;
 
+
+    in >> temp;
+    //cout<<"temp1"<<temp<<endl;
+    stringstream(temp) >> aux;
+    c.set_real(aux);
+
+    in >> temp;
+    //cout<<"esto es temp2: "<<temp<<endl;
     if (!in.eof())
     {
+
+    	stringstream(temp) >> aux;
     	c.set_img(aux);
+    	//cout<<"img:"<<c.get_img()<<endl;
     }
     
     return in;

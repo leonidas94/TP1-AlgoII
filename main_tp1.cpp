@@ -344,32 +344,63 @@ void generate_matrix_c(double max, complejo *** matrix){
 }
 
 
-int * search(const complejo c, const double max){
-	double paso=2/(max-1);	// Determina el paso que debe haber debido al salto de una posicion para que en los limites se encutren los unos
+int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fin_lim[2]){
 
-	int * to_return;
-	size_t i=0 , j=0;
+  // Esta funcion realiza la busqueda del complejo c en la matriz matrix recibida por puntero a traves del metodo binario de busqueda de
+  // forma recursiva. in_lim y fin_lim son arreglos de dos posiciones, en la primer posicion de cada uno se encuentra el valor inicial y final
+  // para las filas y en la segunda los mismos pero para las columnas.
+  // El valor que retorna es la posición de la matiz de donde se encuentra el valor c o el mas proximo a este.
+	// Se prueba que los limites iniciales sean menores a los finales, de no ser asi se devuleve NULL
+  
 
-	for (i = 0 ; (paso*i)-1 < c.get_real() ; ++i);
-//cout << c.get_img() << endl;
-	for (j = max-1 ; -1+(paso*j) > c.get_img(); j--);//j <= (c.get_img()+1)/paso ; j++);
-	//j = max-j;
-if (j<0)
-	j=0;
-if (i>=max)
-	i=max-1;
-//cout << "cortax 2" << endl;
-//1-s*k <= c.img
+  if (in_lim[0]>fin_lim[0] || in_lim[1]>fin_lim[1]){
+    return NULL;
+  }
 
-//1-c.img <= s*k
 
-//(1-c.img)/s <= k
+  // Caso base:
+  // Cuando se llega a una porcion de matriz de 2x2 se fija cual de los cuatro valores es el más proximo a c y ajusta los limites para 
+  // retornar el vector correspondiente
+  if ((fin_lim[0]-in_lim[0]) <= 1 && (fin_lim[1]-in_lim[1]) <= 1){
 
-	to_return= new int[2];
-	to_return[0] = i;
-	to_return[1] = j;
+    if (abs(c.get_real() - ((*matrix)[in_lim[1]][in_lim[0]]).get_real()) > abs(c.get_real() - ((*matrix)[fin_lim[1]][fin_lim[0]]).get_real())){
+      in_lim[0] = fin_lim[0];
+    }
+    if (abs(c.get_img() - ((*matrix)[in_lim[1]][in_lim[0]]).get_img()) > abs(c.get_img() - ((*matrix)[fin_lim[1]][fin_lim[0]]).get_img())){
+      in_lim[1] = fin_lim[1];
+    }
+    return in_lim;
+  }else if ((fin_lim[0]-in_lim[0]) == 0 && (fin_lim[1]-in_lim[1]) == 0){ 	// Si encontro el valor exacto lo devuelve. Solo llegar si la matri
+																		//de la imagen original es de 1x1 porque sino va a terminar en el cb anterior.
+  	in_lim[1] = fin_lim[1];
+  	return in_lim;
+  }
 
-	return to_return;
+
+  // Se calcula la posicion del medio
+  int medio_x = in_lim[0]+(fin_lim[0]-in_lim[0])/2;
+  int medio_y = in_lim[1]+(fin_lim[1]-in_lim[1])/2; 
+
+  // Se evalua si la parte real del complejo es mayor a la prate real del medio, y luego lo mismo
+  // para la parte imaginaria. Luego se ajustan los limites para el proximo llamado.
+
+  if (c.get_real()>= ((*matrix)[medio_y][medio_x]).get_real()){ // Se fija si se encuentra en el semiplano derecho
+    in_lim[0] = medio_x;
+    if (c.get_img()>= ((*matrix)[medio_y][medio_x]).get_img()){	// Se fija si se encuentra en el semiplano superior
+      fin_lim[1] = medio_y;
+    }else{
+      in_lim[1] = medio_y;
+    }
+  }else{
+    fin_lim[0] = medio_x;
+    if (c.get_img()>=((*matrix)[medio_y][medio_x]).get_img()){ // Se fija si se encuentra en el semiplano superior
+      fin_lim[1] = medio_y;
+    }else{
+      in_lim[1] = medio_y;
+      
+    }
+  }
+  return binary_search(c, matrix, in_lim, fin_lim);
 }
 
 
@@ -377,22 +408,49 @@ void map_image(image & original, image & destino, stk <string> output_stk){
 
   int * pos;
   int aux_color;
-  int max = original.get_max_dim();
+  int in_lim[2];
+  int fin_lim[2];
+  double max = original.get_max_dim();
   complejo aux;
   complejo ** complex_matrix;
 
   // Se genera la matriz de complejos de tamaño max por max
   generate_matrix_c(max, &complex_matrix);
+  //pos = new int[2];
 
+  double paso=2/(max-1);	// Determina el paso que debe haber debido al salto de una posicion para que en los limites se encutren los unos
+  double aux_real=-1;
+  double aux_imag=1;
+  
   // Se recorre la matriz de complejos para transformar cada uno de los puntos.
   // Los indices de la matriz de complejos coinciden con los de la matriz destino, por lo tanto 
   // alcanza con recorrer solo una de las dos.
-  for(int i=0; i < destino.get_max_dim();i++){
-    for (int j = 0; j < destino.get_max_dim(); j++)
+  for(int i=0; i < max;i++){
+  	//cout<<"EMPIEZA"<<i<<endl;
+    for (int j = 0; j < max; j++)
     {
+
+    	    	// Se inicializan los limites para la busqueda binaria
+      in_lim[0]=0;
+      in_lim[1]=0;
+      fin_lim[0]=max-1; 
+      fin_lim[1]=max-1;
     	// Se guarda el valor de la matriz de complejos para luego realizar la transformacion
+    	/*cout<<"holanda"<<i<<j<<endl;
+    	cout<<"valor de la matriz"<<complex_matrix[i][j]<<endl;
     	aux = complex_matrix[i][j];
-    	//cout << "aux antes: " << aux << endl;
+    	cout << "aux antes: " << endl;*/
+
+
+
+ 	// Se recorre la matriz y se la va rellenando punto a punto con el valor de complejo correspondiente
+
+      	
+    
+    
+
+    	complejo aux (aux_real,aux_imag);
+    	//cout<<aux;
 
     	stk <string> stk_to_solve = output_stk;
 
@@ -402,18 +460,23 @@ void map_image(image & original, image & destino, stk <string> output_stk){
 		stringstream s1 (aux_string); 
 		s1 >> aux;
 
-//cout << "aux dsp: " << aux << endl;
+//cout << "transformado: " << aux << endl;
 
   		// Se corrobora que el valor c a buscar este dentro de el semiplano que conforman los puntos (-1+i), (-1-i), (1-i) y (1+i)
   		// sino lo esta, no se hace nada, ya que como la matriz de la imagen destino se encuentra rellena de ceros (negro)
+
+
   		if(abs(aux.get_real()) <= 1 && abs(aux.get_img()) <= 1){
-
-    		pos = search(aux, max);
-//cout << pos[0] << "," << pos[1] << " ";
-
+    		pos = binary_search(aux,&complex_matrix,in_lim,fin_lim);
+    		//cout<<complex_matrix[pos[1]][pos[0]]<<endl;
+    		
+    		//search(pos,aux,max);
     	 	if (pos !=NULL){ 		// Si no se detecta un error se se guarda el color en la imagen destino
+    			//cout<<pos[1]<<endl;
     	    	aux_color = original.get_matrix_value(pos[1],pos[0]);
+    	    	
         		destino.set_matrix_value(i,j,aux_color);
+        		
       		}
 	      	else {
 	      		cerr<<"Error en busqueda binaria."<<endl;
@@ -425,9 +488,14 @@ void map_image(image & original, image & destino, stk <string> output_stk){
 	  			delete[] complex_matrix;
 	      	}
     	}
+    	aux_real=aux_real+paso;	// Se ajusta el valor para la proxima posicion
   	}
+/**************************/
+  	aux_real=-1;				// Se reinicia el valor del x ya que recorre por filas
+    aux_imag=aux_imag-paso;	// Se ajusta el valor para la proxima posicion
 //cout << endl;
   }
+  cout<<"SALIOOOOOO"<<endl;
   
   for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
       if (complex_matrix[i]){          
@@ -435,4 +503,46 @@ void map_image(image & original, image & destino, stk <string> output_stk){
       }
     }
   delete[] complex_matrix;
+
+  //delete pos;
+  //cout<<"SA"<<endl;
+
 } 
+
+
+void search(int * pos,const complejo c, const double max){
+	double paso=2/(max-1);	// Determina el paso que debe haber debido al salto de una posicion para que en los limites se encutren los unos
+	double cte = 1;
+	//int to_return[2];
+	int i=0 , j=0;
+
+	/*for (i = 0 ; (paso*i)-cte <= c.get_real() ; i++){}
+
+	for (j = 0 ; cte-(paso*j) >= c.get_img(); ++j){}//cout<<cte-(paso*j)<<c.get_img()<<endl;}//j <= (c.get_img()+1)/paso ; j++);
+	*/ 
+	while((paso*i)-cte <= c.get_real())	{
+		i++;
+	}
+	while(cte-(paso*j) >= c.get_img())	{
+		j++;
+	}
+	//j = max-j;
+	if (j>=max)
+		j=max-1;
+	if (i>=max)
+		i=max-1;
+//1-s*k <= c.img
+
+//1-c.img <= s*k
+
+//(1-c.img)/s <= k
+
+	//to_return= new int[2];
+	/*to_return[0] = i;
+	to_return[1] = j;*/
+
+	pos[0]=i;
+	pos[1]=j;
+
+	return;
+}

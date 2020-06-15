@@ -56,6 +56,8 @@ public:
 	complejo pow2();
 	complejo complex_pow(const complejo);
 	complejo complex_pow(const double);
+	complejo re ();
+	complejo im ();
 
 private:
 	double real; // Dos atributos, real e imaginario, se explica solo

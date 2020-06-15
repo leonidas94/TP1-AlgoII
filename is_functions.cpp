@@ -110,11 +110,7 @@ bool is_string_digit (string str){
   
   	ss >> temp;
   	if(stringstream(temp) >> aux){  // Si puedo convertir a double
-  		cout << aux;
 		return true;
 	}
-
-	//stringstream s1 (right); 
-	//s1 >> x;
 	return false;
 }

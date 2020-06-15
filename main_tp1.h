@@ -43,7 +43,8 @@ static void opt_help(string const &);
 bool read_pgm(image &);
 void generate_matrix_c(double, complejo ***);
 
-int * search(const complejo, const double);
+int * binary_search(const complejo, complejo ***, int [2], int [2]);
+void search(int * ,const complejo , const double);
 
 void map_image(image &, image &, stk <string>);
 

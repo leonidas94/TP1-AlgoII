@@ -123,7 +123,7 @@ void solve_rpn(stk <string> & stack, complejo c){
 		
 		stringstream s1 (right); 
 		s1 >> x;
-
+		
 		string left;
 
 		if (stack.is_empty()){
@@ -139,15 +139,17 @@ void solve_rpn(stk <string> & stack, complejo c){
 
 		stringstream s2 (left); 
 		s2 >> y;
+		//cout<<"ESTO ES y: "<<y<<endl;
 
 		if 		(token == "+") x = y+x;
 		else if (token == "-") x = y-x;
 		else if (token == "*") x = y*x;
 		else if (token == "^") x = y.complex_pow(x);// HACER OPERADOR ^ 
-		else {
+		else if (token == "/"){
 			if (x == 0)
 			{
 				cout<<"error division por 0"<<endl;
+				exit(1);
 			}
 			else
 				x = y/x;
@@ -170,24 +172,16 @@ void solve_rpn(stk <string> & stack, complejo c){
 
 
 		complejo y;
-		double aux;
-		if (right == "j")
-		{
-			y.set_img(1);
-		}
-		else if ( right == "z")
-		{
-			y = c;
-		}else{
-			stringstream s1 (right); 
-			s1 >> temp;
-			stringstream(temp) >> aux;
-			y.set_real(aux);
-		}
+
+
+		stringstream s1 (right); 
+		s1 >> y;
+
 
 		if (function == "exp") y = y.exponencial();
 		if (function == "ln") y = y.logaritmo();
-		//if (function == "re") y = re(y);
+		if (function == "re") y = y.re();
+		if (function == "im") y = y.im();
 
 		
 		right = y.to_string();
