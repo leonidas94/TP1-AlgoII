@@ -184,6 +184,11 @@ complejo & complejo::operator = (const complejo & complejo_a_igualar){
 	img=complejo_a_igualar.img;
 	return *this;
 }
+
+complejo complejo::operator = (const double num_a_igualar){
+
+	return complejo (num_a_igualar,0);
+}
 /*
 complejo complejo:: operator^ (const complejo){
 
@@ -305,21 +310,16 @@ istream & operator >> (istream &in,  complejo &c)
 	double aux;
 	string temp;
 
-
     in >> temp;
-    //cout<<"temp1"<<temp<<endl;
+
     stringstream(temp) >> aux;
     c.set_real(aux);
 
     in >> temp;
-    //cout<<"esto es temp2: "<<temp<<endl;
-    if (!in.eof())
-    {
 
+    if (!in.eof()){
     	stringstream(temp) >> aux;
     	c.set_img(aux);
-    	//cout<<"img:"<<c.get_img()<<endl;
-    }
-    
+    }    
     return in;
 }

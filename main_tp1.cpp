@@ -92,7 +92,7 @@ static void opt_output(string const &arg){
 		oss = &ofs;
 	}
 	if (!oss->good()) {
-		cerr << "No se puede abrir el archivo de salida: "<< arg<< "."<< endl;
+		cerr << "No se puede abrir el archivo de salida: "<< arg << "." << endl;
 		exit(1);
 	}
 }
@@ -407,6 +407,8 @@ int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fi
 
 void map_image(image & original, image & destino, stk <string> output_stk){
 
+  cout << "entre a map imagegeeeggeegge" << endl;
+
   int * pos;
   int aux_color;
   int in_lim[2];
@@ -456,7 +458,13 @@ void map_image(image & original, image & destino, stk <string> output_stk){
     	stk <string> stk_to_solve = output_stk;
 
 		solve_rpn(stk_to_solve, aux);
-		string aux_string = stk_to_solve.peek();
+
+		string aux_string;
+
+    if(!stk_to_solve.peek(aux_string)){
+      cerr << "Error. Peek." << endl;
+      exit(1);
+    }
 
 		stringstream s1 (aux_string); 
 		s1 >> aux;

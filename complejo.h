@@ -43,6 +43,7 @@ public:
 	/*complejo operator ^ (const complejo &); // Potenciacion de complejos
 	complejo operator ^ (const double &);*/
 	complejo & operator = (const complejo &); // Operador =
+	complejo operator = (const double);
 	bool operator== (const complejo &);
 	bool operator== (const double a);
 	bool operator== (const int a);

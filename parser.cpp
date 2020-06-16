@@ -31,11 +31,11 @@ string * parse_function(const string function, size_t & string_array_size){
 		}
 
 		// Guardo numeros o numeros que empiecen con punto
-		else if (  isdigit(function[i]) ||							// Si es un digito O
+		else if (  isdigit(function[i]) ||							// Si es un digito ||
 				   (function[i]=='.' && isdigit(function[i+1]))  ){ // es un punto Y el siguiente un digito
 
 			if (!parse_number(function, string_array, string_array_size, i)){ // Trato de parsear el numero
-				cerr << "Error. Funcion matematica erronea." << endl;
+				cerr << "Error. Formato número." << endl;
 				exit(0);
 			}
 		}
@@ -44,13 +44,13 @@ string * parse_function(const string function, size_t & string_array_size){
 		else if ( is_negative_number(function[i], function[i-1], i) ) {
 
 			if (!parse_negative_number(function, string_array, string_array_size, i)){ 
-				cerr << "Error. Funcion matematica erronea." << endl;
+				cerr << "Error. Formato número negativo." << endl;
 				exit(0);
 			}
 		}
 
 		// Guardo si es operador o parentesis: +-*/^()
-		else if (  is_operator(function[i]) ||			// Si es operador O
+		else if (  is_operator(function[i]) ||			// Si es operador ||
 				   is_parenthesis(function[i])  ) {		// es parentesis
 
 			string aux_string = "";
@@ -59,7 +59,7 @@ string * parse_function(const string function, size_t & string_array_size){
 		}
 
 		// Guardo la variable z y la j de imaginario
-		else if (  function[i]=='z' ||			// Si es 'z' O
+		else if (  function[i]=='z' ||			// Si es 'z' ||
 				   function[i]=='j'  ){			// si es 'j'
 
 			string aux_string = "";
@@ -68,6 +68,10 @@ string * parse_function(const string function, size_t & string_array_size){
 		}
 		i++;
 	}
+/*	for (int j = 0; j < string_array_size ; j++)
+	{
+		cout << string_array[j] << endl;
+	}*/
 	return string_array;
 }
 
@@ -101,10 +105,11 @@ bool parse_number (const string function, string *& string_array, size_t & strin
 
 	string aux_string = "";
 
-	while(  isdigit(function[position]) ||		// Mientra lo q leo sea un digito O
-			function[position] == '.' ||		// un punto O
-			( (function[position] == 'e' || function[position] == 'E') && 	   // (una 'e' seguida de un 
-			  (function[position+1] == '-' || isdigit(function[position+1])) ) // signo menos o digito)
+	while(  isdigit(function[position]) ||																	// Mientra lo q leo sea un digito ||
+			function[position] == '.' ||																	// un punto ||
+			(function[position] == '-' && ((function[position-1] == 'e' || function[position-1] == 'E')))||	// un signo - precedido por una e ||
+			( (function[position] == 'e' || function[position] == 'E') && 	    							// (una 'e' seguida de un 
+			  (function[position+1] == '-' || isdigit(function[position+1])) )  							// signo menos o digito)
 		 ) {
 		aux_string.append(1, function[position++]);
 	}
@@ -122,7 +127,7 @@ bool parse_negative_number (const string function, string *& string_array, size_
 
 	aux_string.append(1, function[position++]);	// Guarda el signo menos
 
-	while(  isdigit(function[position]) ||	// Mientras sea digito O
+	while(  isdigit(function[position]) ||	// Mientras sea digito ||
 			function[position] == '.' ) {	// sea un punto
 
 		if (position >= function.length()){
@@ -190,6 +195,7 @@ bool resize_string_array (string *& string_array, size_t & string_array_size, si
 bool check_balance (const string function){
 	stk <char> stack;
 	bool balanced = true;
+	char aux;
 
 	for (size_t i = 0; i < function.length() && balanced == true; ++i)
 	{
@@ -200,19 +206,19 @@ bool check_balance (const string function){
 				stack.push(function[i]);
 				break;
 			case '}':
-				if (!stack.is_empty() && stack.peek() == '{')
+				if (!stack.is_empty() && (stack.peek(aux) && aux == '{'))
 					stack.pop();
 				else
 					balanced = false;
 				break;
 			case ']':
-				if (!stack.is_empty() && stack.peek() == '[')
+				if (!stack.is_empty() && (stack.peek(aux) && aux == '['))
 					stack.pop();
 				else
 					balanced = false;
 				break;	
 			case ')':
-				if (!stack.is_empty() && stack.peek() == '(')
+				if (!stack.is_empty() && (stack.peek(aux) && aux == '('))
 					stack.pop();
 				else
 					balanced = false;
@@ -225,7 +231,7 @@ bool check_balance (const string function){
 }
 
 
-// Funcion que checkea que lo ingresad no haya empezado con un operador mat prohibido
+// Funcion que checkea que lo ingresado no haya empezado con un operador mat prohibido
 bool check_operator_at_begining(const string function){
 
 	if (function[0]=='*' || function[0]=='/' || function[0]=='^')

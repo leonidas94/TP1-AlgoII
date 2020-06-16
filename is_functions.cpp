@@ -31,8 +31,7 @@ bool is_negative_number(const char actual, const char anterior, size_t vuelta){
 bool is_operator(char token){        
     return token == '+' || token == '-' ||      
            token == '*' || token == '/'	||
-           token == '^' || token == 'e' ||
-           token == 'E';      
+           token == '^' ;      
 }
 
 

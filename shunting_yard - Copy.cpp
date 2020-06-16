@@ -6,7 +6,7 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 
 	stk <string> op_stack;
 	stk <string> tokens_stack; // Lo voy a usar para tratar de separar entered_function en tokens
-	string aux;
+
 // ACA ARRANCA EL AGLORITMO
 	for (int i = 0; i < (int)tamano; ++i)
 	{
@@ -23,18 +23,12 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 		else if (is_operator(entered_function[i]))
 		{	
 			//Calcular la precedencia antes
-			op_stack.peek(aux);
 
-			while((!op_stack.is_empty() && is_operator(aux)) && 
-				((precedence(entered_function[i]) < precedence(aux)) || ((precedence(entered_function[i]) == precedence(aux)) && is_left_associative(entered_function[i])))
-				 && (!is_left_parenthesis(aux)))
+			while((!op_stack.is_empty() && is_operator(op_stack.peek())) && 
+				((precedence(entered_function[i]) < precedence(op_stack.peek())) || ((precedence(entered_function[i]) == precedence(op_stack.peek())) && is_left_associative(entered_function[i])))
+				 && (!is_left_parenthesis(op_stack.peek())))
 			{
-				if(!op_stack.peek(aux)){
-					cout << "Error. Peek2." << endl;
-					exit(1);
-				}
-
-				output_stack.push(aux);
+				output_stack.push(op_stack.peek());
 				op_stack.pop();
 			}
 			op_stack.push(entered_function[i]);
@@ -46,38 +40,16 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 		}  
 		else if (is_right_parenthesis(entered_function[i]))
 		{
-			if(!op_stack.peek(aux)){
-				cout << "Error. Peek3." << endl;
-				exit(1);
-			}
-			while (!is_left_parenthesis(aux)){
-
-				op_stack.peek(aux);
-				output_stack.push(aux);
+			
+			while (!is_left_parenthesis(op_stack.peek())){
+				output_stack.push(op_stack.peek());
 				op_stack.pop();
 			}
-
-			if(!op_stack.peek(aux)){
-				cout << "Error. Peek5." << endl;
-				exit(1);
-			}
-
-			if (is_left_parenthesis(aux))
+			if (is_left_parenthesis(op_stack.peek()))
 			{
 				op_stack.pop();
-				
-				if(!op_stack.peek(aux)){
-					cout << "Error. Peek6." << endl;
-					exit(1);
-				}
-				
-				if (is_math_function(aux)){
-					if(!op_stack.peek(aux)){
-						cout << "Error. Peek7." << endl;
-						exit(1);
-					}
-
-					output_stack.push(aux);
+				if (is_math_function(op_stack.peek())){
+					output_stack.push(op_stack.peek());
 					op_stack.pop();
 				}
 			}
@@ -86,11 +58,7 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 
 	}
 	while(!op_stack.is_empty()){
-		if(!op_stack.peek(aux)){
-			cout << "Error. Peek8." << endl;
-			exit(1);
-		}
-		output_stack.push(aux);
+		output_stack.push(op_stack.peek());
 		op_stack.pop();		
 	}
 }
@@ -112,18 +80,18 @@ int precedence (string token){
 
 void solve_rpn(stk <string> & stack, complejo c){
 	string temp;
-	string aux;
 
+//cout << "entra al slve" << endl;
 	if (stack.is_empty())	// Caso base
 	{
 		cerr << "Stack is empty." << endl;
 		return;
 	}
 
-	else if (stack.peek(aux) && is_string_digit(aux))
+	else if (is_string_digit(stack.peek()))
 	{
 		//cout << "digitox" << endl;
-		if (stack.peek(aux) && aux == "j")
+		if (stack.peek() == "j")
 		{
 			stack.pop();
 			complejo x (0,1);
@@ -132,7 +100,7 @@ void solve_rpn(stk <string> & stack, complejo c){
 		return;
 	}
 
-	else if (stack.peek(aux) && aux == "z")
+	else if (stack.peek() == "z")
 	{
 		//cout << "zetax" << endl;
 		stack.pop();
@@ -140,26 +108,16 @@ void solve_rpn(stk <string> & stack, complejo c){
 		return;
 	}
 
-	else if (stack.peek(aux) && is_operator(aux)){
+	else if (is_operator(stack.peek())){
 
-		string token;
-		if(!stack.peek(token)){
-			cerr << "Error. Peek9" << endl;
-			exit(1);
-		}
-
+		//cout << "operadorx" << endl;
+		string token = stack.peek();
 		stack.pop();
 
 		complejo x, y;
 
 		solve_rpn(stack,c);
-		
-		string right;
-		if(!stack.peek(right)){
-			cerr << "Error. Peek10" << endl;
-			exit(1);
-		}
-
+		string right = stack.peek();
 		stack.pop();
 		
 		stringstream s1 (right); 
@@ -174,12 +132,7 @@ void solve_rpn(stk <string> & stack, complejo c){
 		else{
 
 			solve_rpn(stack,c);
-
-			if(!stack.peek(left)){
-				cerr << "Error. Peek11" << endl;
-				exit(1);	
-			} 
-			
+			left = stack.peek(); 
 			stack.pop();
 		}
 
@@ -206,25 +159,14 @@ void solve_rpn(stk <string> & stack, complejo c){
 		stack.push(right);
 		return;
 	}
-	else if (stack.peek(aux) && is_math_function(aux)){
+	else if (is_math_function(stack.peek())){
 		
 		//cout << "funcionx" << endl;
-		string function;
-
-		if(!stack.peek(function)){
-			cerr << "Error. Peek12" << endl;
-			exit(1);
-		}
-
+		string function = stack.peek();
 		stack.pop();
 
 		solve_rpn(stack,c);
-
-		string right;
-		if(!stack.peek(right)){
-			cerr << "Error. Peek13" << endl;
-			exit(1);
-		}
+		string right = stack.peek();//solve_rpn(stack.peek());
 		stack.pop();
 
 
@@ -239,8 +181,8 @@ void solve_rpn(stk <string> & stack, complejo c){
 		else if (function == "ln") 	  y = y.logaritmo();
 		else if (function == "re") 	  y = y.re();
 		else if (function == "im") 	  y = y.im();
-		else if (function == "abs")   y = y.get_abs();
-		else if (function == "phase") y = y.get_phase();
+		else if (function == "abs")   y = complejo(y.get_abs(),0);
+		else if (function == "phase") y = complejo(y.get_phase(),0);
 
 
 		

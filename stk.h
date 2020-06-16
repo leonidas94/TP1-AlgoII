@@ -45,7 +45,7 @@ class stk{
 
 		void pop();
 		void push(T);
-		T peek();
+		bool peek(T &);
 		bool is_empty();
 		stk<T>& operator= (const stk<T>&);
 
@@ -211,11 +211,13 @@ void stk<T>::push(T t)
 
 
 template<typename T>
-T stk<T>::peek()
+bool stk<T>::peek(T & t)
 {
-	if (!is_empty())
-		return pri_->dato_;
-
+	if (!is_empty()){
+		t = pri_->dato_;
+		return true;
+	}
+	return false;
 }
 
 template<typename T>
