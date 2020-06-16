@@ -9,11 +9,11 @@ string * parse_function(const string function, size_t & string_array_size){
 							// si es que fue ingresada correctamente
 
 	if (!check_balance (function)){	// Valido que lo ingresado este balanceado en cuanto a parentesis
-		cout << "No esta balanceada" << endl;
+		cerr << "Error. No esta balanceada" << endl;
 		exit(0);
 	}
 	if (!check_operator_at_begining(function)){	// Valido que si hay un operador al ppcio, no sea * o /
-		cout << "Error, no puede comenzar con " << function[0] << endl;
+		cerr << "Error, no puede comenzar con " << function[0] << endl;
 		exit(0);
 	}
 
@@ -25,7 +25,7 @@ string * parse_function(const string function, size_t & string_array_size){
 			  !isdigit(function[i+1])  ){				// si el siguiente no es un digito
 
 			if (!parse_math_expression(function, string_array, string_array_size, i)){	// Trato de parsear
-				cout << "error, funcion matematica erronea" << endl;					// la f. mat.
+				cerr << "Error. Funcion matematica erronea." << endl;					// la f. mat.
 				exit(0);
 			}
 		}
@@ -35,7 +35,7 @@ string * parse_function(const string function, size_t & string_array_size){
 				   (function[i]=='.' && isdigit(function[i+1]))  ){ // es un punto Y el siguiente un digito
 
 			if (!parse_number(function, string_array, string_array_size, i)){ // Trato de parsear el numero
-				cout << "error, funcion matematica erronea" << endl;
+				cerr << "Error. Funcion matematica erronea." << endl;
 				exit(0);
 			}
 		}
@@ -44,7 +44,7 @@ string * parse_function(const string function, size_t & string_array_size){
 		else if ( is_negative_number(function[i], function[i-1], i) ) {
 
 			if (!parse_negative_number(function, string_array, string_array_size, i)){ 
-				cout << "error, funcion matematica erronea" << endl;
+				cerr << "Error. Funcion matematica erronea." << endl;
 				exit(0);
 			}
 		}
@@ -79,7 +79,7 @@ bool parse_math_expression (const string function, string *& string_array, size_
 	while (function[position] != '(') {		// Estamos suponiendo que toda f mat es seguida con un '('
 
 		if (position >= function.length()){ // Si la posicion se paso del largo, no encontro '('
-			cout << "ERROR no encontro parentesis ( parseando"<< endl;
+			cerr << "Error. No encontro parentesis ( parseando." << endl;
 			exit (0);
 		}
 
@@ -126,7 +126,7 @@ bool parse_negative_number (const string function, string *& string_array, size_
 			function[position] == '.' ) {	// sea un punto
 
 		if (position >= function.length()){
-			cout << "ERROR no encontro parentesis ( parseando"<< endl;
+			cerr << "Error. No encontro parentesis ( parseando." << endl;
 			return false;
 		}
 		aux_string.append(1, function[position++]);

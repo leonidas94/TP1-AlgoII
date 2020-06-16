@@ -36,7 +36,7 @@ int main(int argc, char * const argv[]){
 
 	//Primero leo la imagen de entrada, ya que si esta mal, hacer el resto es innecesario
 	if(!read_pgm(input_image)){    // Se lee la imagen de intrada
-		cerr<<"Fallo en el archivo"<<endl;
+		cerr<<"Error. Fallo en el archivo."<<endl;
 		return 1;
 	}
 	
@@ -103,7 +103,8 @@ static void opt_function(string const &arg){
 
 static void opt_help(string const &arg){  // La opción -h imprime el formato de ejecución
   cout << "cmdline -f function [-i file] [-o file]" << endl;
-  cout << "funciones: z, expz, conjugar, inversa, log, sin, pow" << endl;
+  cout << "Funciones: exp(z), ln(z), re(z), im(z), abs(z), phase(z)." << endl;
+  cout << "Operadores: +, -, *, /." << endl;
 	exit(0);
 }
 
@@ -222,11 +223,11 @@ bool read_pgm(image & img_arg){
 
   if (in_string[0] == PGM_IDENTIFIER[0]){
   	if (in_string[1] != PGM_IDENTIFIER[1]){
-    	cerr<< "No es PGM" <<endl;   // En caso que el identificador sea incorrecto, imprime un mensaje de error.
+    	cerr << "No es PGM" <<endl;   // En caso que el identificador sea incorrecto, imprime un mensaje de error.
     	return false;
   	}
 	}
-	else {cerr<< "No es PGM" <<endl; return false;}
+	else {cerr << "No es PGM" <<endl; return false;}
 
   getline(*iss, in_string);
   if (in_string[0] == SKIP_LINE_IDENTIFIER){ // Se detecta si se leyó un comentario.
@@ -244,7 +245,7 @@ bool read_pgm(image & img_arg){
   	temp = "";
 	}
 	if (i == 1){
-		cout<< "Error en el formato."<<endl;
+		cout << "Error en el formato."<<endl;
 		return false;
 	}
 

@@ -84,7 +84,7 @@ void solve_rpn(stk <string> & stack, complejo c){
 //cout << "entra al slve" << endl;
 	if (stack.is_empty())	// Caso base
 	{
-		cout<<"empty"<<endl;
+		cerr << "Stack is empty." << endl;
 		return;
 	}
 
@@ -148,7 +148,7 @@ void solve_rpn(stk <string> & stack, complejo c){
 		else if (token == "/"){
 			if (x == 0)
 			{
-				cout<<"error division por 0"<<endl;
+				cerr << "Error. Division por 0." << endl;
 				exit(1);
 			}
 			else
