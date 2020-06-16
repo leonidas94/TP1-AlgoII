@@ -115,7 +115,6 @@ void solve_rpn(stk <string> & stack, complejo c){
 		stack.pop();
 
 		complejo x, y;
-		double aux;
 
 		solve_rpn(stack,c);
 		string right = stack.peek();

@@ -496,7 +496,6 @@ void map_image(image & original, image & destino, stk <string> output_stk){
     aux_imag=aux_imag-paso;	// Se ajusta el valor para la proxima posicion
 //cout << endl;
   }
-  cout<<"SALIOOOOOO"<<endl;
   
   for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
       if (complex_matrix[i]){          

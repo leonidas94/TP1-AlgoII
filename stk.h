@@ -233,9 +233,4 @@ size_t stk<T>::stk_size() const{
 	return tam_;
 }
 
-
-
-
-
-
 #endif
