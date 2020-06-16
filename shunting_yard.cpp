@@ -178,10 +178,13 @@ void solve_rpn(stk <string> & stack, complejo c){
 		s1 >> y;
 
 
-		if (function == "exp") y = y.exponencial();
-		if (function == "ln") y = y.logaritmo();
-		if (function == "re") y = y.re();
-		if (function == "im") y = y.im();
+		if      (function == "exp")   y = y.exponencial();
+		else if (function == "ln") 	  y = y.logaritmo();
+		else if (function == "re") 	  y = y.re();
+		else if (function == "im") 	  y = y.im();
+		else if (function == "abs")   y = complejo(y.get_abs(),0);
+		else if (function == "phase") y = complejo(y.get_phase(),0);
+
 
 		
 		right = y.to_string();

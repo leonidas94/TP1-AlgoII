@@ -41,12 +41,12 @@ double complejo::get_img(void) const{	// Obtiene la parte imaginaria
 	return img;
 }
 
-double complejo::get_modulo(){ // Obtiene le módulo
+double complejo::get_abs(){ // Obtiene le módulo
 	return sqrt((this->real)*(this->real) + (this->img)*(this->img));
 }
 
-double complejo::get_angulo(){	// Obtiene el angulo
-	return atan((this->img)/(this->real));
+double complejo::get_phase(){	// Obtiene el angulo
+	return atan2((this->img),(this->real));
 }
 
 // Printer
@@ -221,8 +221,8 @@ complejo complejo::conjugar (){
 complejo complejo::inversa (){
 	complejo aux;
 	aux=this->conjugar();
-	aux.real=aux.real/(aux.get_modulo());
-	aux.img=aux.img/(aux.get_modulo());
+	aux.real=aux.real/(aux.get_abs());
+	aux.img=aux.img/(aux.get_abs());
 	return aux;
 }
 
@@ -231,7 +231,7 @@ complejo complejo::logaritmo(){
 
   complejo aux;
 
-  double modulo = this->get_modulo();
+  double modulo = this->get_abs();
 
   aux.real = log(modulo);
   aux.img = atan2(this->img,this->real);
@@ -264,8 +264,8 @@ complejo complejo::pow2(){
 
 complejo complejo::complex_pow(const complejo a){
 
-	double r = this->get_modulo();
-	double th = this->get_angulo();
+	double r = this->get_abs();
+	double th = this->get_phase();
 
 	double r2 = pow(r,a.real)*exp(-th*a.img);
 
@@ -276,8 +276,8 @@ complejo complejo::complex_pow(const complejo a){
 
 complejo complejo::complex_pow(const double a){
 
-	double r = this->get_modulo();
-	double th = this->get_angulo();
+	double r = this->get_abs();
+	double th = this->get_phase();
 
 	double r2 = pow(r,a);
 	double th2 = (th*a);
@@ -291,7 +291,6 @@ complejo complejo::re(){
 complejo complejo::im(){
 	return complejo (0,img);
 }
-
 
 ostream & operator << (ostream &out, const complejo &c)
 {
