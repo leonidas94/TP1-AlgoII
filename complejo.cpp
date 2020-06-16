@@ -41,11 +41,11 @@ double complejo::get_img(void) const{	// Obtiene la parte imaginaria
 	return img;
 }
 
-double complejo::get_abs(){ // Obtiene le módulo
-	return sqrt((this->real)*(this->real) + (this->img)*(this->img));
+double complejo::get_abs() const{ // Obtiene le módulo
+	return sqrt(((this->real)*(this->real)) + ((this->img)*(this->img)));
 }
 
-double complejo::get_phase(){	// Obtiene el angulo
+double complejo::get_phase() const{	// Obtiene el angulo
 	return atan2((this->img),(this->real));
 }
 

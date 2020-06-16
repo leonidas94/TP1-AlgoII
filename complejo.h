@@ -23,8 +23,8 @@ public:
 	void set_img(const double);
 	double get_real() const;
 	double get_img()const;
-	double get_abs();
-	double get_phase();
+	double get_abs()const;
+	double get_phase()const;
 
 	// Printer
 	//ostream& operator<< (ostream& os);
