@@ -41,10 +41,18 @@ string * parse_function(const string function, size_t & string_array_size){
 		}
 
 		// Guardo numeros con el signo menos como string: 
-		else if ( is_negative_number(function[i], function[i-1], i) ) {
+		else if ( is_negative_number(function[i], function[i-1], function[i+1], i) ) {
 
 			if (!parse_negative_number(function, string_array, string_array_size, i)){ 
 				cerr << "Error. Formato número negativo." << endl;
+				exit(0);
+			}
+		}
+
+		else if ( is_negative_j(function[i], function[i-1], function[i+1], i) ) {
+			
+			if (!parse_negative_j(function, string_array, string_array_size, i)){ 
+				cerr << "Error. Formato j." << endl;
 				exit(0);
 			}
 		}
@@ -60,7 +68,7 @@ string * parse_function(const string function, size_t & string_array_size){
 
 		// Guardo la variable z y la j de imaginario
 		else if (  function[i]=='z' ||			// Si es 'z' ||
-				   function[i]=='j'  ){			// si es 'j'
+				   function[i]=='j' ){			// si es 'j'
 
 			string aux_string = "";
 			aux_string.append(1, function[i]);
@@ -68,10 +76,10 @@ string * parse_function(const string function, size_t & string_array_size){
 		}
 		i++;
 	}
-/*	for (int j = 0; j < string_array_size ; j++)
-	{
-		cout << string_array[j] << endl;
-	}*/
+for (size_t j = 0; j < string_array_size ; j++)
+{
+cout << string_array[j] << endl;
+}
 	return string_array;
 }
 
@@ -136,6 +144,20 @@ bool parse_negative_number (const string function, string *& string_array, size_
 		}
 		aux_string.append(1, function[position++]);
 	}
+	position--;
+	add_string_to_array(string_array, string_array_size, aux_string);
+	return true;
+}
+
+
+// Compruebo la j negativa y lo guardo en string array junto con su signo -
+bool parse_negative_j (const string function, string *& string_array, size_t & string_array_size, size_t & position){
+
+	string aux_string = "";
+
+	aux_string.append(1, function[position++]);	// Guarda el signo menos
+	aux_string.append(1, function[position++]);
+
 	position--;
 	add_string_to_array(string_array, string_array_size, aux_string);
 	return true;

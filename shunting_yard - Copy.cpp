@@ -7,7 +7,7 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 	stk <string> op_stack;
 	stk <string> tokens_stack; // Lo voy a usar para tratar de separar entered_function en tokens
 
-// ACA ARRANCA EL AGLORITMO
+
 	for (int i = 0; i < (int)tamano; ++i)
 	{
 		

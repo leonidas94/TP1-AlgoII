@@ -7,7 +7,7 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 	stk <string> op_stack;
 	stk <string> tokens_stack; // Lo voy a usar para tratar de separar entered_function en tokens
 	string aux;
-// ACA ARRANCA EL AGLORITMO
+
 	for (int i = 0; i < (int)tamano; ++i)
 	{
 		
@@ -50,18 +50,18 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 				cout << "Error. Peek3." << endl;
 				exit(1);
 			}
+
 			while (!is_left_parenthesis(aux)){
 
 				op_stack.peek(aux);
 				output_stack.push(aux);
 				op_stack.pop();
+				op_stack.peek(aux);
 			}
-
 			if(!op_stack.peek(aux)){
 				cout << "Error. Peek5." << endl;
 				exit(1);
 			}
-
 			if (is_left_parenthesis(aux))
 			{
 				op_stack.pop();
@@ -70,7 +70,6 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 					cout << "Error. Peek6." << endl;
 					exit(1);
 				}
-				
 				if (is_math_function(aux)){
 					if(!op_stack.peek(aux)){
 						cout << "Error. Peek7." << endl;
@@ -127,6 +126,12 @@ void solve_rpn(stk <string> & stack, complejo c){
 		{
 			stack.pop();
 			complejo x (0,1);
+			stack.push(x.to_string());
+		}		
+		if (stack.peek(aux) && aux == "-j")
+		{
+			stack.pop();
+			complejo x (0,-1);
 			stack.push(x.to_string());
 		}
 		return;

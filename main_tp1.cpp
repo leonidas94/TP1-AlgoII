@@ -407,8 +407,6 @@ int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fi
 
 void map_image(image & original, image & destino, stk <string> output_stk){
 
-  cout << "entre a map imagegeeeggeegge" << endl;
-
   int * pos;
   int aux_color;
   int in_lim[2];
@@ -429,11 +427,11 @@ void map_image(image & original, image & destino, stk <string> output_stk){
   // Los indices de la matriz de complejos coinciden con los de la matriz destino, por lo tanto 
   // alcanza con recorrer solo una de las dos.
   for(int i=0; i < max;i++){
-  	//cout<<"EMPIEZA"<<i<<endl;
+
     for (int j = 0; j < max; j++)
     {
 
-    	    	// Se inicializan los limites para la busqueda binaria
+    	// Se inicializan los limites para la busqueda binaria
       in_lim[0]=0;
       in_lim[1]=0;
       fin_lim[0]=max-1; 
@@ -448,23 +446,20 @@ void map_image(image & original, image & destino, stk <string> output_stk){
 
  	// Se recorre la matriz y se la va rellenando punto a punto con el valor de complejo correspondiente
 
-      	
-    
-    
-
     	complejo aux (aux_real,aux_imag);
     	//cout<<aux;
 
     	stk <string> stk_to_solve = output_stk;
 
-		solve_rpn(stk_to_solve, aux);
 
-		string aux_string;
+		  solve_rpn(stk_to_solve, aux);
 
-    if(!stk_to_solve.peek(aux_string)){
-      cerr << "Error. Peek." << endl;
-      exit(1);
-    }
+		  string aux_string;
+
+      if(!stk_to_solve.peek(aux_string)){
+       cerr << "Error. Peek." << endl;
+       exit(1);
+      }
 
 		stringstream s1 (aux_string); 
 		s1 >> aux;

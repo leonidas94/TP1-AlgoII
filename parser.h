@@ -13,6 +13,7 @@ string * parse_function(const string, size_t &);
 bool parse_math_expression(const string, string *&, size_t &, size_t &);
 bool parse_number(const string, string *&, size_t &, size_t &);
 bool parse_negative_number(const string, string *&, size_t &, size_t &);
+bool parse_negative_j(const string, string *&, size_t &, size_t &);
 
 bool check_operator_at_begining(const string);
 bool check_balance (const string );

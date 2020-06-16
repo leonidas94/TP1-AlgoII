@@ -17,11 +17,21 @@ bool is_math_function_initial (const char letter){
 	return false;
 }
 
-bool is_negative_number(const char actual, const char anterior, size_t vuelta){
+bool is_negative_number(const char actual, const char anterior, const char sig, size_t vuelta){
 	if (
-		  (actual=='-' && vuelta==0) ||				 // Encuentro un menos Y esta al principio O
-		  (actual=='-' && anterior=='(') ||			 // encuentro un menos Y el anterior es un parentesis abierto O
-		  (actual=='-' && is_operator(anterior))  ){ // encuentro un menos Y el anterior es un operador
+		  (actual=='-' && vuelta==0 && isdigit(sig)) 	 ||			 // Encuentro un menos Y esta al principio Y lo sig es un numero O
+		  (actual=='-' && anterior=='(' && isdigit(sig)) ||			 // encuentro un menos Y el anterior es un parentesis abierto Y lo sig es un numero O
+		  (actual=='-' && is_operator(anterior) && isdigit(sig))  ){ // encuentro un menos Y el anterior es un operador Y lo sig es un numero
+		return true;
+	}
+	else return false;
+}
+
+bool is_negative_j(const char actual, const char anterior, const char sig, size_t vuelta){
+	if (
+		  (actual=='-' && vuelta==0 && sig == 'j') ||				 // Encuentro un menos Y esta al principio O
+		  (actual=='-' && anterior=='(' && sig=='j') ||			 // encuentro un menos Y el anterior es un parentesis abierto O
+		  (actual=='-' && is_operator(anterior) && sig=='j')  ){ // encuentro un menos Y el anterior es un operador
 		return true;
 	}
 	else return false;
@@ -100,7 +110,7 @@ bool is_math_function (string funct){
 
 bool is_string_digit (string str){
 
-	if (str == "j")
+	if (str == "j" || str == "-j")
 		return true;
 
 	string temp;

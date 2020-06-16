@@ -17,7 +17,8 @@ using namespace std;
 bool is_math_function_initial (const char);
 bool is_math_function (string);
 
-bool is_negative_number(const char, const char, size_t);
+bool is_negative_number(const char, const char, const char, size_t);
+bool is_negative_j(const char , const char, const char, size_t);
 
 bool is_operator(char);
 bool is_operator(string);
