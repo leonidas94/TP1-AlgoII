@@ -53,12 +53,6 @@ int main(int argc, char * const argv[]){
 
 	// Se imprime la imagen de salida
 	output_image.print_image(oss);
-
-	// ESTE WHILE IMPRIME EL STACK PARA VER SI ESTA BIEN (PERO LO DESAPILA!!!!!)
-	/*while(!output.is_empty()){
-		cout<<"Out:"<<output.peek()<<endl;
-		output.pop();
-	}*/
 	
 	return 0;
 }
@@ -259,7 +253,7 @@ bool read_pgm(image & img_arg){
   img_arg.set_width(aux_size[0]);  // Se guarda el ancho de la matriz.
   img_arg.set_height(aux_size[1]); // Se guarda el alto de la matriz.
   
-  // CCAMBIAR A OPERADOR  >> SI HAY TIEMPO
+// CCAMBIAR A OPERADOR  >> SI HAY TIEMPO
   getline(*iss, in_string);
   aux_greyscale = stoi(in_string);
   img_arg.set_greyscale(aux_greyscale); // Se guarda el valor de la escala de grises.
@@ -417,7 +411,6 @@ void map_image(image & original, image & destino, stk <string> output_stk){
 
   // Se genera la matriz de complejos de tamaño max por max
   generate_matrix_c(max, &complex_matrix);
-  //pos = new int[2];
 
   double paso=2/(max-1);	// Determina el paso que debe haber debido al salto de una posicion para que en los limites se encutren los unos
   double aux_real=-1;
@@ -437,17 +430,12 @@ void map_image(image & original, image & destino, stk <string> output_stk){
       fin_lim[0]=max-1; 
       fin_lim[1]=max-1;
     	// Se guarda el valor de la matriz de complejos para luego realizar la transformacion
-    	/*cout<<"holanda"<<i<<j<<endl;
-    	cout<<"valor de la matriz"<<complex_matrix[i][j]<<endl;
-    	aux = complex_matrix[i][j];
-    	cout << "aux antes: " << endl;*/
 
 
 
- 	// Se recorre la matriz y se la va rellenando punto a punto con el valor de complejo correspondiente
+ 	    // Se recorre la matriz y se la va rellenando punto a punto con el valor de complejo correspondiente
 
     	complejo aux (aux_real,aux_imag);
-    	//cout<<aux;
 
     	stk <string> stk_to_solve = output_stk;
 
@@ -464,19 +452,15 @@ void map_image(image & original, image & destino, stk <string> output_stk){
 		stringstream s1 (aux_string); 
 		s1 >> aux;
 
-//cout << "transformado: " << aux << endl;
-
   		// Se corrobora que el valor c a buscar este dentro de el semiplano que conforman los puntos (-1+i), (-1-i), (1-i) y (1+i)
   		// sino lo esta, no se hace nada, ya que como la matriz de la imagen destino se encuentra rellena de ceros (negro)
 
 
   		if(abs(aux.get_real()) <= 1 && abs(aux.get_img()) <= 1){
+
     		pos = binary_search(aux,&complex_matrix,in_lim,fin_lim);
-    		//cout<<complex_matrix[pos[1]][pos[0]]<<endl;
-    		
-    		//search(pos,aux,max);
+
     	 	if (pos !=NULL){ 		// Si no se detecta un error se se guarda el color en la imagen destino
-    			//cout<<pos[1]<<endl;
     	    	aux_color = original.get_matrix_value(pos[1],pos[0]);
     	    	
         		destino.set_matrix_value(i,j,aux_color);
@@ -494,58 +478,16 @@ void map_image(image & original, image & destino, stk <string> output_stk){
     	}
     	aux_real=aux_real+paso;	// Se ajusta el valor para la proxima posicion
   	}
-/**************************/
-  	aux_real=-1;				// Se reinicia el valor del x ya que recorre por filas
+  	aux_real=-1;	// Se reinicia el valor del x ya que recorre por filas
     aux_imag=aux_imag-paso;	// Se ajusta el valor para la proxima posicion
-//cout << endl;
+
   }
   
-  for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
+  for (int i = 0; i<max; i++){   // Borra la memoria pedida por generate_matrix_c
       if (complex_matrix[i]){          
         delete[] complex_matrix[i];
       }
     }
   delete[] complex_matrix;
 
-  //delete pos;
-  //cout<<"SA"<<endl;
-
-} 
-
-
-void search(int * pos,const complejo c, const double max){
-	double paso=2/(max-1);	// Determina el paso que debe haber debido al salto de una posicion para que en los limites se encutren los unos
-	double cte = 1;
-	//int to_return[2];
-	int i=0 , j=0;
-
-	/*for (i = 0 ; (paso*i)-cte <= c.get_real() ; i++){}
-
-	for (j = 0 ; cte-(paso*j) >= c.get_img(); ++j){}//cout<<cte-(paso*j)<<c.get_img()<<endl;}//j <= (c.get_img()+1)/paso ; j++);
-	*/ 
-	while((paso*i)-cte <= c.get_real())	{
-		i++;
-	}
-	while(cte-(paso*j) >= c.get_img())	{
-		j++;
-	}
-	//j = max-j;
-	if (j>=max)
-		j=max-1;
-	if (i>=max)
-		i=max-1;
-//1-s*k <= c.img
-
-//1-c.img <= s*k
-
-//(1-c.img)/s <= k
-
-	//to_return= new int[2];
-	/*to_return[0] = i;
-	to_return[1] = j;*/
-
-	pos[0]=i;
-	pos[1]=j;
-
-	return;
 }
