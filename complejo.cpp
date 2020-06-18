@@ -221,6 +221,17 @@ complejo complejo::seno(){
   return aux;
 }
 
+// COSENO
+complejo complejo::coseno(){
+
+  complejo aux;
+
+  aux.real = cos(real)*cosh(img);
+  aux.img = -(sin(real)*sinh(img));
+
+  return aux;
+}
+
 
 // Complejo elevado a complejo
 complejo complejo::complex_pow(const complejo a){

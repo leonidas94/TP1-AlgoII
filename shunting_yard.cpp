@@ -245,6 +245,8 @@ void solve_rpn(stk <string> & stack, complejo c){
 		else if (function == "im") 	  y = y.im();
 		else if (function == "abs")   y = complejo(y.get_abs(),0);
 		else if (function == "phase") y = complejo(y.get_phase(),0);
+		else if (function == "sin")	  y = y.seno();
+		else if (function == "cos")	  y = y.coseno();
 
 
 		right = y.to_string();						// Se combierte al resultado en un string para 

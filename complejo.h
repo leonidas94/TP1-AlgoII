@@ -52,6 +52,7 @@ public:
 	complejo inversa ();  	// Calcula la inversa
 	complejo logaritmo();	// Calcula el logaritmo
 	complejo seno();		// Calcula el seno
+	complejo coseno();		// Calcula es coseno
 	complejo complex_pow(const complejo);	// Eleva un complejo a otro
 	complejo complex_pow(const double);		// Eleva un complejo a un double
 	complejo re ();							// Devuelve la parte real
