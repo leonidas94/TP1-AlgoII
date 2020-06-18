@@ -9,13 +9,6 @@ template<typename T>
 class stk{
 	private:
 
-/*		string * array;
-		size_t size;
-		int top;
-*/
-
-		//lista <char> list;
-
 		class nodo
 		{
 
@@ -23,8 +16,6 @@ class stk{
 
 		nodo *sig_;
 		T dato_;
-
-		//bool flag_sign;
 
 		public:
 		nodo(T const&);
@@ -53,22 +44,25 @@ class stk{
 
 };
 
-
+// Constructor de nodo
 template<typename T>
 stk<T>::nodo::nodo(const T &t) : sig_(0), dato_(t)
 {
 }
 
+// Destructor de nodo
 template<typename T>
 stk<T>::nodo::~nodo()
 {
 }
 
+// Constructor por defecto del stk
 template<typename T>
 stk<T>::stk() : pri_(0), tam_(0)
 {
 }
 
+// Constructor por copia del stk
 template <typename T>
 stk<T>::stk (const stk<T>& stk2copy){
 
@@ -94,6 +88,20 @@ stk<T>::stk (const stk<T>& stk2copy){
 	}
 }
 
+// Destrucotor
+template<typename T>
+stk<T>::~stk()
+{
+	for (nodo *p = pri_; p; )
+	{
+		nodo *q = p->sig_;
+		delete p;
+		p = q;
+	}
+}
+
+// Operador= : se la asigna a un stack el contenido del otro. Se 
+// crean dinamicamente los nuevos punteros
 template <typename T>
 stk<T>& stk<T>::operator= (const stk<T>& stk2copy){
 
@@ -127,60 +135,11 @@ stk<T>& stk<T>::operator= (const stk<T>& stk2copy){
 	return *this;
 }
 
-/*
-template<typename T>
-stk<T>::stk(const stk &orig) : pri_(0), ult_(0), tam_(orig.tam_)
-{
-	nodo *iter;
-	nodo *ant;
+// Funciones
 
-	// Recorremos la secuencia original en sentido directo. En cada paso,
-	// creamos un nodo, copiando el dato correspondiente, y lo enganchamos
-	// al final de nuestra nueva lista.
-	//
-	for (iter = orig.pri_, ant = 0; iter != 0; iter = iter->sig_)
-	{
-		// Creamos un nodo, copiando el dato, y lo enganchamos en e
-		// final de nuestra lista.
-		//
-		nodo *nuevo = new nodo(iter->dato_);
-		nuevo->ant_ = ant;
-		nuevo->sig_ = 0;
-
-		// Si ésta no es la primera pasada, es decir, si no se trata
-		// del primer nodo de la lista, ajustamos el enlace sig_ del
-		// nodo anterior.
-		//
-		if (ant != 0)
-			ant->sig_ = nuevo;
-
-		// Además, tenemos que ajustar los punteros a los elementos
-		// distinguidos de la secuencia, primero y último. En el caso
-		// de pri_ (enlace al primer elemento), esto lo vamos a
-		// hacer una única vez; para el caso de ult_, iremos tomando
-		// registro del último nodo procesado, para ajustarlo antes
-		// de retornar.
-		//
-		if (pri_ == 0)
-			pri_ = nuevo;
-		
-	}
-	
-	// Ajustamos el puntero al último elemento de la copia.
-	ult_ = ant;
-}*/
-
-template<typename T>
-stk<T>::~stk()
-{
-	for (nodo *p = pri_; p; )
-	{
-		nodo *q = p->sig_;
-		delete p;
-		p = q;
-	}
-}
-
+// Pop: Desapila el ultimo elemento del stack y reasigna el puntero 
+// para no perder a los demas elementos y libera la memoria 
+// correspondiente
 template<typename T>
 void stk<T>::pop()
 {
@@ -196,7 +155,8 @@ void stk<T>::pop()
 
 }
 
-
+// Push: Apila un elemento en el stack, creando un nuevo nodo y
+// reasignando los punteros
 template<typename T>
 void stk<T>::push(T t)
 {
@@ -209,7 +169,9 @@ void stk<T>::push(T t)
 }
 
 
-
+// Peek: Toma el ultimo elemento en el stack sin desapilarlo,
+// en caso de que el stack este vacio devuelve falss si no
+// retorna true
 template<typename T>
 bool stk<T>::peek(T & t)
 {
@@ -220,6 +182,8 @@ bool stk<T>::peek(T & t)
 	return false;
 }
 
+// Is_empty: Corrobora el estado del stack, si se encuentra o
+// no vacio
 template<typename T>
 bool stk<T>::is_empty()
 {
@@ -230,6 +194,7 @@ bool stk<T>::is_empty()
 	return false;
 }
 
+// Stk_size: Devuelve el tamaño del stack
 template<typename T>
 size_t stk<T>::stk_size() const{
 	return tam_;

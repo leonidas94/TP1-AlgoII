@@ -49,34 +49,7 @@ double complejo::get_phase() const{	// Obtiene el angulo
 	return atan2((this->img),(this->real));
 }
 
-// Printer
-/*
-ostream& complejo::operator<< (ostream& os){
-	return os << real << "+ j*" << img;
-}*/
-/*
-string complejo::complex_to_string (){
-	string aux = "";
-
-	ostringstream ss;
-  	ss << real;
-	aux.append(ss.str());
-	aux.append("+j*");
-	ostringstream ss1;
-	ss1 << img;
-	aux.append(ss1.str());
-
-
-	return aux;
-}*/
-/*
-const std::string complejo::complex_to_string()const
-{
-    return (std::to_string(real)+"+"+std::to_string(imaginary)+"i");
-//    std::cin.ignore(50, '\n');
-//    std::cin.get();
-    }*/
-
+// Combierte un complejo a una string con el formato "real imaginario j"
 string complejo::to_string(){
 
   	ostringstream x_convert;
@@ -84,7 +57,7 @@ string complejo::to_string(){
 	return x_convert.str();
 }
 
-
+// Compara dos numeros complejos
 bool complejo::operator== (const complejo& a){
  	
 	if (real == a.real && img == a.img)
@@ -92,6 +65,7 @@ bool complejo::operator== (const complejo& a){
 	return false;
 }
 
+// Compara un complejo con un double
 bool complejo::operator== (const double a){
  	
 	if (real == a && img == 0)
@@ -99,6 +73,7 @@ bool complejo::operator== (const double a){
 	return false;
 }
 
+// Compara un complejo con un int
 bool complejo::operator== (const int a){
  	
 	if (real == a && img == 0)
@@ -188,16 +163,8 @@ complejo complejo::operator = (const double num_a_igualar){
 
 	return complejo (num_a_igualar,0);
 }
-/*
-complejo complejo:: operator^ (const complejo){
 
-}
-
-complejo complejo:: operator^ (const double exponente){
-	
-}
-*/
- // Funciones
+// Funciones
 
 // EXPONENCIAL
 complejo complejo::exponencial(){
@@ -254,18 +221,8 @@ complejo complejo::seno(){
   return aux;
 }
 
-// CUADRADO
 
-complejo complejo::pow2(){
-
-	complejo aux;
-
-  	aux.real = real*real-img*img;
-  	aux.img = real*img*2;
-
- 	return aux;
-}
-
+// Complejo elevado a complejo
 complejo complejo::complex_pow(const complejo a){
 
 	double r = this->get_abs();
@@ -278,6 +235,7 @@ complejo complejo::complex_pow(const complejo a){
   	return complejo(r2*cos(th2),r2*sin(th2));
 }
 
+// Complejo elevado a un numero
 complejo complejo::complex_pow(const double a){
 
 	double r = this->get_abs();
@@ -289,23 +247,25 @@ complejo complejo::complex_pow(const double a){
   	return complejo(r2*cos(th2),r2*sin(th2));
 }
 
+// Devuelve la parte real como un complejo real puro
 complejo complejo::re(){
 	return complejo (real,0);
 }
+
+// Devuelve la parte imaginaria de un complejo como un imaginario puro
 complejo complejo::im(){
 	return complejo (0,img);
 }
 
-ostream & operator << (ostream &out, const complejo &c)
-{
+// Imprime el numero complejo en un ostream
+ostream & operator << (ostream &out, const complejo &c){
     out << c.get_real();
     out << " " << c.get_img() << " j";
     return out;
 }	
 
-
-istream & operator >> (istream &in,  complejo &c)
-{	
+// Lee un numero complejo con formato "real imaginario j"
+istream & operator >> (istream &in,  complejo &c){	
 	double aux;
 	string temp;
 

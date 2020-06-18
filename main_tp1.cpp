@@ -49,9 +49,11 @@ int main(int argc, char * const argv[]){
 	// Aplico el algoritmo Shunting-Yard al array de strings, guardo en un stack de strings 'output'
 	shunting_yard(output_stk, string_array, string_array_size);
 
+  // Mapea la imagen de salida resolviendo la expresion ingresada
 	map_image(input_image, output_image, output_stk);
 
 	delete[] string_array;
+  
 	// Se imprime la imagen de salida
 	output_image.print_image(oss);
 	

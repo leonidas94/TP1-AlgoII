@@ -94,7 +94,7 @@ bool is_left_associative(string token){
 }
 
 
-// Comparto si es una funcion matematica
+// Comparo si es una funcion matematica
 bool is_math_function (string funct){
 
 	bool aux;
@@ -108,6 +108,7 @@ bool is_math_function (string funct){
 	return false;
 }
 
+// Copara si una string es un digito o una j
 bool is_string_digit (string str){
 
 	if (str == "j" || str == "-j")
