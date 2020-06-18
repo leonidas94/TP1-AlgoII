@@ -47,6 +47,7 @@ int * binary_search(const complejo, complejo ***, int [2], int [2]);
 void search(int * ,const complejo , const double);
 
 void map_image(image &, image &, stk <string>);
+bool delete_matrix(int ** &, int);
 
 /********************************/
 

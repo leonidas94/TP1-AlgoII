@@ -5,7 +5,7 @@ CANTIDAD EN IS_FUNCTIONS.H */
 static char functions_initials[]= {'l', 'r', 'i', 'e', 'a', 'p', 'c', 's'};
 static string math_functions[]= {"exp", "ln", "re", "im", "abs", "phase", "cos", "sin"};
 
-// Comparo contra las iniciales de las funciones
+// Compara contra las iniciales de las funciones
 bool is_math_function_initial (const char letter){
 	size_t size = sizeof(functions_initials) / sizeof(functions_initials[0]);
 
@@ -17,6 +17,7 @@ bool is_math_function_initial (const char letter){
 	return false;
 }
 
+// Se detecta si el numero es negativo
 bool is_negative_number(const char actual, const char anterior, const char sig, size_t vuelta){
 	if (
 		  (actual=='-' && vuelta==0 && isdigit(sig)) 	 ||			 // Encuentro un menos Y esta al principio Y lo sig es un numero O
@@ -27,6 +28,7 @@ bool is_negative_number(const char actual, const char anterior, const char sig, 
 	else return false;
 }
 
+// Se detecta si es una j negativa
 bool is_negative_j(const char actual, const char anterior, const char sig, size_t vuelta){
 	if (
 		  (actual=='-' && vuelta==0 && sig == 'j') ||				 // Encuentro un menos Y esta al principio O
@@ -37,7 +39,7 @@ bool is_negative_j(const char actual, const char anterior, const char sig, size_
 	else return false;
 }
 
-// Comparo contra operadores matematicos, en este caso recibe un char // VER QUE ONDA ACA LA E, LO DEJAMOS COMO OPERADOR O NO?
+// Se detecta si es un operador para char
 bool is_operator(char token){        
     return token == '+' || token == '-' ||      
            token == '*' || token == '/'	||
@@ -45,7 +47,7 @@ bool is_operator(char token){
 }
 
 
-// Comparo contra operadores matematicos, en este caso recibe una string
+// Se detecta si es un operador para char
 bool is_operator(string token){        
     return token == "+" || token == "-" ||      
            token == "*" || token == "/"	||
@@ -53,7 +55,7 @@ bool is_operator(string token){
 }
 
 
-// Comparo contra parentesis, corchetes o llaves, recibe char
+// Se detecta si es un paretensis
 bool is_parenthesis(char token){        
     return token == ')' || token == '(' ||
     	   token == ']' || token == '[' ||
@@ -61,15 +63,14 @@ bool is_parenthesis(char token){
 } 
 
 
-// Comparo contra parentesis, corchete o llave izquierda
+// Se detecta si es un parentesis izquierdo
 bool is_left_parenthesis(string token){        
     return token == "(" ||
     	   token == "[" ||
     	   token == "{";      
 }
 
-
-// Comparo contra parentesis, corchete o llave derecha
+// Se detecta si es un parentesis derecho
 bool is_right_parenthesis(string token){   
 
     return token == ")" ||
@@ -78,7 +79,7 @@ bool is_right_parenthesis(string token){
 }
 
 
-// Comparo si es asociativo a izquierda
+// Se verifica si el operador tiene asociatividad izquierda
 bool is_left_associative(string token){
 	bool left_assoc = true;
 
@@ -94,7 +95,7 @@ bool is_left_associative(string token){
 }
 
 
-// Comparto si es una funcion matematica
+// Se detecta si es una funcion matematica
 bool is_math_function (string funct){
 
 	bool aux;
@@ -108,6 +109,7 @@ bool is_math_function (string funct){
 	return false;
 }
 
+// Se verifica si una string es un digito o una j
 bool is_string_digit (string str){
 
 	if (str == "j" || str == "-j")

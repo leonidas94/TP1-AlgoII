@@ -27,8 +27,6 @@ public:
 	double get_phase()const;
 
 	// Printer
-	//ostream& operator<< (ostream& os);
-	//const std::string complex_to_string () const;
 	string to_string();
 
 	// Operadores
@@ -40,33 +38,32 @@ public:
 	complejo operator * (const double &);
 	complejo operator / (const complejo &); // Division de complejos
 	complejo operator / (const double &);
-	/*complejo operator ^ (const complejo &); // Potenciacion de complejos
-	complejo operator ^ (const double &);*/
-	complejo & operator = (const complejo &); // Operador =
+	
+
+	complejo & operator = (const complejo &); 
 	complejo operator = (const double);
-	bool operator== (const complejo &);
+	bool operator== (const complejo &);		 
 	bool operator== (const double a);
 	bool operator== (const int a);
 
 	// Funciones
-	complejo exponencial ();
-	complejo conjugar (); // Conjuga el complejo
-	complejo inversa ();  // Calcula la inversa
-	complejo logaritmo();
-	complejo seno();
-	complejo pow2();
-	complejo complex_pow(const complejo);
-	complejo complex_pow(const double);
-	complejo re ();
-	complejo im ();
+	complejo exponencial ();// Calcula la exponencial
+	complejo conjugar (); 	// Conjuga el complejo
+	complejo inversa ();  	// Calcula la inversa
+	complejo logaritmo();	// Calcula el logaritmo
+	complejo seno();		// Calcula el seno
+	complejo complex_pow(const complejo);	// Eleva un complejo a otro
+	complejo complex_pow(const double);		// Eleva un complejo a un double
+	complejo re ();							// Devuelve la parte real
+	complejo im ();							// Devuelve la parte imaginaria como imaginario puro
 
 private:
-	double real; // Dos atributos, real e imaginario, se explica solo
+	double real; // Dos atributos, real e imaginario
 	double img;
 
 };
 
-ostream & operator << (ostream &, const complejo &);
-istream & operator >> (istream &,  complejo &);
+ostream & operator << (ostream &, const complejo &); // Imprimie complejo en ostream
+istream & operator >> (istream &,  complejo &);		 // Lee complejo desde istream
 
 #endif

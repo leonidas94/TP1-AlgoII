@@ -30,12 +30,12 @@ int main(int argc, char * const argv[]){
 	size_t string_array_size= 0;
 	stk <string> output_stk;
 
-	cmdline cmdl(options);	       // Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
+	cmdline cmdl(options);	       // Objeto con parametro tipo option_t (struct) declarado globalmente
 	cmdl.parse(argc, argv);        // Metodo de parseo de la clase cmdline
 
 
-	//Primero leo la imagen de entrada, ya que si esta mal, hacer el resto es innecesario
-	if(!read_pgm(input_image)){    // Se lee la imagen de intrada
+	// Se lee la imagen de entrada
+	if(!read_pgm(input_image)){   
 		cerr<<"Error. Fallo en el archivo."<<endl;
 		return 1;
 	}
@@ -43,18 +43,20 @@ int main(int argc, char * const argv[]){
 	// Se declara la imagen de salida a partir de las dimenciones de la imagen de entrada
 	image output_image(input_image.get_max_dim(),input_image.get_max_dim(),input_image.get_greyscale());
 
-	// Parsero la funcion ingresada para aplicarle el algoritmo Shunting-Yard
+	// Se parsea la funcion ingresada para aplicarle el algoritmo Shunting-Yard
 	string_array = parse_function(entered_function, string_array_size);	
 	
-	// Aplico el algoritmo Shunting-Yard al array de strings, guardo en un stack de strings 'output'
+	// Se aplica el algoritmo Shunting-Yard al array de strings y se guarda la funcion en RPN en output_stk
 	shunting_yard(output_stk, string_array, string_array_size);
 
+  // Se mapea la imagen de salida resolviendo la expresion ingresada
 	map_image(input_image, output_image, output_stk);
 
-	delete[] string_array;
 	// Se imprime la imagen de salida
 	output_image.print_image(oss);
-	
+
+	delete[] string_array;
+
 	return 0;
 }
 
@@ -206,7 +208,7 @@ int cmdline::do_short_opt(const char *opt, const char *arg) {
 
 // *******************************FUNCIONES**********************************//
 
-// Esta funcion lee del archivo de input y llena la imagen VACIA que se le pasa como argumento. 
+// Esta funcion lee del archivo de input y llena la imagen VACIA que se le pasa como argumento 
 bool read_pgm(image & img_arg){
   int aux_int, aux_size[2], aux_greyscale;
   int i=0;
@@ -214,26 +216,26 @@ bool read_pgm(image & img_arg){
   string in_string, temp;		
 
 
-  getline(*iss, in_string); // Identificador PGM.
+  getline(*iss, in_string); // Identificador PGM
 
   if (in_string[0] == PGM_IDENTIFIER[0]){
   	if (in_string[1] != PGM_IDENTIFIER[1]){
-    	cerr << "No es PGM" <<endl;   // En caso que el identificador sea incorrecto, imprime un mensaje de error.
+    	cerr << "No es PGM" <<endl;   // En caso que el identificador sea incorrecto, imprime un mensaje de error
     	return false;
   	}
 	}
 	else {cerr << "No es PGM" <<endl; return false;}
 
   getline(*iss, in_string);
-  if (in_string[0] == SKIP_LINE_IDENTIFIER){ // Se detecta si se leyó un comentario.
-    getline(*iss, in_string); // Se leen las dimensiones de la matriz.
+  if (in_string[0] == SKIP_LINE_IDENTIFIER){ // Se detecta si se leyó un comentario
+    getline(*iss, in_string); // Se leen las dimensiones de la matriz
   }
 
   stringstream ss (in_string); 
   
 	while (i < 2 && !ss.eof()){
   	ss >> temp;
-  	if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, guardo.
+  	if(stringstream(temp) >> aux_int){  // Si se pudo convertir se guarda en el arreglo
   	  aux_size[i] = aux_int;
   	  i++;
   	}
@@ -245,22 +247,21 @@ bool read_pgm(image & img_arg){
 	}
 
 	ss >> temp;
- 	if(stringstream(temp) >> aux_int){  // Si puedo convertir a int, es un error.
+ 	if(stringstream(temp) >> aux_int){  // Si se pudo convertir es un error
  		cout<< "Error en el formato."<<endl;
  		return false;
   }
 
   
-  img_arg.set_width(aux_size[0]);  // Se guarda el ancho de la matriz.
-  img_arg.set_height(aux_size[1]); // Se guarda el alto de la matriz.
+  img_arg.set_width(aux_size[0]);  // Se guarda el ancho de la matriz
+  img_arg.set_height(aux_size[1]); // Se guarda el alto de la matriz
   
-// CCAMBIAR A OPERADOR  >> SI HAY TIEMPO
   getline(*iss, in_string);
   aux_greyscale = stoi(in_string);
-  img_arg.set_greyscale(aux_greyscale); // Se guarda el valor de la escala de grises.
+  img_arg.set_greyscale(aux_greyscale); // Se guarda el valor de la escala de grises
 
-  // Crea la matriz de enteros y los llena con ceros.
-  // Como la matriz va a ser cuadrada, se pide dos veces de dimension "max".
+  // Crea la matriz de enteros y los llena con ceros
+  // Como la matriz va a ser cuadrada, se pide dos veces de dimension "max"
 
   aux_matrix = new int*[aux_size[1]]; 
   for (int i = 0; i < aux_size[1]; i++){  
@@ -276,18 +277,14 @@ bool read_pgm(image & img_arg){
     			aux_matrix[i][j] = aux_int;
     		}else{
     			cerr<<"Error. Elemento de fuera de rango."<<endl; // En caso que haya menos elementos,
-    			for (int i = 0; i<aux_size[1]; i++)        // se destruye matriz auxiliar
-        		delete[] aux_matrix[i];
-  				delete[] aux_matrix;
+          delete_matrix(aux_matrix, aux_size[1]);
     			return false;
     		}
     		
 
     	}else{
     		cerr<<"Error. Cantidad insuficiente de elementos."<<endl; // En caso que haya menos elementos,
-    		for (int i = 0; i<aux_size[1]; i++)        // se destruye matriz auxiliar
-        	delete[] aux_matrix[i];
-  			delete[] aux_matrix;
+        delete_matrix(aux_matrix, aux_size[1]);
     		return false;
     	}   
     }
@@ -297,19 +294,14 @@ bool read_pgm(image & img_arg){
 
   if (!iss->eof()){ // Se evalúa si el siguiente elemento es eof.
   	cerr<<"Error. Cantidad excesiva de elementos."<<endl; // En caso que haya más elementos,
-  	for (int i = 0; i<aux_size[1]; i++)      // Se destruye matriz auxiliar en caso de error
-      delete[] aux_matrix[i];
-  	delete[] aux_matrix;
+    delete_matrix(aux_matrix, aux_size[1]);
   	return false;
   }
 
 
   img_arg.fill_matrix(aux_matrix);  // Se llena la matriz de imagen
 
-  for (int i = 0; i<aux_size[1]; i++)   // Se destruye la matriz auxiliar              
-        delete[] aux_matrix[i];
-  delete[] aux_matrix;
-
+  delete_matrix(aux_matrix, aux_size[1]);
   return true;
 }
 
@@ -430,28 +422,25 @@ void map_image(image & original, image & destino, stk <string> output_stk){
       in_lim[1]=0;
       fin_lim[0]=max-1; 
       fin_lim[1]=max-1;
-    	// Se guarda el valor de la matriz de complejos para luego realizar la transformacion
 
-
-
- 	    // Se recorre la matriz y se la va rellenando punto a punto con el valor de complejo correspondiente
-
+ 	    // Se crea un complejo a el cual se le va a realizar la transformacion
     	complejo aux (aux_real,aux_imag);
 
+      // Se iguala el stack en RPN a uno vacio para no perder la funcion cuando se desapile
     	stk <string> stk_to_solve = output_stk;
 
-
+      // Se transforma el complejo
 		  solve_rpn(stk_to_solve, aux);
 
 		  string aux_string;
 
       if(!stk_to_solve.peek(aux_string)){
-       cerr << "Error. Peek." << endl;
+       cerr << "Stack is empty" << endl;
        exit(1);
       }
 
-		stringstream s1 (aux_string); 
-		s1 >> aux;
+		  stringstream s1 (aux_string); 
+		  s1 >> aux;
 
   		// Se corrobora que el valor c a buscar este dentro de el semiplano que conforman los puntos (-1+i), (-1-i), (1-i) y (1+i)
   		// sino lo esta, no se hace nada, ya que como la matriz de la imagen destino se encuentra rellena de ceros (negro)
@@ -463,9 +452,7 @@ void map_image(image & original, image & destino, stk <string> output_stk){
 
     	 	if (pos !=NULL){ 		// Si no se detecta un error se se guarda el color en la imagen destino
     	    	aux_color = original.get_matrix_value(pos[1],pos[0]);
-    	    	
-        		destino.set_matrix_value(i,j,aux_color);
-        		
+        		destino.set_matrix_value(i,j,aux_color); // Se guarda el valor del pixel en la imagen destino
       		}
 	      	else {
 	      		cerr<<"Error en busqueda binaria."<<endl;
@@ -473,8 +460,8 @@ void map_image(image & original, image & destino, stk <string> output_stk){
 	      			if (complex_matrix[i]){          
 	        			delete[] complex_matrix[i];
 	      			}
-	    		}
-	  			delete[] complex_matrix;
+	    		  }
+	  			  delete[] complex_matrix;
 	      	}
     	}
     	aux_real=aux_real+paso;	// Se ajusta el valor para la proxima posicion
@@ -491,4 +478,13 @@ void map_image(image & original, image & destino, stk <string> output_stk){
   }
   delete[] complex_matrix;
 
+}
+
+// Se destruye la matriz
+bool delete_matrix(int ** &matrix, int size){
+  for (int i = 0; i<size; i++)              
+        delete[] matrix[i];
+  delete[] matrix;
+
+  return true;
 }
