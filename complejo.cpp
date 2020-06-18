@@ -141,10 +141,9 @@ complejo complejo::operator - (const double & double_a_restar){
 // Operador MULTIPLICACION por un complejo
 complejo complejo::operator * (const complejo & A){
 	complejo aux;
-	//cout<<"la parte imaginaria"<<A.img<<endl;
+
 	aux.real = (this->real * A.real) - (this->img * A.img);
 	aux.img = (this->real * A.img) + (this->img * A.real);
-	//cout<<aux.real<<","<<aux.img<<endl;
 	return aux;
 }
 
@@ -240,7 +239,7 @@ complejo complejo::logaritmo(){
 
   aux.real = log(modulo);
   aux.img = atan2(this->img,this->real);
-  //cout<<aux<<endl;
+
   return aux;
 }
 
