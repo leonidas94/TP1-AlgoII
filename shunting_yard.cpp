@@ -92,7 +92,7 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 	}
 }
 
-
+// Esta funcion devuelve la presedencia del operador que se le pasa por copia
 int precedence (string token){
 	int p = 0;
 
@@ -106,7 +106,8 @@ int precedence (string token){
 	return p;
 } 
 
-
+// Esta funcion resulve la funcion en notacion polaca inversa. Recibe el stack con la funcion y el complejo
+// c, que será reemplazado por z.
 void solve_rpn(stk <string> & stack, complejo c){
 	string temp;
 	string aux;
@@ -117,15 +118,15 @@ void solve_rpn(stk <string> & stack, complejo c){
 		return;
 	}
 
-	else if (stack.peek(aux) && is_string_digit(aux))
+	else if (stack.peek(aux) && is_string_digit(aux)) 	// Se fija si es un numero o una j se crea el numero complejo
 	{
-		if (stack.peek(aux) && aux == "j")
+		if (stack.peek(aux) && aux == "j")				// Complejo puro positivo
 		{
 			stack.pop();
 			complejo x (0,1);
 			stack.push(x.to_string());
 		}		
-		if (stack.peek(aux) && aux == "-j")
+		if (stack.peek(aux) && aux == "-j")				// Complejo puro negativo
 		{
 			stack.pop();
 			complejo x (0,-1);
@@ -134,47 +135,51 @@ void solve_rpn(stk <string> & stack, complejo c){
 		return;
 	}
 
-	else if (stack.peek(aux) && aux == "z")
+	else if (stack.peek(aux) && aux == "z")			// Se fija si es una z y la reemplaza por c
 	{
 		stack.pop();
 		stack.push(c.to_string());
 		return;
 	}
 
-	else if (stack.peek(aux) && is_operator(aux)){
+	else if (stack.peek(aux) && is_operator(aux)){	// Se fija si es un operardor
 
 		string token;
-		if(!stack.peek(token)){
+		if(!stack.peek(token)){						// Se guarda el operador en token
 			cerr << "Error. Peek9" << endl;
 			exit(1);
 		}
 
-		stack.pop();
+		stack.pop();								// Se quita el operador de la pila
 
 		complejo x, y;
 
-		solve_rpn(stack,c);
+		solve_rpn(stack,c);							// Como todos los operadores son binarios reciben un elemento a izquierda
+													// y otro a derecha, por lo tanto se llama recursivamente a solve_rpn
+													// y se guarda lo que retorna en la cima de la pila a la variable right 
+													// (elemento de la derecha de la operacion)
 		
 		string right;
-		if(!stack.peek(right)){
+
+		if(!stack.peek(right)){						// Se valida que haya algo en el stack
 			cerr << "Error. Peek10" << endl;
 			exit(1);
 		}
 
-		stack.pop();
+		stack.pop();								// Se quita el valor del stack
 		
 		stringstream s1 (right); 
-		s1 >> x;
+		s1 >> x;									// Se combierte al valor a un numero complejo
 		
 		string left;
 
-		if (stack.is_empty()){
-
+		if (stack.is_empty()){						// Si no hay elemento a izquierda significa que la funcion comienza 
+													// - o +, y de ser asi se le asigna 0 al elemento de la izquierda
 			left = "0";
 		}
 		else{
 
-			solve_rpn(stack,c);
+			solve_rpn(stack,c);						// Se llama recursivamente para obtener el valor a izquierda del operador
 
 			if(!stack.peek(left)){
 				cerr << "Error. Peek11" << endl;
