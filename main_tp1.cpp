@@ -278,18 +278,14 @@ bool read_pgm(image & img_arg){
     			aux_matrix[i][j] = aux_int;
     		}else{
     			cerr<<"Error. Elemento de fuera de rango."<<endl; // En caso que haya menos elementos,
-    			for (int i = 0; i<aux_size[1]; i++)        // se destruye matriz auxiliar
-        		delete[] aux_matrix[i];
-  				delete[] aux_matrix;
+          delete_matrix(aux_matrix, aux_size[1]);
     			return false;
     		}
     		
 
     	}else{
     		cerr<<"Error. Cantidad insuficiente de elementos."<<endl; // En caso que haya menos elementos,
-    		for (int i = 0; i<aux_size[1]; i++)        // se destruye matriz auxiliar
-        	delete[] aux_matrix[i];
-  			delete[] aux_matrix;
+        delete_matrix(aux_matrix, aux_size[1]);
     		return false;
     	}   
     }
@@ -299,19 +295,14 @@ bool read_pgm(image & img_arg){
 
   if (!iss->eof()){ // Se evalúa si el siguiente elemento es eof.
   	cerr<<"Error. Cantidad excesiva de elementos."<<endl; // En caso que haya más elementos,
-  	for (int i = 0; i<aux_size[1]; i++)      // Se destruye matriz auxiliar en caso de error
-      delete[] aux_matrix[i];
-  	delete[] aux_matrix;
+    delete_matrix(aux_matrix, aux_size[1]);
   	return false;
   }
 
 
   img_arg.fill_matrix(aux_matrix);  // Se llena la matriz de imagen
 
-  for (int i = 0; i<aux_size[1]; i++)   // Se destruye la matriz auxiliar              
-        delete[] aux_matrix[i];
-  delete[] aux_matrix;
-
+  delete_matrix(aux_matrix, aux_size[1]);
   return true;
 }
 
@@ -475,8 +466,8 @@ void map_image(image & original, image & destino, stk <string> output_stk){
 	      			if (complex_matrix[i]){          
 	        			delete[] complex_matrix[i];
 	      			}
-	    		}
-	  			delete[] complex_matrix;
+	    		  }
+	  			  delete[] complex_matrix;
 	      	}
     	}
     	aux_real=aux_real+paso;	// Se ajusta el valor para la proxima posicion
@@ -493,4 +484,13 @@ void map_image(image & original, image & destino, stk <string> output_stk){
   }
   delete[] complex_matrix;
 
+}
+
+
+bool delete_matrix(int ** &matrix, int size){
+  for (int i = 0; i<size; i++)   // Se destruye la matriz             
+        delete[] matrix[i];
+  delete[] matrix;
+
+  return true;
 }

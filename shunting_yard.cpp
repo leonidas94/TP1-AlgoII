@@ -245,11 +245,10 @@ void solve_rpn(stk <string> & stack, complejo c){
 		else if (function == "ln") 	  y = y.logaritmo();
 		else if (function == "re") 	  y = y.re();
 		else if (function == "im") 	  y = y.im();
-		else if (function == "abs")   y = y.get_abs();
-		else if (function == "phase") y = y.get_phase();
+		else if (function == "abs")   y = complejo(y.get_abs(),0);
+		else if (function == "phase") y = complejo(y.get_phase(),0);
 
 
-		
 		right = y.to_string();						// Se combierte al resultado en un string para 
 		stack.push(right);							// pusheralo en el stack
 		return;
