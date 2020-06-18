@@ -51,6 +51,10 @@ int main(int argc, char * const argv[]){
 
 	map_image(input_image, output_image, output_stk);
 
+  //if (!string_array){
+  //  delete[] string_array;
+  //}
+
 	// Se imprime la imagen de salida
 	output_image.print_image(oss);
 	
@@ -487,7 +491,7 @@ void map_image(image & original, image & destino, stk <string> output_stk){
       if (complex_matrix[i]){          
         delete[] complex_matrix[i];
       }
-    }
+  }
   delete[] complex_matrix;
 
 }

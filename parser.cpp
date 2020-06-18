@@ -76,10 +76,6 @@ string * parse_function(const string function, size_t & string_array_size){
 		}
 		i++;
 	}
-for (size_t j = 0; j < string_array_size ; j++)
-{
-cout << string_array[j] << endl;
-}
 	return string_array;
 }
 
@@ -180,12 +176,11 @@ bool resize_string_array (string *& string_array, size_t & string_array_size, si
 
 	if (string_array_size == 0){	// Primer caso
 		string_array = new string [i];
-		string_array[0]="";
 		string_array_size += i;
 		return true;
 	}
 
-	if (string_array_size>0){	// Luego del primer caso
+	else if (string_array_size>0){	// Luego del primer caso
 
 		aux_string_array = new string [string_array_size]; // Pido memoria para el string array aux
 
@@ -194,16 +189,17 @@ bool resize_string_array (string *& string_array, size_t & string_array_size, si
 		}
 
 		delete[] string_array;
-		string_array = new string [string_array_size+i];	// Pido memoria para i lugar mas
+		string_array = new string [string_array_size +i ];	// Pido memoria para i lugar mas
 
 		for (size_t j = 0; j< string_array_size ; j++){ // Recupero la informacion que tenia antes
 			string_array[j] = aux_string_array [j];
 		}
 
-		for (size_t j = string_array_size; j < string_array_size+i; j++){	// Seteo las nuevas posiciones en vacio
-			string_array[j] = "";
-		}
+		//for (size_t j = string_array_size; j < string_array_size+i; j++){	// Seteo las nuevas posiciones en vacio
+		//	string_array[j] = "";
+		//}
 		string_array_size += i;
+
 		delete[] aux_string_array;
 
 		return true;
