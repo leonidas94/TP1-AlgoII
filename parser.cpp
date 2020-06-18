@@ -189,6 +189,8 @@ bool resize_string_array (string *& string_array, size_t & string_array_size, si
 		}
 
 		delete[] string_array;
+		string_array = NULL;
+		
 		string_array = new string [string_array_size +i ];	// Pido memoria para i lugar mas
 
 		for (size_t j = 0; j< string_array_size ; j++){ // Recupero la informacion que tenia antes
@@ -201,6 +203,7 @@ bool resize_string_array (string *& string_array, size_t & string_array_size, si
 		string_array_size += i;
 
 		delete[] aux_string_array;
+		aux_string_array = NULL;
 
 		return true;
 	}

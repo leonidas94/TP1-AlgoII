@@ -51,10 +51,7 @@ int main(int argc, char * const argv[]){
 
 	map_image(input_image, output_image, output_stk);
 
-  //if (!string_array){
-  //  delete[] string_array;
-  //}
-
+	delete[] string_array;
 	// Se imprime la imagen de salida
 	output_image.print_image(oss);
 	

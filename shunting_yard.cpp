@@ -4,8 +4,8 @@ using namespace std;
 
 void shunting_yard(stk <string> & output_stack, string entered_function[],size_t tamano){
 
-	stk <string> op_stack;
-	stk <string> tokens_stack; // Lo voy a usar para tratar de separar entered_function en tokens
+	stk <string> op_stack; // Operator stack
+
 	string aux;
 
 	for (int i = 0; i < (int)tamano; ++i)
@@ -36,8 +36,8 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 				op_stack.pop();
 
 				if(!op_stack.peek(aux)){
-					cout << "Error. Peek2." << endl;
-					exit(1);
+					//cout << "Error. Peek2." << endl;
+					//exit(1);
 				}
 			}
 			op_stack.push(entered_function[i]);
