@@ -4,7 +4,7 @@ using namespace std;
 
 void shunting_yard(stk <string> & output_stack, string entered_function[],size_t tamano){
 
-	stk <string> op_stack; // Operator stack
+	stk <string> op_stack; // Donde se almacenaran los operadores
 
 	string aux;
 
@@ -22,11 +22,10 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 		
 		else if (is_operator(entered_function[i]))
 		{
-			//Calcular la precedencia antes
 			op_stack.peek(aux);
 
-			bool lower_precedence = precedence(entered_function[i]) < precedence(aux);
-			bool equal_precedence =precedence(entered_function[i]) == precedence(aux);
+			bool lower_precedence = precedence(entered_function[i]) < precedence(aux);	// Se determina si el token tiene menor precedencia que el ultimo en el stack
+			bool equal_precedence =precedence(entered_function[i]) == precedence(aux);	// Se determina si el token tiene igual precedencia que el ultimo en el stack
 
 			
 			while((!op_stack.is_empty() && is_operator(aux)) && 
@@ -34,15 +33,15 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 				 && (!is_left_parenthesis(aux)))
 			{
 
-				output_stack.push(aux);
-				op_stack.pop();
+				output_stack.push(aux); 										// Se pasa al operador o funcion al output stack
+				op_stack.pop();													// Se desapila el operador
 
 				op_stack.peek(aux);
 
-				lower_precedence = precedence(entered_function[i]) < precedence(aux);
-				equal_precedence =precedence(entered_function[i]) == precedence(aux);
+				lower_precedence = precedence(entered_function[i]) < precedence(aux); // Se determina si el token tiene menor precedencia que el ultimo en el stack
+				equal_precedence =precedence(entered_function[i]) == precedence(aux); // Se determina si el token tiene igual precedencia que el ultimo en el stack
 			}
-			op_stack.push(entered_function[i]);
+			op_stack.push(entered_function[i]);						// Se apila el nuevo operador en la pila de operadores
 			
 		}
 		else if (is_left_parenthesis(entered_function[i]))
@@ -52,19 +51,19 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 		else if (is_right_parenthesis(entered_function[i]))
 		{
 			if(!op_stack.peek(aux)){
-				cout << "Error. Peek3." << endl;
+				cout << "Error. Stack is empty." << endl;
 				exit(1);
 			}
 
-			while ( !is_left_parenthesis(aux) ){
-				
-				output_stack.push(aux);
+			while ( !is_left_parenthesis(aux) ){					// Mientras que no sea un parentesis dereche se pasan los operadores 
+																	// al output_stack
+				output_stack.push(aux);										
 				op_stack.pop();
 				op_stack.peek(aux);
 
 			}
 			if(!op_stack.peek(aux)){
-				cout << "Error. Peek5." << endl;
+				cout << "Error. Stack is empty." << endl;
 				exit(1);
 			}
 			if (is_left_parenthesis(aux))
@@ -73,7 +72,7 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 				
 				op_stack.peek(aux);
 
-				if (is_math_function(aux)){
+				if (is_math_function(aux)){							// En caso de que sea una funcion se la pasa al output_stack
 
 					output_stack.push(aux);
 					op_stack.pop();
@@ -83,10 +82,10 @@ void shunting_yard(stk <string> & output_stack, string entered_function[],size_t
 
 
 	}
-	while(!op_stack.is_empty()){
+	while(!op_stack.is_empty()){									// Se pasan todos los operadores a el output_stack
 
 		if(!op_stack.peek(aux)){
-			cout << "Error. Peek8." << endl;
+			cout << "Error. Stack is empty." << endl;
 			exit(1);
 		}
 		output_stack.push(aux);
@@ -116,7 +115,6 @@ void solve_rpn(stk <string> & stack, complejo c){
 
 	if (stack.is_empty())	// Caso base
 	{
-		cerr << "Stack is empty." << endl;
 		return;
 	}
 
@@ -148,7 +146,7 @@ void solve_rpn(stk <string> & stack, complejo c){
 
 		string token;
 		if(!stack.peek(token)){						// Se guarda el operador en token
-			cerr << "Error. Peek9" << endl;
+			cerr << "Error. Stack is empty." << endl;
 			exit(1);
 		}
 
@@ -164,7 +162,7 @@ void solve_rpn(stk <string> & stack, complejo c){
 		string right;
 
 		if(!stack.peek(right)){						// Se valida que haya algo en el stack
-			cerr << "Error. Peek10" << endl;
+			cerr << "Error. Stack is empty." << endl;
 			exit(1);
 		}
 
@@ -184,7 +182,7 @@ void solve_rpn(stk <string> & stack, complejo c){
 			solve_rpn(stack,c);						// Se llama recursivamente para obtener el valor a izquierda del operador
 
 			if(!stack.peek(left)){
-				cerr << "Error. Peek11" << endl;
+				cerr << "Error. Stack is empty." << endl;
 				exit(1);	
 			} 
 			
@@ -218,7 +216,7 @@ void solve_rpn(stk <string> & stack, complejo c){
 		string function;
 
 		if(!stack.peek(function)){
-			cerr << "Error. Peek12" << endl;
+			cerr << "Error. Stack is empty." << endl;
 			exit(1);
 		}
 
@@ -228,7 +226,7 @@ void solve_rpn(stk <string> & stack, complejo c){
 
 		string right;
 		if(!stack.peek(right)){
-			cerr << "Error. Peek13" << endl;
+			cerr << "Error. Stack is empty." << endl;
 			exit(1);
 		}
 		stack.pop();								// Se saca este numero del stack para ser evaluado

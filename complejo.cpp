@@ -269,16 +269,18 @@ istream & operator >> (istream &in,  complejo &c){
 	double aux;
 	string temp;
 
-    in >> temp;
+    in >> temp;						// Se lee parte real
 
-    stringstream(temp) >> aux;
-    c.set_real(aux);
+    stringstream(temp) >> aux;		// Se combierte el numero a double
+    c.set_real(aux);				// Se guarda el valor en la parte real
 
-    in >> temp;
+    in >> temp;	 					// Se lee el proximo dato del istream
 
-    if (!in.eof()){
-    	stringstream(temp) >> aux;
-    	c.set_img(aux);
+    if (!in.eof()){					// Si hay mas datos
+    	stringstream(temp) >> aux;  // Se combierte el numero a double
+    	c.set_img(aux);				// Se guarda el valor imaginario en el complejo
+    }else{
+    	c.set_img(0);				// Si no se le asigna 0 a la parte imaginaria
     }    
     return in;
 }

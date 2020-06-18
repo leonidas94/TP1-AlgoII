@@ -88,7 +88,7 @@ stk<T>::stk (const stk<T>& stk2copy){
 	}
 }
 
-// Destrucotor
+// Destructor
 template<typename T>
 stk<T>::~stk()
 {
@@ -101,7 +101,7 @@ stk<T>::~stk()
 }
 
 // Operador= : se la asigna a un stack el contenido del otro. Se 
-// crean dinamicamente los nuevos punteros
+// crean dinamicamente los nuevos nodos
 template <typename T>
 stk<T>& stk<T>::operator= (const stk<T>& stk2copy){
 
@@ -137,9 +137,8 @@ stk<T>& stk<T>::operator= (const stk<T>& stk2copy){
 
 // Funciones
 
-// Pop: Desapila el ultimo elemento del stack y reasigna el puntero 
-// para no perder a los demas elementos y libera la memoria 
-// correspondiente
+// Pop: Desapila el ultimo elemento del stack, reasigna el puntero 
+// para no perder a los demas elementos y libera la memoria correspondiente
 template<typename T>
 void stk<T>::pop()
 {
@@ -170,7 +169,7 @@ void stk<T>::push(T t)
 
 
 // Peek: Toma el ultimo elemento en el stack sin desapilarlo,
-// en caso de que el stack este vacio devuelve falss si no
+// en caso de que el stack este vacio devuelve false si no
 // retorna true
 template<typename T>
 bool stk<T>::peek(T & t)

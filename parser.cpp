@@ -2,36 +2,35 @@
 
 using namespace std;
 
-// Valido y parseo la funcion ingresada
+// Se parsea la funcion ingresada
 string * parse_function(const string function, size_t & string_array_size){
 	size_t i = 0;
-	string * string_array;	// Aca devuelvo el string array con la funcion parseada
-							// si es que fue ingresada correctamente
+	string * string_array;				
 
-	if (!check_balance (function)){	// Valido que lo ingresado este balanceado en cuanto a parentesis
+	if (!check_balance (function)){				// Se valida que la expresion este balanceada
 		cerr << "Error. No esta balanceada" << endl;
 		exit(0);
 	}
-	if (!check_operator_at_begining(function)){	// Valido que si hay un operador al ppcio, no sea * o /
+	if (!check_operator_at_begining(function)){	// Se valida que la funcion no comience con un operador * o /
 		cerr << "Error, no puede comenzar con " << function[0] << endl;
 		exit(0);
 	}
 
-	while (i < function.length()){	// Recorro char por char
+	while (i < function.length()){				// Se recorre el string de entrada
 
-		// Guardo expresiones matematicas (exp, ln, phase,...)
-		if (  is_math_function_initial(function[i]) &&	// Si es la inicial de una funcion mat Y
-			  function[i+1]!='-' &&						// si el siguiente no es un guion Y
+		// Se guardan las expresiones matematicas (exp, ln, phase, abs, re, im)
+		if (  is_math_function_initial(function[i]) &&	// Si es la inicial de una funcion matematica y
+			  function[i+1]!='-' &&						// si el siguiente no es un guion y
 			  !isdigit(function[i+1])  ){				// si el siguiente no es un digito
 
-			if (!parse_math_expression(function, string_array, string_array_size, i)){	// Trato de parsear
-				cerr << "Error. Funcion matematica erronea." << endl;					// la f. mat.
+			if (!parse_math_expression(function, string_array, string_array_size, i)){
+				cerr << "Error. Funcion matematica erronea." << endl;					
 				exit(0);
 			}
 		}
 
 		// Guardo numeros o numeros que empiecen con punto
-		else if (  isdigit(function[i]) ||							// Si es un digito ||
+		else if (  isdigit(function[i]) ||							// Si es un digito o
 				   (function[i]=='.' && isdigit(function[i+1]))  ){ // es un punto Y el siguiente un digito
 
 			if (!parse_number(function, string_array, string_array_size, i)){ // Trato de parsear el numero
@@ -58,7 +57,7 @@ string * parse_function(const string function, size_t & string_array_size){
 		}
 
 		// Guardo si es operador o parentesis: +-*/^()
-		else if (  is_operator(function[i]) ||			// Si es operador ||
+		else if (  is_operator(function[i]) ||			// Si es operador o
 				   is_parenthesis(function[i])  ) {		// es parentesis
 
 			string aux_string = "";
@@ -67,7 +66,7 @@ string * parse_function(const string function, size_t & string_array_size){
 		}
 
 		// Guardo la variable z y la j de imaginario
-		else if (  function[i]=='z' ||			// Si es 'z' ||
+		else if (  function[i]=='z' ||			// Si es 'z' o
 				   function[i]=='j' ){			// si es 'j'
 
 			string aux_string = "";
@@ -84,19 +83,19 @@ string * parse_function(const string function, size_t & string_array_size){
 bool parse_math_expression (const string function, string *& string_array, size_t & string_array_size, size_t & position){	
 	string aux_string = "";
 
-	while (function[position] != '(') {		// Estamos suponiendo que toda f mat es seguida con un '('
+	while (function[position] != '(') {		// Todas las funciones matematicas terminan con '('
 
-		if (position >= function.length()){ // Si la posicion se paso del largo, no encontro '('
+		if (position >= function.length()){ // Si la posicion supero a el largo de la string
 			cerr << "Error. No encontro parentesis ( parseando." << endl;
 			exit (0);
 		}
 
-		aux_string.append(1, function[position]);	// Voy copiando letras
+		aux_string.append(1, function[position]);	// Se copia letra por letra
 		position++;
 	}
 	position--;
 
-	if (is_math_function(aux_string)){	// Verifico que lo parseado sea una f. mat.
+	if (is_math_function(aux_string)){	// Se verifica que sea una funcion
 		add_string_to_array(string_array, string_array_size, aux_string);
 		return true;
 	}
@@ -104,7 +103,7 @@ bool parse_math_expression (const string function, string *& string_array, size_
 }
 
 
-// Compruebo el numero a parsear y lo guardo en string arrray
+// Se parsea el numero
 bool parse_number (const string function, string *& string_array, size_t & string_array_size, size_t & position){
 
 	string aux_string = "";
@@ -124,7 +123,7 @@ bool parse_number (const string function, string *& string_array, size_t & strin
 }
 
 
-// Compruebo el numero negativo y lo guardo en string array junto con su signo -
+// Se pasea el numero negativo y se lo guarda
 bool parse_negative_number (const string function, string *& string_array, size_t & string_array_size, size_t & position){
 
 	string aux_string = "";
@@ -146,7 +145,7 @@ bool parse_negative_number (const string function, string *& string_array, size_
 }
 
 
-// Compruebo la j negativa y lo guardo en string array junto con su signo -
+// Se parsea la j negativa
 bool parse_negative_j (const string function, string *& string_array, size_t & string_array_size, size_t & position){
 
 	string aux_string = "";
@@ -212,7 +211,7 @@ bool resize_string_array (string *& string_array, size_t & string_array_size, si
 }
 
 
-// Funcion que verifica el balance de parentesis de lo ingresado
+// Funcion que verifica la expresion esta balanceada
 bool check_balance (const string function){
 	stk <char> stack;
 	bool balanced = true;
@@ -252,7 +251,7 @@ bool check_balance (const string function){
 }
 
 
-// Funcion que checkea que lo ingresado no haya empezado con un operador mat prohibido
+// Funcion que checkea que lo ingresado no haya empezado con un operador matamatico prohibido
 bool check_operator_at_begining(const string function){
 
 	if (function[0]=='*' || function[0]=='/' || function[0]=='^')
