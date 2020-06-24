@@ -394,7 +394,7 @@ int * binary_search(const complejo c, complejo *** matrix, int in_lim[2], int fi
 
 void map_image(image & original, image & destino, stk <string> output_stk){
 
-  int * pos;
+  int pos[2];
   int aux_color;
   int in_lim[2];
   int fin_lim[2];
@@ -439,8 +439,9 @@ void map_image(image & original, image & destino, stk <string> output_stk){
        exit(1);
       }
 
-		  stringstream s1 (aux_string); 
-		  s1 >> aux;
+		stringstream s1 (aux_string); 
+		s1 >> aux;
+
 
   		// Se corrobora que el valor c a buscar este dentro de el semiplano que conforman los puntos (-1+i), (-1-i), (1-i) y (1+i)
   		// sino lo esta, no se hace nada, ya que como la matriz de la imagen destino se encuentra rellena de ceros (negro)
@@ -448,13 +449,15 @@ void map_image(image & original, image & destino, stk <string> output_stk){
 
   		if(abs(aux.get_real()) <= 1 && abs(aux.get_img()) <= 1){
 
-    		pos = binary_search(aux,&complex_matrix,in_lim,fin_lim);
+  			search(pos,aux,max);
+  			//cout << pos[1]<<","<<pos[0]<<endl;
+    		//pos = binary_search(aux,&complex_matrix,in_lim,fin_lim);
 
-    	 	if (pos !=NULL){ 		// Si no se detecta un error se se guarda el color en la imagen destino
+    	 	//if (pos !=NULL){ 		// Si no se detecta un error se se guarda el color en la imagen destino
     	    	aux_color = original.get_matrix_value(pos[1],pos[0]);
         		destino.set_matrix_value(i,j,aux_color); // Se guarda el valor del pixel en la imagen destino
-      		}
-	      	else {
+      		//}
+	      	/*else {
 	      		cerr<<"Error en busqueda binaria."<<endl;
 	      		for (int i = 0; i<max; i++){    	// Borra la memoria pedida por generate_matrix_c
 	      			if (complex_matrix[i]){          
@@ -462,7 +465,7 @@ void map_image(image & original, image & destino, stk <string> output_stk){
 	      			}
 	    		  }
 	  			  delete[] complex_matrix;
-	      	}
+	      	}*/
     	}
     	aux_real=aux_real+paso;	// Se ajusta el valor para la proxima posicion
   	}
@@ -487,4 +490,27 @@ bool delete_matrix(int ** &matrix, int size){
   delete[] matrix;
 
   return true;
+}
+
+void search(int * pos,const complejo c, const double max){
+	double paso=2/(max-1);	// Determina el paso que debe haber debido al salto de una posicion para que en los limites se encutren los unos
+	double cte = 1;
+	int i=0 , j=0;
+
+	i = round((c.get_real()+cte)/paso);
+	
+	j = round((cte-c.get_img())/paso);
+	/*cout << "Real: " << (paso*i)-cte << "| Imag:" << cte-(paso*j) << endl;
+	cout << "comp:" << c << endl;*/
+
+	if (j>=max)
+		j=max-1;
+	if (i>=max)
+		i=max-1;
+
+	
+	pos[0]=i;
+	pos[1]=j;
+
+	return;
 }
