@@ -177,3 +177,39 @@ void image::fill_matrix(int ** matrix){
   height = max;
   width = max;
 }
+
+// Imprime la imagen en un ostream
+ostream & operator << (ostream *os, const image & c){
+
+  int max=0;
+  if(c.width<c.height){max = c.height;} else{max = c.width;}
+
+  *os << "P2"<<'\n'<<max<<" "<<max<<'\n'<<c.greyscale<<'\n';
+  if (os->bad()) {
+    cerr << "cannot write to output stream."
+    << endl;
+    exit(1);
+  }
+
+  for(int x=0;x<max;x++)
+  {
+    for(int y=0;y<max;y++) {
+      *os << c.matrix[x][y];
+      *os << " ";
+      if (os->bad()) {
+        cerr << "cannot write to output stream."
+        << endl;
+        exit(1);
+      }            
+    }
+
+    *os<<endl;
+    if (os->bad()) {
+        cerr << "cannot write to output stream."
+        << endl;
+        exit(1);
+    } 
+  }
+  return *os;
+
+}

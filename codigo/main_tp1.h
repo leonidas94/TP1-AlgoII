@@ -15,6 +15,7 @@
 #include "parser.h"
 #include "image.h"
 #include "shunting_yard.h"
+#include "pgm_reader.h"
 
 using namespace std;
 
@@ -40,18 +41,9 @@ static void opt_output(string const &);
 static void opt_function(string const &);
 static void opt_help(string const &);
 
-bool read_pgm(image &);
-
 void search(int * ,const complejo , const double);
 
 void map_image(image &, image &, stk <string>);
-
-bool delete_matrix(int ** &, int);
-
-bool read_identifier(istream *);
-bool read_size(istream *, image &);
-void read_greyscale(istream *, image &);
-bool read_matrix (istream *, image &);
 
 /********************************/
 

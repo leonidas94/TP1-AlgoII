@@ -36,6 +36,10 @@ class image{
   void print_image(ostream*);
 
   void fill_matrix(int **);
+
+  friend ostream & operator << (ostream *, const image &); // Imprimie image en ostream
+
 };
+
 
 #endif
