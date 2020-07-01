@@ -104,10 +104,11 @@ bool read_matrix (istream * iss, image & img_arg){
   }
 
   for (int i = 0; i < img_arg.get_height(); i++){
+    
     for (int j = 0; j < img_arg.get_width(); j++){
-      *iss >> aux_int;
-      if (!(iss->eof())){  // Se evalúa si los elementos que esta leyendo corresponde a la cantidad de la dimensión
 
+      if (!(iss->eof())){  // Se evalúa si los elementos que esta leyendo corresponde a la cantidad de la dimensión
+        *iss >> aux_int;
         if (aux_int <= img_arg.get_greyscale() && aux_int >= 0)
         {
           aux_matrix[i][j] = aux_int;
@@ -121,7 +122,8 @@ bool read_matrix (istream * iss, image & img_arg){
         cerr<<"Error. Cantidad insuficiente de elementos."<<endl; // En caso que haya menos elementos,
         delete_matrix(aux_matrix, img_arg.get_height());
         return false;
-      }   
+      }
+       
     }
   }
   *iss >> aux_int; 

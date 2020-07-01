@@ -105,34 +105,37 @@ stack<T>::~stack()
 template <typename T>
 stack<T>& stack<T>::operator= (const stack<T>& stk2copy){
 
-	for (nodo *p = pri_; p; )
-	{
-		nodo *q = p->sig_;
-		delete p;
-		p = q;
-	}
-
-	nodo * aux;
-	nodo * aux2;
-	if (stk2copy.tam_>0)
-	{
-		pri_ = new nodo((stk2copy.pri_)->dato_);
-		aux = (stk2copy.pri_)->sig_;
-		aux2 = pri_;
-
-		while (aux){
-			aux2->sig_ = new nodo(aux->dato_);
-			aux = aux->sig_;
-			aux2 = aux2->sig_;
-
+	if(this != &stk2copy){
+		for (nodo *p = pri_; p; )
+		{
+			nodo *q = p->sig_;
+			delete p;
+			p = q;
 		}
-		tam_=stk2copy.tam_;
-	}
-	else{
-		this->pri_=0;
-		this->tam_=0;
+
+		nodo * aux;
+		nodo * aux2;
+		if (stk2copy.tam_>0)
+		{
+			pri_ = new nodo((stk2copy.pri_)->dato_);
+			aux = (stk2copy.pri_)->sig_;
+			aux2 = pri_;
+
+			while (aux){
+				aux2->sig_ = new nodo(aux->dato_);
+				aux = aux->sig_;
+				aux2 = aux2->sig_;
+
+			}
+			tam_=stk2copy.tam_;
+		}
+		else{
+			this->pri_=0;
+			this->tam_=0;
+		}
 	}
 	return *this;
+
 }
 
 // Funciones

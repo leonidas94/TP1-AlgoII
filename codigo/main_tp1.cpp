@@ -12,7 +12,7 @@ static fstream ofs;		// Output File Stream (derivada de la clase ofstream que de
 static option_t options[] = {
 	{1, "i", "input", "-", opt_input, OPT_DEFAULT},
 	{1, "o", "output", "-", opt_output, OPT_DEFAULT},
-	{1, "f", "function", NULL, opt_function, OPT_DEFAULT},
+	{1, "f", "function", "-", opt_function, OPT_DEFAULT},
 	{0, "h", "help", NULL, opt_help, OPT_DEFAULT},
 	{0, },
 };
@@ -92,11 +92,15 @@ static void opt_output(string const &arg){
 }
 
 static void opt_function(string const &arg){
+	if (arg == "-") {
+		entered_function = "z";		// Se establece la entrada estandar cin como flujo de entrada
+	} else {
 	entered_function = arg;
+	} 
 }
 
 static void opt_help(string const &arg){  // La opción -h imprime el formato de ejecución
-  cout << "cmdline -f function [-i file] [-o file]" << endl;
+  cout << "cmdline [-f 'function'] [-i file] [-o file]" << endl;
   cout << "Funciones: exp(z), ln(z), re(z), im(z), abs(z), phase(z)." << endl;
   cout << "Operadores: +, -, *, /." << endl;
 	exit(0);

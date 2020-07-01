@@ -15,6 +15,10 @@ string * parse_function(const string function, size_t & string_array_size){
 		cerr << "Error, no puede comenzar con " << function[0] << endl;
 		exit(0);
 	}
+	if(!check_syntax(function)){
+		cerr << "Error, sintaxis " << endl;
+		exit(0);
+	}
 
 	while (i < function.length()){				// Se recorre el string de entrada
 
@@ -28,6 +32,8 @@ string * parse_function(const string function, size_t & string_array_size){
 				exit(0);
 			}
 		}
+
+		else if (function[i] == ' '){}
 
 		// Guardo numeros o numeros que empiecen con punto
 		else if (  isdigit(function[i]) ||							// Si es un digito o
@@ -73,8 +79,17 @@ string * parse_function(const string function, size_t & string_array_size){
 			aux_string.append(1, function[i]);
 			add_string_to_array(string_array, string_array_size, aux_string);
 		}
+
+		else {
+			cerr << "Error. Caracter invalido." << endl;
+			exit(0);
+		}
 		i++;
 	}
+
+for (size_t j=0 ; j<string_array_size ; j++){
+cout << string_array[j] << endl;
+}
 	return string_array;
 }
 
@@ -259,4 +274,10 @@ bool check_operator_at_begining(const string function){
 		return false;
 	}
 	return true;
+}
+
+bool check_syntaxis(const string function){
+	for (size_t i=0; i < function.length(); i++){
+		if(is_operator(function[i]))
+	}
 }

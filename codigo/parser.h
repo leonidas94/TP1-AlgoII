@@ -17,6 +17,7 @@ bool parse_negative_j(const string, string *&, size_t &, size_t &);
 
 bool check_operator_at_begining(const string);
 bool check_balance (const string );
+bool check_syntax(const string );
 
 bool resize_string_array (string *& , size_t &, size_t );
 void add_string_to_array(string *& , size_t &, const string &);
