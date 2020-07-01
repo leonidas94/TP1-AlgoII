@@ -2,9 +2,9 @@
 
 using namespace std; 
 
-void shunting_yard(stk <string> & output_stack, string entered_function[],size_t tamano){
+void shunting_yard(stack <string> & output_stack, string entered_function[],size_t tamano){
 
-	stk <string> op_stack; // Donde se almacenaran los operadores
+	stack <string> op_stack; // Donde se almacenaran los operadores
 
 	string aux;
 
@@ -109,7 +109,7 @@ int precedence (string token){
 
 // Esta funcion resulve la funcion en notacion polaca inversa. Recibe el stack con la funcion y el complejo
 // c, que será reemplazado por z. Es importante remarcar que el resultado lo devuelve en el stack
-void solve_rpn(stk <string> & stack, complejo c){
+void solve_rpn(stack <string> & stack, complejo c){
 	string temp;
 	string aux;
 

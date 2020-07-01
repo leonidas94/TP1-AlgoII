@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 #include "is_functions.h"
-#include "stk.h"
+#include "stack.h"
 #include "complejo.h"
 
 static const int precedence_2 = 2;
@@ -15,10 +15,10 @@ static const int precedence_4 = 4;
 
 //ostream & operator << (ostream &, const complejo &);
 
-void shunting_yard(stk <string> &, string[], size_t);
+void shunting_yard(stack <string> &, string[], size_t);
 
 int precedence (string token);
 
-void solve_rpn(stk <string> &, complejo);
+void solve_rpn(stack <string> &, complejo);
 
 #endif

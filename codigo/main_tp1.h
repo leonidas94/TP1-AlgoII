@@ -11,7 +11,7 @@
 
 #include "is_functions.h"
 #include "complejo.h"
-#include "stk.h"
+#include "stack.h"
 #include "parser.h"
 #include "image.h"
 #include "shunting_yard.h"
@@ -43,7 +43,7 @@ static void opt_help(string const &);
 
 void search(int * ,const complejo , const double);
 
-void map_image(image &, image &, stk <string>);
+void map_image(image &, image &, stack <string>);
 
 /********************************/
 

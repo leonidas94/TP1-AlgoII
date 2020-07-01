@@ -6,13 +6,13 @@
 using namespace std;
 
 template<typename T>
-class stk{
+class stack{
 	private:
 
 		class nodo
 		{
 
-		friend class stk;
+		friend class stack;
 
 		nodo *sig_;
 		T dato_;
@@ -28,9 +28,9 @@ class stk{
 
 	public:
 
-		stk();
-		stk (const stk<T>&);
-		~stk();
+		stack();
+		stack (const stack<T>&);
+		~stack();
 
 		size_t stk_size() const;
 
@@ -38,7 +38,7 @@ class stk{
 		void push(T);
 		bool peek(T &);
 		bool is_empty();
-		stk<T>& operator= (const stk<T>&);
+		stack<T>& operator= (const stack<T>&);
 
 
 
@@ -46,25 +46,25 @@ class stk{
 
 // Constructor de nodo
 template<typename T>
-stk<T>::nodo::nodo(const T &t) : sig_(0), dato_(t)
+stack<T>::nodo::nodo(const T &t) : sig_(0), dato_(t)
 {
 }
 
 // Destructor de nodo
 template<typename T>
-stk<T>::nodo::~nodo()
+stack<T>::nodo::~nodo()
 {
 }
 
 // Constructor por defecto del stk
 template<typename T>
-stk<T>::stk() : pri_(0), tam_(0)
+stack<T>::stack() : pri_(0), tam_(0)
 {
 }
 
 // Constructor por copia del stk
 template <typename T>
-stk<T>::stk (const stk<T>& stk2copy){
+stack<T>::stack (const stack<T>& stk2copy){
 
 	nodo * aux;
 	nodo * aux2;
@@ -90,7 +90,7 @@ stk<T>::stk (const stk<T>& stk2copy){
 
 // Destructor
 template<typename T>
-stk<T>::~stk()
+stack<T>::~stack()
 {
 	for (nodo *p = pri_; p; )
 	{
@@ -103,7 +103,7 @@ stk<T>::~stk()
 // Operador= : se la asigna a un stack el contenido del otro. Se 
 // crean dinamicamente los nuevos nodos
 template <typename T>
-stk<T>& stk<T>::operator= (const stk<T>& stk2copy){
+stack<T>& stack<T>::operator= (const stack<T>& stk2copy){
 
 	for (nodo *p = pri_; p; )
 	{
@@ -140,7 +140,7 @@ stk<T>& stk<T>::operator= (const stk<T>& stk2copy){
 // Pop: Desapila el ultimo elemento del stack, reasigna el puntero 
 // para no perder a los demas elementos y libera la memoria correspondiente
 template<typename T>
-void stk<T>::pop()
+void stack<T>::pop()
 {
 	if (pri_)
 	{
@@ -157,7 +157,7 @@ void stk<T>::pop()
 // Push: Apila un elemento en el stack, creando un nuevo nodo y
 // reasignando los punteros
 template<typename T>
-void stk<T>::push(T t)
+void stack<T>::push(T t)
 {
 	nodo *p = new nodo(t);
 	p->sig_ = pri_;
@@ -172,7 +172,7 @@ void stk<T>::push(T t)
 // en caso de que el stack este vacio devuelve false si no
 // retorna true
 template<typename T>
-bool stk<T>::peek(T & t)
+bool stack<T>::peek(T & t)
 {
 	if (!is_empty()){
 		t = pri_->dato_;
@@ -184,7 +184,7 @@ bool stk<T>::peek(T & t)
 // Is_empty: Corrobora el estado del stack, si se encuentra o
 // no vacio
 template<typename T>
-bool stk<T>::is_empty()
+bool stack<T>::is_empty()
 {
 	if (!pri_)
 	{
@@ -195,7 +195,7 @@ bool stk<T>::is_empty()
 
 // Stk_size: Devuelve el tamaño del stack
 template<typename T>
-size_t stk<T>::stk_size() const{
+size_t stack<T>::stk_size() const{
 	return tam_;
 }
 

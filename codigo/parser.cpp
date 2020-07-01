@@ -213,7 +213,7 @@ bool resize_string_array (string *& string_array, size_t & string_array_size, si
 
 // Funcion que verifica la expresion esta balanceada
 bool check_balance (const string function){
-	stk <char> stack;
+	stack <char> stack;
 	bool balanced = true;
 	char aux;
 

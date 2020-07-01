@@ -25,7 +25,7 @@ int main(int argc, char * const argv[]){
 	image input_image;
 	string * string_array;
 	size_t string_array_size= 0;
-	stk <string> output_stk;
+	stack <string> output_stk;
 
 	cmdline cmdl(options);	       // Objeto con parametro tipo option_t (struct) declarado globalmente
 	cmdl.parse(argc, argv);        // Metodo de parseo de la clase cmdline
@@ -205,7 +205,7 @@ int cmdline::do_short_opt(const char *opt, const char *arg) {
 
 // *******************************FUNCIONES**********************************//
 
-void map_image(image & original, image & destino, stk <string> output_stk){
+void map_image(image & original, image & destino, stack <string> output_stk){
 
   int pos[2];
   int aux_color;
@@ -228,7 +228,7 @@ void map_image(image & original, image & destino, stk <string> output_stk){
     	complejo aux (aux_real,aux_imag);
 
       // Se iguala el stack en RPN a uno vacio para no perder la funcion cuando se desapile
-    	stk <string> stk_to_solve = output_stk;
+    	stack <string> stk_to_solve = output_stk;
 
       // Se transforma el complejo
 		  solve_rpn(stk_to_solve, aux);

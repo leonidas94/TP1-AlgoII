@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include "is_functions.h"
-#include "stk.h"
+#include "stack.h"
 
 using namespace std;
 
