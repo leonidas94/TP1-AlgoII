@@ -3,9 +3,11 @@
 using namespace std;
 
 // Se parsea la funcion ingresada
-string * parse_function(const string function, size_t & string_array_size){
+string * parse_function(const string arg_function, size_t & string_array_size){
 	size_t i = 0;
 	string * string_array;				
+
+	string function = remove_spaces(arg_function);
 
 	if (!check_balance (function)){				// Se valida que la expresion este balanceada
 		cerr << "Error. No esta balanceada" << endl;
@@ -15,16 +17,20 @@ string * parse_function(const string function, size_t & string_array_size){
 		cerr << "Error, no puede comenzar con " << function[0] << endl;
 		exit(0);
 	}
-	if(!check_syntax(function)){
-		cerr << "Error, sintaxis " << endl;
+	if (!check_characters(function)){
+		cerr << "Error, caracter invalidox" << endl;
 		exit(0);
 	}
+	//if(!check_syntax(function)){
+	//	cerr << "Error, sintaxis " << endl;
+	//	exit(0);
+	//}
 
 	while (i < function.length()){				// Se recorre el string de entrada
 
 		// Se guardan las expresiones matematicas (exp, ln, phase, abs, re, im)
 		if (  is_math_function_initial(function[i]) &&	// Si es la inicial de una funcion matematica y
-			  function[i+1]!='-' &&						// si el siguiente no es un guion y
+			  //function[i+1]!='-' &&						// si el siguiente no es un guion y
 			  !isdigit(function[i+1])  ){				// si el siguiente no es un digito
 
 			if (!parse_math_expression(function, string_array, string_array_size, i)){
@@ -32,8 +38,6 @@ string * parse_function(const string function, size_t & string_array_size){
 				exit(0);
 			}
 		}
-
-		else if (function[i] == ' '){}
 
 		// Guardo numeros o numeros que empiecen con punto
 		else if (  isdigit(function[i]) ||							// Si es un digito o
@@ -101,8 +105,8 @@ bool parse_math_expression (const string function, string *& string_array, size_
 	while (function[position] != '(') {		// Todas las funciones matematicas terminan con '('
 
 		if (position >= function.length()){ // Si la posicion supero a el largo de la string
-			cerr << "Error. No encontro parentesis ( parseando." << endl;
-			exit (0);
+//cerr << "Error. Funcion matematica invalida." << endl;
+			return false;
 		}
 
 		aux_string.append(1, function[position]);	// Se copia letra por letra
@@ -276,8 +280,35 @@ bool check_operator_at_begining(const string function){
 	return true;
 }
 
-bool check_syntaxis(const string function){
+string remove_spaces(const string function){
+	string aux_string = "";
+
+	for(size_t i =0 ; i<function.length() ; i++ ){
+		if (function[i] != ' '){
+			aux_string.append(1, function[i]);
+		}
+	}
+	return aux_string;
+}
+
+/*bool check_syntax(const string function){
 	for (size_t i=0; i < function.length(); i++){
 		if(is_operator(function[i]))
 	}
+}*/
+
+bool check_characters(const string function){
+	for (size_t i = 0; i < function.length() ; i++){
+		if (function[i] == 'z' || function[i] == 'j'){}
+		else if ( isalpha(function[i]) && !isalpha(function[i+1]) ){
+			return false;
+		}
+		else if ( isalpha(function[i]) && isalpha(function[i+1])){
+			while ( !isalpha(function[i]) || i<function.length()){
+				i++;
+			}
+			i--;
+		}
+	}
+	return true;
 }
