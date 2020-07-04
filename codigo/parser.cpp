@@ -14,17 +14,14 @@ string * parse_function(const string arg_function, size_t & string_array_size){
 		exit(0);
 	}
 	if (!check_operator_at_begining(function)){	// Se valida que la funcion no comience con un operador * o /
-		cerr << "Error, no puede comenzar con " << function[0] << endl;
+		cerr << "Error. no puede comenzar con " << function[0] << endl;
 		exit(0);
 	}
 	if (!check_characters(function)){
-		cerr << "Error, caracter invalidox" << endl;
+		cerr << "Error. caracter invalido" << endl;
 		exit(0);
 	}
-	//if(!check_syntax(function)){
-	//	cerr << "Error, sintaxis " << endl;
-	//	exit(0);
-	//}
+
 
 	while (i < function.length()){				// Se recorre el string de entrada
 
@@ -91,9 +88,10 @@ string * parse_function(const string arg_function, size_t & string_array_size){
 		i++;
 	}
 
-for (size_t j=0 ; j<string_array_size ; j++){
-cout << string_array[j] << endl;
-}
+	if(!check_syntax(string_array,string_array_size)){ // Validacion de sintaxis
+		cerr << "Error. Error de sintaxis." << endl;
+		exit(0);
+	}
 	return string_array;
 }
 
@@ -291,11 +289,21 @@ string remove_spaces(const string function){
 	return aux_string;
 }
 
-/*bool check_syntax(const string function){
-	for (size_t i=0; i < function.length(); i++){
-		if(is_operator(function[i]))
+bool check_syntax(string * parsed_function,size_t string_array_size){ // validar operadores seguidos
+
+	for (size_t i=0; i < string_array_size; i++){
+
+		if (i == string_array_size-1 && is_operator(parsed_function[i])){
+			cerr << "Termina con operador" << endl;
+			return false;
+		}
+		else if(is_operator(parsed_function[i]) && is_operator(parsed_function[i+1])){
+			cerr << "Hay dos operadores seguidos" << endl;
+			return false;
+		}
 	}
-}*/
+	return true;
+}
 
 bool check_characters(const string function){
 	for (size_t i = 0; i < function.length() ; i++){
