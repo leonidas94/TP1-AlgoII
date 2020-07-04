@@ -308,6 +308,10 @@ bool check_syntax(string * parsed_function,size_t string_array_size){ // validar
 bool check_characters(const string function){
 	for (size_t i = 0; i < function.length() ; i++){
 		if (function[i] == 'z' || function[i] == 'j'){}
+
+		else if (i == (function.length()-1) && isalpha(function[i])){
+			return false;
+		}
 		else if ( isalpha(function[i]) && !isalpha(function[i+1]) ){
 			return false;
 		}
