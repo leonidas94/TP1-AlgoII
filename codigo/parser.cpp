@@ -73,8 +73,14 @@ string * parse_function(const string arg_function, size_t & string_array_size){
 		}
 
 		// Guardo la variable z y la j de imaginario
-		else if (  function[i]=='z' ||			// Si es 'z' o
-				   function[i]=='j' ){			// si es 'j'
+		else if ( (function[i]=='z' || function[i]=='j') ){
+
+			if (i != function.size()-1){
+				if( function[i+1]== 'z' || function[i+1]== 'j' ){
+					cerr << "Error. Sintaxis de variables." << endl;
+					exit(0);
+				}			
+			}
 
 			string aux_string = "";
 			aux_string.append(1, function[i]);
@@ -92,6 +98,11 @@ string * parse_function(const string arg_function, size_t & string_array_size){
 		cerr << "Error. Error de sintaxis." << endl;
 		exit(0);
 	}
+
+for (size_t asd=0; asd<string_array_size; asd++){
+	cout << string_array[asd] << endl;
+} // IMPRESIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
+
 	return string_array;
 }
 

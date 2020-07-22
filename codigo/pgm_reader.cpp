@@ -18,7 +18,10 @@ bool read_pgm(istream * iss, image & img_arg){
     return false;
   }
 
-  read_greyscale(iss, img_arg);
+  if (!read_greyscale(iss, img_arg)){
+    cerr << "Error en la escala de grises" <<endl;
+    return false;
+  }
 
   // Crea la matriz de enteros y los llena con ceros
   // Como la matriz va a ser cuadrada, se pide dos veces de dimension "max"
@@ -35,7 +38,7 @@ bool read_pgm(istream * iss, image & img_arg){
 bool read_identifier(istream * iss){
   string in_string;
 
-  getline(*iss, in_string); // Identificador PGM
+  *iss >> in_string;
 
   if (in_string[0] == PGM_IDENTIFIER[0]){
     if (in_string[1] != PGM_IDENTIFIER[1]){ // En caso que el identificador sea incorrecto
@@ -48,47 +51,39 @@ bool read_identifier(istream * iss){
 
 
 bool read_size(istream * iss, image & img_arg){
-  int aux_int, i=0, aux_size[2];
+  int aux_size[2];
   string in_string, temp;
 
-  getline(*iss, in_string);
+  *iss >> in_string;
   if (in_string[0] == SKIP_LINE_IDENTIFIER){ // Se detecta si se leyó un comentario
-    getline(*iss, in_string); // Se leen las dimensiones de la matriz
+    getline(*iss, in_string);
   }
 
-  stringstream ss (in_string); 
-  
-  while (i < 2 && !ss.eof()){
-    ss >> temp;
-    if(stringstream(temp) >> aux_int){  // Si se pudo convertir se guarda en el arreglo
-      aux_size[i] = aux_int;
-      i++;
-    }
-    temp = "";
-  }
-  if (i == 1){
-    return false;
-  }
+  *iss >> aux_size[0];
+  *iss >> aux_size[1];
 
-  ss >> temp;
-  if(stringstream(temp) >> aux_int){  // Si se pudo convertir es un error
+  if (aux_size[0]==0 || aux_size[1]==0){
+    cerr << "Error en dimension." << endl;
     return false;
   }
 
   img_arg.set_width(aux_size[0]);  // Se guarda el ancho de la matriz
-  img_arg.set_height(aux_size[1]); // Se guarda el alto de la matriz
+  img_arg.set_height(aux_size[1]);  // Se guarda el ancho de la matriz
 
   return true;
 }
 
-
-void read_greyscale(istream * iss, image & img_arg){
+bool read_greyscale(istream * iss, image & img_arg){
   string in_string;
   int aux_greyscale;
 
-  getline(*iss, in_string);
-  aux_greyscale = stoi(in_string);
+  *iss >> aux_greyscale;
+
+  if (aux_greyscale <= 0){
+    return false;
+  }
   img_arg.set_greyscale(aux_greyscale); // Se guarda el valor de la escala de grises
+  return true;
 }
 
 
@@ -109,6 +104,7 @@ bool read_matrix (istream * iss, image & img_arg){
 
       if (!(iss->eof())){  // Se evalúa si los elementos que esta leyendo corresponde a la cantidad de la dimensión
         *iss >> aux_int;
+
         if (aux_int <= img_arg.get_greyscale() && aux_int >= 0)
         {
           aux_matrix[i][j] = aux_int;

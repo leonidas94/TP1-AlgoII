@@ -10,7 +10,7 @@ bool read_pgm(istream *, image &);
 
 bool read_identifier(istream *);
 bool read_size(istream *, image &);
-void read_greyscale(istream *, image &);
+bool read_greyscale(istream *, image &);
 bool read_matrix (istream *, image &);
 
 bool delete_matrix(int ** &, int);
