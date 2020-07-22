@@ -99,10 +99,6 @@ string * parse_function(const string arg_function, size_t & string_array_size){
 		exit(0);
 	}
 
-for (size_t asd=0; asd<string_array_size; asd++){
-	cout << string_array[asd] << endl;
-} // IMPRESIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOON
-
 	return string_array;
 }
 
